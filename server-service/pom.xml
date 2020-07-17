@@ -9,18 +9,16 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>server-ui</artifactId>
+  <artifactId>server-service</artifactId>
 
   <dependencies>
-    <!-- server-service start -->
+    <!-- server-base start -->
     <dependency>
       <groupId>ddp.web</groupId>
-      <artifactId>server-service</artifactId>
+      <artifactId>server-base</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
-    <!-- server-service end -->
-
-
+    <!-- server-base end -->
   </dependencies>
 
 </project>
