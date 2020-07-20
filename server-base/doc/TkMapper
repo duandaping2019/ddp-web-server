@@ -1,0 +1,88 @@
+1、selectOne(T)：通过pojo对象，查询一条数据
+
+参数：UmsPeimision对象
+返回值：UmsPeimision对象
+2、select(T)：通过pojo对象，查询一组数据
+
+参数：UmsPeimision对象
+返回值：List<UmsPeimision>
+3、selectAll()：查询所有
+
+参数：无
+返回值：List<UmsPeimision>
+4、selectCount(T)：通过pojo对象，查询该数据的条数
+
+参数：int
+返回值：List<UmsPeimision>
+5、selectByPrimaryKey(Object)：通过主键，查询数据
+
+参数：主键
+返回值：UmsPeimision对象
+6、existsWithPrimaryKey(Object)：通过主键，查询数据是否存在
+
+参数：主键
+返回值：boolean
+7、insert(T)：通过pojo对象， 插入对象
+
+参数：UmsPeimision对象
+返回值：int
+所有的字段都会添加一遍即使没有值
+8、insertSelective(T)：通过pojo对象， 插入对象
+
+参数：UmsPeimision对象
+返回值：int
+只给有值的字段赋值
+9、updateByPrimaryKey(T)：通过pojo对象主键， 更新对象
+
+参数：UmsPeimision对象
+返回值：int
+所有的字段都会更新一遍即使没有值
+10、updateByPrimaryKeySelective(T)：通过pojo对象主键， 更新对象
+
+参数：UmsPeimision对象
+返回值：int
+只给有值的字段更新
+11、delete(T)：通过pojo对象， 删除对象
+
+参数：UmsPeimision对象
+返回值：int
+12、deleteByPrimaryKey(Object)：通过主键， 删除对象
+
+参数：主键
+返回值：int
+
+查询
+
+
+====================================================================================================
+示例：
+Example example = new Example(Country.class);
+example.setForUpdate(true);
+example.createCriteria().andGreaterThan("id", 100).andLessThan("id",151);
+example.or().andLessThan("id", 41);
+List<Country> countries = mapper.selectByExample(example);
+日志：
+
+DEBUG [main] - ==>  Preparing:
+SELECT id,countryname,countrycode FROM country WHERE ( id > ? and id < ? ) or ( id < ? ) ORDER BY id desc FOR UPDATE
+DEBUG [main] - ==> Parameters: 100(Integer), 151(Integer), 41(Integer)
+DEBUG [main] - <==      Total: 90
+
+
+示例：
+
+Example example = new Example(Country.class);
+Example.Criteria criteria = example.createCriteria();
+if(query.getCountryname() != null){
+    criteria.andLike("countryname", query.getCountryname() + "%");
+}
+if(query.getId() != null){
+    criteria.andGreaterThan("id", query.getId());
+}
+List<Country> countries = mapper.selectByExample(example);
+日志：
+
+DEBUG [main] - ==>  Preparing:
+SELECT id,countryname,countrycode FROM country WHERE ( countryname like ? ) ORDER BY id desc
+DEBUG [main] - ==> Parameters: China%(String)
+DEBUG [main] - <==      Total: 1

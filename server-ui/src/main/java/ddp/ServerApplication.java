@@ -1,11 +1,17 @@
-package ddp.web;
+package ddp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"ddp.configure", "ddp.web.controller","ddp.beans"})//扫描包路径【ALL】
+@ComponentScan(basePackages = {
+    "ddp.web",
+    "ddp.service","ddp.beans"
+})
+@MapperScan(basePackages = {"ddp.mapper"})
+//@EnableRedisHttpSession
 public class ServerApplication {
 
   public static void main(String[] args) {

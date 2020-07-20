@@ -11,5 +11,23 @@
 
   <artifactId>server-tools</artifactId>
 
+  <dependencies>
+    <!-- fastjson start-->
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>1.2.71</version>
+    </dependency>
+    <!-- fastjson end-->
+
+    <!-- commons-lang start-->
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
+    </dependency>
+    <!-- commons-lang end-->
+
+  </dependencies>
 
 </project>

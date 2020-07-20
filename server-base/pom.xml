@@ -12,18 +12,52 @@
   <artifactId>server-base</artifactId>
 
   <dependencies>
-    <!-- swagger start -->
+    <!-- server-tools start -->
     <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-swagger2</artifactId>
-      <version>2.9.2</version>
+      <groupId>ddp.web</groupId>
+      <artifactId>server-tools</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <!-- server-tools end -->
+
+    <!--Mysql数据库驱动 start-->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--Mysql数据库驱动 end-->
+
+    <!--Druid 连接池  start-->
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>druid</artifactId>
+      <version>1.1.10</version>
+    </dependency>
+    <!--Druid 连接池  end-->
+
+    <!--TkMapper依赖及配置 start-->
+    <dependency>
+      <groupId>org.mybatis</groupId>
+      <artifactId>mybatis-spring</artifactId>
+      <version>2.0.4</version>
     </dependency>
     <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-swagger-ui</artifactId>
-      <version>2.9.2</version>
+      <groupId>tk.mybatis</groupId>
+      <artifactId>mapper-spring-boot-starter</artifactId>
+      <version>RELEASE</version>
     </dependency>
-    <!-- swagger end-->
+    <!--TkMapper依赖及配置 end-->
+
+    <!-- pagehelper分页控件 start-->
+    <dependency>
+      <groupId>com.github.pagehelper</groupId>
+      <artifactId>pagehelper-spring-boot-starter</artifactId>
+      <version>1.2.12</version>
+    </dependency>
+    <!-- pagehelper分页控件 end-->
+
+
   </dependencies>
 
 </project>

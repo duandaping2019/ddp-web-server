@@ -1,0 +1,14 @@
+session 和 cookie 是保存用户状态的两种方式，session在服务端，cookie 在客户端。
+  session（会话）
+  粘性会话
+  如果某台服务器宕机，那么会话信息就没有了。
+  复制会话
+  每台机器都复制会话，如果量太大的话，不现实
+  集中会话
+  使用 mongo 、redis 等统一保持会话
+
+使用spring-session机制进行安全认证，并且通过redis存储session，满足集群部署、分布式系统的session共享。
+java工程中，说到权限管理和安全认证，我们首先想到的是Spring Security和Apache Shiro，这两者均能实现用户身份认证和复杂的权限管理功能。
+但是如果我们只是想实现身份认证（如是否登录、会话是否超时），使用session管理即可满足。
+
+
