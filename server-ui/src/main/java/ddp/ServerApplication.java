@@ -7,8 +7,9 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
-    "ddp.web",
-    "ddp.service","ddp.beans"
+    "ddp.web",//server-ui
+    "ddp.service","ddp.beans",//server-service
+    "ddp.configure","ddp.tools"//server-tools
 })
 @MapperScan(basePackages = {"ddp.mapper"})
 //@EnableRedisHttpSession

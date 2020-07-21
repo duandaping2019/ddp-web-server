@@ -1,0 +1,5 @@
+opsForValue()：操作只有简单属性的数据
+opsForList()：操作含有List的数据
+opsForSet()：操作含有set的数据
+opsForHash()：操作含有hash的数据
+opsForZSet()：操作含有有序set类型ZSet的数据
