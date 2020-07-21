@@ -1,4 +1,4 @@
-package ddp.web.controller;
+package ddp.web.controller.test;
 
 import com.github.pagehelper.PageInfo;
 import ddp.beans.common.MyPageHelper;
