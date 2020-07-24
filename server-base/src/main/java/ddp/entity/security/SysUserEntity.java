@@ -13,7 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "sys_user")
-public class SecUserEntity extends BaseEntity{
+public class SysUserEntity extends BaseEntity{
 
   /**
    *  用户主键

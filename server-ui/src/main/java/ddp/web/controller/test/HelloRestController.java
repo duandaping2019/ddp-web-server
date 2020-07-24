@@ -3,7 +3,7 @@ package ddp.web.controller.test;
 import com.github.pagehelper.PageInfo;
 import ddp.beans.common.MyPageHelper;
 import ddp.beans.test.HelloUserBean;
-import ddp.ext.security.SecUserExt;
+import ddp.ext.security.SysUserExt;
 import ddp.service.security.UserService;
 import ddp.web.BaseController;
 import io.swagger.annotations.Api;
@@ -36,8 +36,8 @@ public class HelloRestController extends BaseController {
 
   @ApiOperation(value = "getSecUserInfo",notes = "获取系统用户信息")
   @PostMapping("/get_sec_user_info")
-  public PageInfo<SecUserExt> getSecUserInfo(@ApiParam(value = "用户请求参数",required =false) @RequestBody SecUserExt ext,@ApiParam(value = "用户请求对象",required =false) HttpServletRequest request){
-    return userService.getSecUserInfo(new MyPageHelper<SecUserExt>(ext,request));
+  public PageInfo<SysUserExt> getSecUserInfo(@ApiParam(value = "用户请求参数",required =false) @RequestBody SysUserExt ext,@ApiParam(value = "用户请求对象",required =false) HttpServletRequest request){
+    return userService.getSecUserInfo(new MyPageHelper<SysUserExt>(ext,request));
   }
 
 
