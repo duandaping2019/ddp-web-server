@@ -4,6 +4,10 @@ server:
     context-path: / # 访问根路径
     session:
       timeout: PT30M # session超时为30分钟
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
 
 spring:
   datasource: # 数据库配置

@@ -2,6 +2,8 @@ package ddp.web.filters;
 
 import com.alibaba.fastjson.JSON;
 import ddp.web.BaseResponse;
+import ddp.web.configure.MyLocaleResolver;
+import ddp.web.tools.MessageSourceUtils;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +32,10 @@ public class SessionCofig implements WebMvcConfigurer {
 
   @Configuration
   public class SecurityInterceptor implements HandlerInterceptor {
+
+    /**
+     * 登陆Session校验拦截
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
       HttpSession session = request.getSession();
@@ -37,7 +43,7 @@ public class SessionCofig implements WebMvcConfigurer {
         return true;
       }
 
-      response.getWriter().write(JSON.toJSONString(BaseResponse.noLogin("")));
+      response.getWriter().write(JSON.toJSONString(BaseResponse.noLogin(MessageSourceUtils.getSourceFromCache("login_first",MyLocaleResolver.getCurrLocale()))));
       return false;
     }
   }

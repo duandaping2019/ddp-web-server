@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ddp.mapper.security.SysLangMapper" >
+  <resultMap id="BaseResultMap" type="ddp.entity.security.SysLangEntity">
+    <id column="lang_id" property="langId" jdbcType="BIGINT" />
+    <result column="lang_code" property="langCode" jdbcType="VARCHAR" />
+    <result column="lang_zh" property="langZh" jdbcType="VARCHAR" />
+    <result column="lang_en" property="langEn" jdbcType="SMALLINT" />
+  </resultMap>
+
+</mapper>
