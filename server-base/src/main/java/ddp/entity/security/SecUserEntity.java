@@ -42,6 +42,18 @@ public class SecUserEntity extends BaseEntity{
   @Column(name = "user_sex", length = 1)
   private Short userSex;
 
+  /**
+   *  登陆ID
+   */
+  @Column(name = "login_id", length = 128)
+  private String loginId;
+
+  /**
+   *  登陆密码
+   */
+  @Column(name = "login_pwd", length = 128)
+  private String loginPwd;
+
   public Long getUserId() {
     return userId;
   }
@@ -72,5 +84,21 @@ public class SecUserEntity extends BaseEntity{
 
   public void setUserSex(Short userSex) {
     this.userSex = userSex;
+  }
+
+  public String getLoginId() {
+    return loginId;
+  }
+
+  public void setLoginId(String loginId) {
+    this.loginId = loginId;
+  }
+
+  public String getLoginPwd() {
+    return loginPwd;
+  }
+
+  public void setLoginPwd(String loginPwd) {
+    this.loginPwd = loginPwd;
   }
 }

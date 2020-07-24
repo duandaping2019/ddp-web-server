@@ -2,6 +2,8 @@ server:
   port: 8080 # 访问端口
   servlet:
     context-path: / # 访问根路径
+    session:
+      timeout: PT30M # session超时为30分钟
 
 spring:
   datasource: # 数据库配置
