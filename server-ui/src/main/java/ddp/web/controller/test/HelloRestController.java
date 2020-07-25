@@ -40,6 +40,4 @@ public class HelloRestController extends BaseController {
     return userService.getSecUserInfo(new MyPageHelper<SysUserExt>(ext,request));
   }
 
-
-
 }

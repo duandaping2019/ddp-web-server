@@ -17,13 +17,14 @@ import tk.mybatis.spring.annotation.MapperScan;
     "ddp.configure","ddp.tools"//server-tools
 })
 @MapperScan(basePackages = {"ddp.mapper"})
-//@EnableRedisHttpSession
+/**
+ * 在启动类当中加上extends SpringBootServletInitializer并重写configure方法，这是为了打包springboot项目用的
+ */
 public class ServerApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(ServerApplication.class, args);
   }
-
 
   /**
    * 配置自定义语言解析器

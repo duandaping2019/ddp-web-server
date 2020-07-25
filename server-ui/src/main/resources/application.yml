@@ -25,6 +25,8 @@ spring:
       max-idle: 8 # 连接池中的最大空闲连接 默认 8
       min-idle: 0 # 连接池中的最小空闲连接 默认 0
     timeout: 0 # 关闭时长
+  session:
+    store-type: redis # 使用Redis方式存储Session
 
 mybatis: # Mybatis 配置
   mapper-locations: classpath:mapper/*.xml #定义xml文件位置，不是必须的，如果需要在xml写sql请配置此选项

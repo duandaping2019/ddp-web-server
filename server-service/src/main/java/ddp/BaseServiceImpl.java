@@ -8,15 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 
 public class BaseServiceImpl implements BaseService{
-
-//  @Override
-//  public void setPageInfo(MyPageParamers pageParamers) {
-//    if(pageParamers !=null){
-//      PageHelper.startPage(pageParamers.getPageNum(),pageParamers.getPageSize());
-//    }
-//  }
-
-
   @Override
   public void setPageInfo(MyPageHelper myPageHelper) {
     HttpServletRequest request = myPageHelper.getRequest();

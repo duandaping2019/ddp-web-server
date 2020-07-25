@@ -1,10 +1,14 @@
 package ddp.tools;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +17,9 @@ public class RedisUtils {
 
   @Autowired
   private RedisTemplate redisTemplate;
+
+  @Autowired
+  private StringRedisTemplate stringRedisTemplate;
 
   /**
    * 批量删除对应的value
@@ -88,6 +95,19 @@ public class RedisUtils {
       e.printStackTrace();
     }
     return result;
+  }
+
+  /**
+   * 获取所有key数据
+   */
+  public List<String> getAllKeys(){
+    List<String> list = new ArrayList<>();
+    Set<String> keys = stringRedisTemplate.keys("*");
+    Iterator<String> it1 = keys.iterator();
+    while (it1.hasNext()) {
+      list.add(it1.next());
+    }
+    return list;
   }
 
 }

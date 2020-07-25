@@ -1,15 +1,18 @@
 package ddp.web.controller.system;
 
+import com.alibaba.fastjson.JSON;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.UserService;
 import ddp.tools.ExceptionUtils;
+import ddp.tools.RedisUtils;
 import ddp.web.BaseResponse;
 import ddp.web.tools.MessageSourceUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.Locale;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,19 +30,39 @@ public class UserRestController {
   @Autowired
   private UserService userService;
 
+  /**
+   * 缓存工具类
+   */
+  @Autowired
+  private RedisUtils redisUtils;
+
   @ApiOperation(value = "login",notes = "用户登陆")
   @PostMapping("/login")
-  public BaseResponse login(@ApiParam(value = "用户请求参数",required =false) @RequestBody SysUserExt ext,@ApiParam(value = "语言请求参数",required =false) Locale locale) throws ExceptionUtils{
+  public BaseResponse login(@ApiParam(value = "用户请求参数",required =false) @RequestBody SysUserExt ext,@ApiParam(value = "语言请求参数",required =false) Locale locale,
+      @ApiParam(value = "用户会话对象",required =false) HttpSession session) throws ExceptionUtils{
     SysUserEntity user = userService.getUserByLoginId(ext.getLoginId());
-    if(user != null){
-      //登录成功后将用户信息写入session
+    if(user != null && user.getLoginPwd().equals(ext.getLoginPwd())){
+      //将用户信息写入session，用于登陆拦截判定
+      session.setAttribute(session.getId(), JSON.toJSONString(user));
 
     }else{
-      throw new ExceptionUtils("user not exist ！");
+      return BaseResponse.badrequest(MessageSourceUtils.getSourceFromCache("login_fail",locale));
     }
 
     return BaseResponse.success(MessageSourceUtils.getSourceFromCache("login_succ",locale));
   }
 
+
+  @ApiOperation(value = "logout",notes = "用户注销")
+  @PostMapping("/logout")
+  public BaseResponse logout(@ApiParam(value = "用户请求参数",required =false) @RequestBody SysUserExt ext,@ApiParam(value = "语言请求参数",required =false) Locale locale,
+      @ApiParam(value = "用户会话对象",required =false) HttpSession session) throws ExceptionUtils{
+    SysUserEntity user = userService.getUserByLoginId(ext.getLoginId());
+    if(user != null){
+      session.removeAttribute(session.getId());
+    }
+
+    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("login_out",locale));
+  }
 
 }
