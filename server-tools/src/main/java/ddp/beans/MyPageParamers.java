@@ -1,4 +1,4 @@
-package ddp.beans.common;
+package ddp.beans;
 
 public class MyPageParamers {
 

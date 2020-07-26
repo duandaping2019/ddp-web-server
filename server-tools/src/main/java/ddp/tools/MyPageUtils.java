@@ -1,8 +1,8 @@
-package ddp.beans.common;
+package ddp.tools;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class MyPageHelper<T> {
+public class MyPageUtils<T> {
 
   /**
    * 业务主体
@@ -14,7 +14,7 @@ public class MyPageHelper<T> {
    */
   private HttpServletRequest request;
 
-  public MyPageHelper(T doMain, HttpServletRequest request){
+  public MyPageUtils(T doMain, HttpServletRequest request){
     this.doMain=doMain;
     this.request=request;
   }

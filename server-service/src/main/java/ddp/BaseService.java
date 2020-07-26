@@ -1,12 +1,12 @@
 package ddp;
 
-import ddp.beans.common.MyPageHelper;
+import ddp.tools.MyPageUtils;
 
 public interface BaseService {
 
   /**
    * 设置分页信息
    */
-  void setPageInfo(MyPageHelper myPageHelper);
+  void setPageInfo(MyPageUtils myPageHelper);
 
 }

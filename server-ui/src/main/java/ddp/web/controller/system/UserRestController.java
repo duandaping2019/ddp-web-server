@@ -3,9 +3,9 @@ package ddp.web.controller.system;
 import com.alibaba.fastjson.JSON;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
-import ddp.service.security.UserService;
+import ddp.service.security.SysUserService;
 import ddp.tools.ExceptionUtils;
-import ddp.tools.RedisUtils;
+import ddp.web.BaseController;
 import ddp.web.BaseResponse;
 import ddp.web.tools.MessageSourceUtils;
 import io.swagger.annotations.Api;
@@ -22,19 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "用户管理类",value = "UserRestController")
 @RestController
 @RequestMapping("/user")
-public class UserRestController {
+public class UserRestController extends BaseController {
 
   /**
    * 用户管理服务
    */
   @Autowired
-  private UserService userService;
-
-  /**
-   * 缓存工具类
-   */
-  @Autowired
-  private RedisUtils redisUtils;
+  private SysUserService userService;
 
   @ApiOperation(value = "login",notes = "用户登陆")
   @PostMapping("/login")

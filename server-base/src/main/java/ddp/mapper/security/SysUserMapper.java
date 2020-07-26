@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface SecUserMapper extends BaseMapper<SysUserEntity> {
+public interface SysUserMapper extends BaseMapper<SysUserEntity> {
   /*通过Ext检索数据*/
   List<SysUserExt> selectByExt(SysUserExt userExt);
 
