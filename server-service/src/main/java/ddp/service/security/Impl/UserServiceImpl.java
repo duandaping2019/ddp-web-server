@@ -18,7 +18,7 @@ public class UserServiceImpl extends BaseServiceImpl implements SysUserService {
   private SysUserMapper userMapper;
 
   @Override
-  public PageInfo<SysUserExt> getSecUserInfo(MyPageUtils<SysUserExt> myPageHelper) {
+  public PageInfo<SysUserExt> getUserInfoList(MyPageUtils<SysUserExt> myPageHelper) {
     setPageInfo(myPageHelper);
     List<SysUserExt> list = userMapper.selectByExt(myPageHelper.getDoMain());
     return new PageInfo<SysUserExt>(list);

@@ -9,7 +9,7 @@
     <module>server-ui</module>
     <module>server-base</module>
     <module>server-service</module>
-    <module>server-tools</module>
+    <module>server-utils</module>
   </modules>
 
   <parent>

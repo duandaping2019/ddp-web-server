@@ -11,7 +11,7 @@ import ddp.ext.security.SysUserExt;
  */
 public interface SysUserService extends BaseService {
   /*获取系统用户信息列表*/
-  PageInfo<SysUserExt> getSecUserInfo(MyPageUtils<SysUserExt> myPageHelper);
+  PageInfo<SysUserExt> getUserInfoList(MyPageUtils<SysUserExt> myPageHelper);
 
   /*通过登陆ID获取用户信息*/
   SysUserEntity getUserByLoginId(String loginId);
