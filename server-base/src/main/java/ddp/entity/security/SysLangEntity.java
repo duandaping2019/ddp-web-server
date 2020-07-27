@@ -1,6 +1,6 @@
 package ddp.entity.security;
 
-import java.io.Serializable;
+import ddp.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "sys_lang")
-public class SysLangEntity implements Serializable {
+public class SysLangEntity extends BaseEntity {
   /**
    *  用户主键
    *  IDENTITY：主键由数据库自动生成（主要是自动增长型） AUTO：主键由程序控制。

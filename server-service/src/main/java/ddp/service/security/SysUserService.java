@@ -9,7 +9,7 @@ import ddp.ext.security.SysUserExt;
 /**
  * 用户管理服务
  */
-public interface SysUserService extends BaseService {
+public interface SysUserService extends BaseService<SysUserEntity> {
   /*获取系统用户信息列表*/
   PageInfo<SysUserExt> getUserInfoList(MyPageUtils<SysUserExt> myPageHelper);
 

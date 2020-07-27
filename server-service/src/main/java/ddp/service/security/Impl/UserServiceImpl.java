@@ -2,18 +2,18 @@ package ddp.service.security.Impl;
 
 import com.github.pagehelper.PageInfo;
 import ddp.BaseServiceImpl;
-import ddp.tools.MyPageUtils;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.mapper.security.SysUserMapper;
 import ddp.service.security.SysUserService;
+import ddp.tools.MyPageUtils;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 @Service
-public class UserServiceImpl extends BaseServiceImpl implements SysUserService {
+public class UserServiceImpl extends BaseServiceImpl<SysUserEntity> implements SysUserService {
   @Autowired
   private SysUserMapper userMapper;
 

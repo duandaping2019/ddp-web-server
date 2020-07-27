@@ -1,6 +1,6 @@
 package ddp.entity.security;
 
-import java.io.Serializable;
+import ddp.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "sys_user")
-public class SysUserEntity implements Serializable {
+public class SysUserEntity extends BaseEntity {
 
   /**
    *  用户主键

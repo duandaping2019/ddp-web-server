@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 国际化配置
  */
-public interface SysLangService extends BaseService {
+public interface SysLangService extends BaseService<SysLangEntity> {
 
   /**
    * 获取所有配置信息

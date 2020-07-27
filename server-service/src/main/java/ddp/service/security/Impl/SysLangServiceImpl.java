@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SysLangServiceImpl extends BaseServiceImpl implements SysLangService {
+public class SysLangServiceImpl extends BaseServiceImpl<SysLangEntity> implements SysLangService {
 
   @Autowired
   private SysLangMapper langMapper;
