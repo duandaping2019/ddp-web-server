@@ -8,11 +8,4 @@
     <result column="user_sex" property="userSex" jdbcType="SMALLINT" />
   </resultMap>
 
-  <select id="selectByExt" resultMap="BaseResultMap">
-    select * from sys_user where 1=1
-    <if test="userNo !=null and userNo !=''">
-      and user_no like concat('%',#{userNo},'%')
-    </if>
-
-  </select>
 </mapper>

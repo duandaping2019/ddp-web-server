@@ -1,13 +1,16 @@
 package ddp;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import ddp.beans.MyPageParamers;
 import ddp.constants.CommConstants;
 import ddp.tools.MyPageUtils;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import tk.mybatis.mapper.entity.Example;
 
 @SuppressWarnings("unchecked")
 public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseService<T>{
@@ -30,8 +33,21 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
   }
 
   @Override
-  public T getEntityInfo(T t){
-    return mapper.selectOne(t);
+  public T getEntityInfo(Object ext){
+    Example example = new Example(modelClass);
+    Example.Criteria condition = example.createCriteria();
+    condition.andEqualTo(ext);
+    return mapper.selectOneByExample(example);
+  }
+
+  @Override
+  public PageInfo<T> getEntityInfoList(MyPageUtils<T> myPageHelper) {
+    setPageInfo(myPageHelper);//分页设置
+    Example example = new Example(modelClass);
+    Example.Criteria condition = example.createCriteria();
+    condition.andEqualTo(myPageHelper.getDoMain());
+    List<T> list = mapper.selectByExample(example);
+    return new PageInfo<T>(list);
   }
 
   @Override
