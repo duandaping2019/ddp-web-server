@@ -2,6 +2,7 @@ package ddp;
 
 import com.github.pagehelper.PageInfo;
 import ddp.tools.MyPageUtils;
+import tk.mybatis.mapper.entity.Example;
 
 public interface BaseService<T extends BaseEntity> {
 
@@ -13,7 +14,7 @@ public interface BaseService<T extends BaseEntity> {
   /**
    * 根据特定信息获取唯一实体
    */
-  T getEntityInfo(Object ext);
+  T getEntityInfo(Example example);
 
   /**
    * 根据特定信息获取实体集合【分页】

@@ -33,10 +33,10 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
   }
 
   @Override
-  public T getEntityInfo(Object ext){
-    Example example = new Example(modelClass);
-    Example.Criteria condition = example.createCriteria();
-    condition.andEqualTo(ext);
+  public T getEntityInfo(Example example){
+//    Example example = new Example(modelClass);
+//    Example.Criteria condition = example.createCriteria();
+//    condition.andEqualTo(ext);
     return mapper.selectOneByExample(example);
   }
 

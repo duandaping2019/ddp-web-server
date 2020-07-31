@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tk.mybatis.mapper.entity.Example;
 
 @Api(tags = "用户管理类",value = "UserRestController")
 @RestController
@@ -37,7 +38,14 @@ public class UserRestController extends BaseController {
   @PostMapping("/login")
   public BaseResponse login(@ApiParam(value = "用户请求参数",required =false) @RequestBody SysUserExt ext,@ApiParam(value = "语言请求参数",required =false) Locale locale,
       @ApiParam(value = "用户会话对象",required =false) HttpSession session) throws ExceptionUtils{
-    SysUserEntity user = userService.getEntityInfo(ext);
+    //封装条件
+    Example example = new Example(SysUserEntity.class);
+    example.createCriteria().andEqualTo("loginId",ext.getLoginId()).andEqualTo("loginPwd",ext.getLoginPwd());
+
+    //执行查询
+    SysUserEntity user = userService.getEntityInfo(example);
+
+    //逻辑处理
     if(user != null && user.getLoginPwd().equals(ext.getLoginPwd())){
       //将用户信息写入session，用于登陆拦截判定【*】
       session.setAttribute(session.getId(), JSON.toJSONString(user));
@@ -54,7 +62,14 @@ public class UserRestController extends BaseController {
   @PostMapping("/logout")
   public BaseResponse logout(@ApiParam(value = "用户请求参数",required =false) @RequestBody SysUserExt ext,@ApiParam(value = "语言请求参数",required =false) Locale locale,
       @ApiParam(value = "用户会话对象",required =false) HttpSession session) throws ExceptionUtils{
-    SysUserEntity user = userService.getEntityInfo(ext);
+    //封装条件
+    Example example = new Example(SysUserEntity.class);
+    example.createCriteria().andEqualTo("loginId",ext.getLoginId());
+
+    //执行查询
+    SysUserEntity user = userService.getEntityInfo(example);
+
+    //逻辑处理
     if(user != null){
       session.removeAttribute(session.getId());
     }else{
@@ -68,7 +83,14 @@ public class UserRestController extends BaseController {
   @ApiOperation(value = "getUserInfo",notes = "获取用户信息")
   @PostMapping("/get_user_info")
   public BaseResponse getUserInfo(@ApiParam(value = "用户请求参数",required =false) @RequestBody SysUserExt ext,@ApiParam(value = "语言请求参数",required =false) Locale locale){
-    SysUserEntity entity = userService.getEntityInfo(ext);
+    //封装条件
+    Example example = new Example(SysUserEntity.class);
+    example.createCriteria().andEqualTo(ext);
+
+    //执行查询
+    SysUserEntity entity = userService.getEntityInfo(example);
+
+    //返回结果
     return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ",locale),entity);
   }
 
