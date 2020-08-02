@@ -13,9 +13,12 @@ import ddp.web.tools.MessageSourceUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -104,12 +107,24 @@ public class UserRestController extends BaseController {
   }
 
 
-//  @ApiOperation(value = "addUserInfo",notes = "添加用户信息")
-//  @PostMapping("/add_user_info")
-//  public BaseResponse addUserInfo(@ApiParam(value = "用户请求参数",required =false) @RequestBody SysUserExt ext,@ApiParam(value = "语言请求参数",required =false) Locale locale){
-//    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ",locale),"");
-//  }
+  @ApiOperation(value = "addUserInfo",notes = "添加用户信息")
+  @PostMapping("/add_user_info")
+  public BaseResponse addUserInfo(@ApiParam(value = "用户请求参数",required =false) @RequestBody SysUserExt ext,@ApiParam(value = "语言请求参数",required =false) Locale locale){
+    SysUserEntity entity = new SysUserEntity();
+    BeanUtils.copyProperties(ext,entity);
+    int result = userService.addEntityInfo(entity);
+    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ",locale),result);
+  }
 
+
+  @ApiOperation(value = "addUserInfoList",notes = "添加用户信息")
+  @PostMapping("/add_user_info_list")
+  public BaseResponse addUserInfoList(@ApiParam(value = "用户请求参数",required =false) @RequestBody List<SysUserExt> extList,@ApiParam(value = "语言请求参数",required =false) Locale locale){
+    List<SysUserEntity> entityList = new ArrayList<>();
+    entityList.addAll(extList);
+    int result = userService.addEntityInfoList(entityList);
+    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ",locale),result);
+  }
 
 
 

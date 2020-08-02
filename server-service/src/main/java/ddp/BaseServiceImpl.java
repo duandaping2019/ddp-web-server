@@ -10,16 +10,18 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.entity.Example;
 
 @SuppressWarnings("unchecked")
-public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseService<T>{
+@Component//事务依赖前提【被spring管理】
+public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T>{
 
   @Autowired(required = false)
   protected MyMapper<T> mapper;
 
-
-  private Class<T> modelClass;    // 当前泛型真实类型的Class
+  // 当前泛型真实类型的Class
+  private Class<T> modelClass;
 
   public BaseServiceImpl() {
     // 获得具体model，通过反射来根据属性条件查找数据
@@ -27,16 +29,24 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     modelClass = (Class<T>) pt.getActualTypeArguments()[0];
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////Transactional manager///////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////
   @Override
   public int addEntityInfo(T t) {
-    return 0;
+    return mapper.insert(t);
   }
 
   @Override
+  public int addEntityInfoList(List<T> list) {
+    return mapper.insertList(list);
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////Normol manager//////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  @Override
   public T getEntityInfo(Example example){
-//    Example example = new Example(modelClass);
-//    Example.Criteria condition = example.createCriteria();
-//    condition.andEqualTo(ext);
     return mapper.selectOneByExample(example);
   }
 
@@ -50,6 +60,9 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     return new PageInfo<T>(list);
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////Helper start////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////
   @Override
   public void setPageInfo(MyPageUtils myPageHelper) {
     HttpServletRequest request = myPageHelper.getRequest();
@@ -66,4 +79,5 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
 
     PageHelper.startPage(pageParamers.getPageNum(),pageParamers.getPageSize());
   }
+
 }
