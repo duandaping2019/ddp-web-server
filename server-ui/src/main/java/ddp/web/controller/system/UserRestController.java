@@ -2,13 +2,13 @@ package ddp.web.controller.system;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
+import ddp.beans.BaseResponse;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysUserService;
 import ddp.tools.ExceptionUtils;
 import ddp.tools.MyPageUtils;
 import ddp.web.BaseController;
-import ddp.web.BaseResponse;
 import ddp.web.tools.MessageSourceUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

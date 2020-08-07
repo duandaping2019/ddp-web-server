@@ -1,7 +1,7 @@
 package ddp.web.filters;
 
 import com.alibaba.fastjson.JSON;
-import ddp.web.BaseResponse;
+import ddp.beans.BaseResponse;
 import ddp.web.configure.MyLocaleResolver;
 import ddp.web.tools.MessageSourceUtils;
 import java.io.IOException;

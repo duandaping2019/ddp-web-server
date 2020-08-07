@@ -1,5 +1,5 @@
 server:
-  port: 8080 # 访问端口
+  port: 8081 # 访问端口
   servlet:
     context-path: / # 访问根路径
     session:

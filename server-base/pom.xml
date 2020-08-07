@@ -19,14 +19,6 @@
     </dependency>
     <!-- server-tools end -->
 
-    <!--Mysql数据库驱动 start-->
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!--Mysql数据库驱动 end-->
-
     <!--Druid 连接池  start-->
     <dependency>
       <groupId>com.alibaba</groupId>

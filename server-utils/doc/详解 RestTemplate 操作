@@ -1,0 +1,26 @@
+详解 RestTemplate 操作
+  1、近几年来,以信息为中心的表述性状态转移(Representational State Transfer，REST)已经称为替代传统SOAP Web 服务的流行方案.SOAP关注的一般是行为和处理,而REST关注的是要处理的数据.
+  2、从Spring3.0开始,Spring为创建Rest API提供了良好的支持.REST提供了一个更简单的可选方案。另外，很多的现代化应用都会有移动或富JavaScript客户端，它们都会使用运行在服务器上REST API。
+  3、REST是面向资源的，将资源的状态以最适合客户端或服务端的形式从服务器端转移到客户端（或者反过来）
+
+Spring 中如何使用Rest资源
+  1、借助 RestTemplate，Spring应用能够方便地使用REST资源
+  2、Spring的 RestTemplate访问使用了模版方法的设计模式.
+
+常见方法如下
+  1、delete() 在特定的URL上对资源执行HTTP DELETE操作
+  2、exchange() 在URL上执行特定的HTTP方法，返回包含对象的ResponseEntity，这个对象是从响应体中映射得到的
+  3、execute()  在URL上执行特定的HTTP方法，返回一个从响应体映射得到的对象
+
+  4、getForEntity() 发送一个HTTP GET请求，返回的ResponseEntity包含了响应体所映射成的对象
+  5、getForObject() 发送一个HTTP GET请求，返回的请求体将映射为一个对象
+
+  6、postForEntity() POST 数据到一个URL，返回包含一个对象的ResponseEntity
+  7、postForObject() POST 数据到一个URL，返回根据响应体匹配形成的对象
+
+  8、headForHeaders() 发送HTTP HEAD请求，返回包含特定资源URL的HTTP头
+  9、optionsForAllow() 发送HTTP OPTIONS请求，返回对特定URL的Allow头信息
+  10、postForLocation() POST 数据到一个URL，返回新创建资源的URL
+
+  11、put() PUT 资源到特定的URL
+

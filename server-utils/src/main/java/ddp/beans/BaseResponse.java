@@ -1,4 +1,4 @@
-package ddp.web;
+package ddp.beans;
 
 import java.io.Serializable;
 

@@ -13,8 +13,8 @@ import tk.mybatis.spring.annotation.MapperScan;
 @EnableSwagger2
 @ComponentScan(basePackages = {
     "ddp.web",//server-ui
-    "ddp.service","ddp.beans",//server-service
-    "ddp.configure","ddp.tools"//server-tools
+    "ddp.service",//server-service
+    "ddp.beans","ddp.configure","ddp.demo","ddp.tools"//server-tools
 })
 @MapperScan(basePackages = {"ddp.mapper"})
 /**
