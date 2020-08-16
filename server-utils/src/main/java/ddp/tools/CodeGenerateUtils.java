@@ -91,9 +91,7 @@ public class CodeGenerateUtils {
     dataMap.put("table_name",PropertiesUtils.getProperty("TABLE_NAME"));//表名
     dataMap.put("class_name",MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME")));//类名
 
-    /*属性信息设置*/
-
-
+    //模板信息输出
     Writer out = new BufferedWriter(new OutputStreamWriter(fos, "utf-8"),10240);
     template.process(dataMap,out);
 
