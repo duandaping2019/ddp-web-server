@@ -68,6 +68,13 @@
     </dependency>
     <!-- java-properties-to-json end-->
 
+    <!-- freemarker start -->
+    <dependency>
+      <groupId>org.freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+      <version>2.3.30</version>
+    </dependency>
+    <!-- freemarker end -->
 
   </dependencies>
 

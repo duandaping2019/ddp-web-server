@@ -1,5 +1,6 @@
 package ddp.tools;
 
+import java.io.File;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -26,5 +27,22 @@ public class MyStringUtils {
     }
     String result = sb.toString().replaceAll("_", "");
     return StringUtils.capitalize(result);
+  }
+
+  /**
+   * 包名转路径
+   * @param modelPackage 包名
+   * @return
+   */
+  public static String transPackage2Path(String modelPackage) {
+    StringBuilder builder = new StringBuilder();
+    if(modelPackage.indexOf(".")>0){
+      builder.append(modelPackage.replace(".", File.separator));
+    }else{
+      builder.append(modelPackage);
+    }
+    builder.append(File.separator);
+
+    return builder.toString();
   }
 }
