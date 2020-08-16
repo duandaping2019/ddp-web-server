@@ -82,12 +82,16 @@ public class CodeGenerateUtils {
   private static void generateFileByTemplate(String templateName, File file, Map<String, Object> dataMap) throws Exception {
     Template template = FreeMarkerTemplateUtils.getTemplate(templateName);
     FileOutputStream fos = new FileOutputStream(file);
+
+    /*基础信息设置*/
     dataMap.put("package_name",PropertiesUtils.getProperty("MODEL_PACKAGE"));//包名
     dataMap.put("table_remark",PropertiesUtils.getProperty("TABLE_REMARK"));//表描述
     dataMap.put("author",PropertiesUtils.getProperty("AUTHOR"));//作者
     dataMap.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));//日期
     dataMap.put("table_name",PropertiesUtils.getProperty("TABLE_NAME"));//表名
     dataMap.put("class_name",MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME")));//类名
+
+    /*属性信息设置*/
 
 
     Writer out = new BufferedWriter(new OutputStreamWriter(fos, "utf-8"),10240);
