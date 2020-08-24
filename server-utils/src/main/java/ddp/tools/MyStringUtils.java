@@ -3,6 +3,7 @@ package ddp.tools;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.util.regex.Matcher;
 
 /**
  * 字符串解析工具类
@@ -34,12 +35,14 @@ public class MyStringUtils {
 
   /**
    * 包名转路径
+   * 要用replaceAll()方法，而不是replace();
+   * 包名中的"."在正则中匹配时，要转义\\.，.在正则表达式中匹配任意一个字符;
+   * windows下File.separator为\，需要Matcher.quoteReplacement(File.separator)获取
    * @param modelPackage 包名
-   * @return
    */
   public static String transPackage2Path(String modelPackage) {
     StringBuilder builder = new StringBuilder();
-    builder.append(modelPackage.replaceAll("\\.", File.separator));
+    builder.append(modelPackage.replaceAll("\\.", Matcher.quoteReplacement(File.separator)));
     builder.append(File.separator);
 
     return builder.toString();

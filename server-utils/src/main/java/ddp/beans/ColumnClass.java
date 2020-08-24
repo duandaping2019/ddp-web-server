@@ -9,6 +9,8 @@ public class ColumnClass {
   private String columnName;
   /** 数据库字段类型 **/
   private String columnType;
+  /** 数据库字段类型 **/
+  private Integer columnLen;
   /** 数据库字段首字母小写且去掉下划线字符串 **/
   private String changeColumnName;
   /** 数据库字段注释 **/
@@ -44,5 +46,13 @@ public class ColumnClass {
 
   public void setChangeColumnName(String changeColumnName) {
     this.changeColumnName = changeColumnName;
+  }
+
+  public Integer getColumnLen() {
+    return columnLen;
+  }
+
+  public void setColumnLen(Integer columnLen) {
+    this.columnLen = columnLen;
   }
 }

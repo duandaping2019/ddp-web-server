@@ -60,9 +60,6 @@ public class CodeGenerateUtils {
       }
     }
 
-
-
-
   }
 
   /**
@@ -75,7 +72,7 @@ public class CodeGenerateUtils {
         PropertiesUtils.getProperty("DISK_PATH") + PropertiesUtils.getProperty("MODEL_PACKAGE_BATH")
             + MyStringUtils.transPackage2Path(PropertiesUtils.getProperty("MODEL_PACKAGE"))
             + MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME"))
-            + ".java";
+            + "Entity.java";
     File modelFile = new File(path);
 
     //获取实体信息集合
@@ -92,9 +89,11 @@ public class CodeGenerateUtils {
       try {
         ColumnClass columnClass = new ColumnClass();
         columnClass.setColumnName(resultSet.getString("COLUMN_NAME")); //获取字段名称
-        columnClass.setColumnType(resultSet.getString("TYPE_NAME")); //获取字段类型
+        columnClass.setColumnType(resultSet.getString("TYPE_NAME").toLowerCase()); //获取字段类型【转小写】
+        columnClass.setColumnLen(resultSet.getInt("COLUMN_SIZE")); // 字段长度
         columnClass.setChangeColumnName(MyStringUtils.replaceUnderLineAndUpperCase(columnClass.getColumnName())); //实体属性
         columnClass.setColumnComment(resultSet.getString("REMARKS")); //字段说明
+
         columnClassList.add(columnClass);
       } catch (SQLException e) {
         e.printStackTrace();
@@ -123,13 +122,13 @@ public class CodeGenerateUtils {
     dataMap.put("author", PropertiesUtils.getProperty("AUTHOR")); //作者
     dataMap.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())); //日期
     dataMap.put("table_name", PropertiesUtils.getProperty("TABLE_NAME")); //表名
-    dataMap.put("class_name", MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME"))); //类名
+    dataMap.put("class_name", MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME")) + "Entity"); //类名
 
     // 读取磁盘文件【utf-8】
     try (Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8), 10240)) {
       Template template = FreeMarkerTemplateUtils.getTemplate(templateName);
       template.process(dataMap, out);
-    }catch (Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
 

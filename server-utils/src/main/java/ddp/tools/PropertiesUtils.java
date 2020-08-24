@@ -1,33 +1,23 @@
 package ddp.tools;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 /**
  * 属性文件获取类
  */
 public class PropertiesUtils {
-  private PropertiesUtils (){}
+  private PropertiesUtils(){}
 
   /*设置属性对象*/
   private static Properties pro = new Properties();
 
   static {
-    InputStream in = null;
-    try {
-      in = Thread.currentThread().getContextClassLoader().getResourceAsStream("genTemplates/genProps.properties");
+    try (InputStreamReader in = new InputStreamReader(PropertiesUtils.class.getClassLoader().getResourceAsStream("genTemplates/genProps.properties"), StandardCharsets.UTF_8)) {
       pro.load(in);
     } catch (Exception e) {
       e.printStackTrace();
-    } finally {
-      if (in != null) {
-        try {
-          in.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
     }
   }
 
