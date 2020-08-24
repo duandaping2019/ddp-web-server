@@ -76,6 +76,14 @@
     </dependency>
     <!-- freemarker end -->
 
+    <!-- pagehelper分页控件 start-->
+    <dependency>
+      <groupId>com.github.pagehelper</groupId>
+      <artifactId>pagehelper-spring-boot-starter</artifactId>
+      <version>1.2.12</version>
+    </dependency>
+    <!-- pagehelper分页控件 end-->
+
   </dependencies>
 
 </project>

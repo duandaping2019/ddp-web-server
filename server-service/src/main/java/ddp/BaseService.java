@@ -1,10 +1,10 @@
 package ddp;
 
 import com.github.pagehelper.PageInfo;
-import ddp.tools.MyPageUtils;
-import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 public interface BaseService<T extends BaseEntity> {
 
@@ -34,14 +34,6 @@ public interface BaseService<T extends BaseEntity> {
   /**
    * 根据特定信息获取实体集合【分页】
    */
-  PageInfo<T> getEntityInfoList(MyPageUtils<T> myPageHelper);
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////Helper start////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-  /**
-   * 设置分页信息
-   */
-  void setPageInfo(MyPageUtils myPageHelper);
+  PageInfo<T> getEntityInfoList(Example example);
 
 }

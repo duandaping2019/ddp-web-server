@@ -1,37 +1,38 @@
 package ddp.tools;
 
+import com.github.pagehelper.PageHelper;
+import ddp.beans.MyPageParamers;
+import ddp.constants.CommConstants;
+import org.apache.commons.lang.StringUtils;
+
 import javax.servlet.http.HttpServletRequest;
 
-public class MyPageUtils<T> {
+/**
+ *  分页工具类
+ */
+public class MyPageUtils {
+
+  private MyPageUtils(){
+
+  }
 
   /**
-   * 业务主体
+   * 设置分页
    */
-  private T doMain;
+  public static void setPageInfo(HttpServletRequest request) {
+    MyPageParamers pageParamers = new MyPageParamers();
+    String pageNum = request.getParameter(CommConstants.PAGE_NUM);
+    if (StringUtils.isNotEmpty(pageNum)) {
 
-  /**
-   * 用户请求对象
-   */
-  private HttpServletRequest request;
+      pageParamers.setPageNum(Integer.parseInt(pageNum));
+    }
 
-  public MyPageUtils(T doMain, HttpServletRequest request){
-    this.doMain=doMain;
-    this.request=request;
+    String pageSize = request.getParameter(CommConstants.PAGE_SIZE);
+    if (StringUtils.isNotEmpty(pageSize)) {
+      pageParamers.setPageSize(Integer.parseInt(pageSize));
+    }
+
+    PageHelper.startPage(pageParamers.getPageNum(), pageParamers.getPageSize());
   }
 
-  public T getDoMain() {
-    return doMain;
-  }
-
-  public void setDoMain(T doMain) {
-    this.doMain = doMain;
-  }
-
-  public HttpServletRequest getRequest() {
-    return request;
-  }
-
-  public void setRequest(HttpServletRequest request) {
-    this.request = request;
-  }
 }

@@ -12,14 +12,14 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configuration
 public class SwaggerConfig {
   @Bean
-  public Docket createRestApi(){
+  public Docket createRestApi() {
     return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
         .select()
         .apis(RequestHandlerSelectors.basePackage("ddp.web.controller"))//指定标记包路径
         .paths(PathSelectors.any()).build();
   }
 
-  private ApiInfo apiInfo(){
+  private ApiInfo apiInfo() {
     return new ApiInfoBuilder()
         .title("ddp Web API Doc")
         .description("This is a restful api document of DdpWeb.")

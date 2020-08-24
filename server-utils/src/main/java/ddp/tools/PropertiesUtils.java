@@ -8,17 +8,20 @@ import java.util.Properties;
  * 属性文件获取类
  */
 public class PropertiesUtils {
+  private PropertiesUtils (){}
+
   /*设置属性对象*/
   private static Properties pro = new Properties();
+
   static {
-    InputStream in=null;
+    InputStream in = null;
     try {
       in = Thread.currentThread().getContextClassLoader().getResourceAsStream("genTemplates/genProps.properties");
       pro.load(in);
-    }catch (Exception e){
+    } catch (Exception e) {
       e.printStackTrace();
-    }finally {
-      if(in !=null){
+    } finally {
+      if (in != null) {
         try {
           in.close();
         } catch (IOException e) {

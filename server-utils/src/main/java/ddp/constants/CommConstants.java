@@ -1,6 +1,10 @@
 package ddp.constants;
 
 public class CommConstants {
+
+  private CommConstants() {
+  }
+
   /*分页参数【页码数】*/
   public static final String PAGE_NUM = "pageNum";
 

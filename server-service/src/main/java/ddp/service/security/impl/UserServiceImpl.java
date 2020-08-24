@@ -1,4 +1,4 @@
-package ddp.service.security.Impl;
+package ddp.service.security.impl;
 
 import ddp.BaseServiceImpl;
 import ddp.entity.security.SysUserEntity;

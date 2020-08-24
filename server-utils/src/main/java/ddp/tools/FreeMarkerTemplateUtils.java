@@ -14,9 +14,10 @@ public class FreeMarkerTemplateUtils {
 
 
   private FreeMarkerTemplateUtils(){}
+
   private static final Configuration CONFIGURATION = new Configuration(Configuration.VERSION_2_3_30);
 
-  static{
+  static {
     //这里比较重要，用来指定加载模板所在的路径
     CONFIGURATION.setTemplateLoader(new ClassTemplateLoader(FreeMarkerTemplateUtils.class, "/genTemplates"));
     CONFIGURATION.setDefaultEncoding("UTF-8");
@@ -30,11 +31,7 @@ public class FreeMarkerTemplateUtils {
    * @return
    */
   public static Template getTemplate(String templateName) throws IOException {
-    try {
-      return CONFIGURATION.getTemplate(templateName);
-    } catch (IOException e) {
-      throw e;
-    }
+    return CONFIGURATION.getTemplate(templateName);
   }
 
   /**

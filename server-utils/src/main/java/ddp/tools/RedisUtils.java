@@ -1,16 +1,17 @@
 package ddp.tools;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.stereotype.Component;
 
 @Component
 public class RedisUtils {
@@ -20,6 +21,15 @@ public class RedisUtils {
 
   @Autowired
   private StringRedisTemplate stringRedisTemplate;
+
+  /**
+   * 删除对应的value
+   */
+  public void remove(final String key) {
+    if (exists(key)) {
+      redisTemplate.delete(key);
+    }
+  }
 
   /**
    * 批量删除对应的value
@@ -34,18 +44,9 @@ public class RedisUtils {
    * 批量删除key
    */
   public void removePattern(final String pattern) {
-    Set<Serializable> keys = redisTemplate.keys(pattern);
-    if (keys.size() > 0) {
+    Set<String> keys = redisTemplate.keys(pattern);
+    if (!keys.isEmpty()) {
       redisTemplate.delete(keys);
-    }
-  }
-
-  /**
-   * 删除对应的value
-   */
-  public void remove(final String key) {
-    if (exists(key)) {
-      redisTemplate.delete(key);
     }
   }
 
@@ -100,7 +101,7 @@ public class RedisUtils {
   /**
    * 获取所有key数据
    */
-  public List<String> getAllKeys(){
+  public List<String> getAllKeys() {
     List<String> list = new ArrayList<>();
     Set<String> keys = stringRedisTemplate.keys("*");
     Iterator<String> it1 = keys.iterator();

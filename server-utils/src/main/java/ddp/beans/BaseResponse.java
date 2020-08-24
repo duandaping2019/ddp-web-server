@@ -1,12 +1,10 @@
 package ddp.beans;
 
-import java.io.Serializable;
-
 /**
  * 公共响应类
- * @param <T>
+ * @param <T> 实体
  */
-public class BaseResponse<T> implements Serializable {
+public class BaseResponse<T> {
   /*成功响应码*/
   private static final int CODE_SUCCESS = 200;
   /*失败响应码*/
@@ -28,46 +26,55 @@ public class BaseResponse<T> implements Serializable {
   }
 
   public static <T> BaseResponse<T> success() {
-    return new BaseResponse<T>(CODE_SUCCESS, "success", null);
+    return new BaseResponse<>(CODE_SUCCESS, "success", null);
   }
+
   public static <T> BaseResponse<T> success(String message) {
-    return new BaseResponse<T>(CODE_SUCCESS, message, null);
+    return new BaseResponse<>(CODE_SUCCESS, message, null);
   }
+
   public static <T> BaseResponse<T> success(T data) {
-    return new BaseResponse<T>(CODE_SUCCESS, "success", data);
+    return new BaseResponse<>(CODE_SUCCESS, "success", data);
   }
+
   public static <T> BaseResponse<T> success(String message, T data) {
-    return new BaseResponse<T>(CODE_SUCCESS, message, data);
+    return new BaseResponse<>(CODE_SUCCESS, message, data);
   }
 
   public static <T> BaseResponse<T> error() {
-    return new BaseResponse<T>(CODE_ERROR, "fail", null);
+    return new BaseResponse<>(CODE_ERROR, "fail", null);
   }
+
   public static <T> BaseResponse<T> error(String message) {
-    return new BaseResponse<T>(CODE_ERROR, message, null);
+    return new BaseResponse<>(CODE_ERROR, message, null);
   }
+
   public static <T> BaseResponse<T> error(T data) {
-    return new BaseResponse<T>(CODE_ERROR, "fail", data);
+    return new BaseResponse<>(CODE_ERROR, "fail", data);
   }
+
   public static <T> BaseResponse<T> error(String message, T data) {
-    return new BaseResponse<T>(CODE_ERROR, message, data);
+    return new BaseResponse<>(CODE_ERROR, message, data);
   }
 
   public static <T> BaseResponse<T> badrequest() {
-    return new BaseResponse<T>(CODE_FAIL, "no identifier arguments", null);
+    return new BaseResponse<>(CODE_FAIL, "no identifier arguments", null);
   }
+
   public static <T> BaseResponse<T> badrequest(String message) {
-    return new BaseResponse<T>(CODE_FAIL, message, null);
+    return new BaseResponse<>(CODE_FAIL, message, null);
   }
+
   public static <T> BaseResponse<T> badrequest(T data) {
-    return new BaseResponse<T>(CODE_FAIL, "no identifier arguments", data);
+    return new BaseResponse<>(CODE_FAIL, "no identifier arguments", data);
   }
+
   public static <T> BaseResponse<T> badrequest(String message, T data) {
-    return new BaseResponse<T>(CODE_FAIL, message, data);
+    return new BaseResponse<>(CODE_FAIL, message, data);
   }
 
   public static <T> BaseResponse<T> noLogin(String message) {
-    return new BaseResponse<T>(CODE_NO_LOGIN, message, null);
+    return new BaseResponse<>(CODE_NO_LOGIN, message, null);
   }
 
   public int getCode() {
