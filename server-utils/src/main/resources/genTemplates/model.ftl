@@ -23,6 +23,10 @@ public class ${class_name} extends BaseEntity {
     /**
     *${model.columnComment!}
     */
+    <#if model_index == 0>
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    </#if>
     <#if (model.columnType = 'varchar')>
     @Column(name = "${model.columnName}", length = ${model.columnLen})
     private String ${model.changeColumnName?uncap_first};
@@ -38,4 +42,41 @@ public class ${class_name} extends BaseEntity {
 
 </#list>
 </#if>
+
+<#if model_column?exists>
+<#list model_column as model>
+    <#if (model.columnType = 'varchar' || model.columnType = 'text')>
+    /**
+    * 设置${model.columnComment!}
+    */
+    public String get${model.changeColumnName}() {
+        return this.${model.changeColumnName?uncap_first};
+    }
+    /**
+    * 获取${model.columnComment!}
+    */
+    public void set${model.changeColumnName}(String ${model.changeColumnName?uncap_first}) {
+        this.${model.changeColumnName?uncap_first} = ${model.changeColumnName?uncap_first};
+    }
+    </#if>
+    <#if model.columnType = 'timestamp' || model.columnType = 'datetime'>
+    /**
+    * 设置${model.columnComment!}
+    */
+    public Date get${model.changeColumnName}() {
+        return this.${model.changeColumnName?uncap_first};
+    }
+    /**
+    * 获取${model.columnComment!}
+    */
+    public void set${model.changeColumnName}(Date ${model.changeColumnName?uncap_first}) {
+        this.${model.changeColumnName?uncap_first} = ${model.changeColumnName?uncap_first};
+    }
+    </#if>
+
+</#list>
+</#if>
+
+
+
 }
