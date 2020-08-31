@@ -3,6 +3,7 @@ package ddp.tools;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.util.UUID;
 import java.util.regex.Matcher;
 
 /**
@@ -47,4 +48,12 @@ public class MyStringUtils {
 
     return builder.toString();
   }
+
+  /**
+   * 获取UUID字符串
+   */
+  public static String getUUID() {
+    return UUID.randomUUID().toString().replace("-", "");
+  }
+
 }

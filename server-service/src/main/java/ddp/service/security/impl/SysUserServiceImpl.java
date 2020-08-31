@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl extends BaseServiceImpl<SysUserEntity> implements SysUserService {
+public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implements SysUserService {
   @Autowired
   private SysUserMapper userMapper;
 

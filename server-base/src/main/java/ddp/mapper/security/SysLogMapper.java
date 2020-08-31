@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
 * 描述：系统日志表模型
 * @author Ddp
-* @date 2020-08-31 16:47:52
+* @date 2020-08-31 19:10:30
 */
 @Mapper
 public interface SysLogMapper extends MyMapper<SysLogEntity> {

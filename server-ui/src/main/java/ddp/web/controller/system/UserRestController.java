@@ -3,11 +3,13 @@ package ddp.web.controller.system;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import ddp.beans.BaseResponse;
+import ddp.constants.CommConstants;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysUserService;
 import ddp.tools.MyPageUtils;
 import ddp.web.BaseController;
+import ddp.web.aop.OperLog;
 import ddp.web.tools.MessageSourceUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,6 +44,7 @@ public class UserRestController extends BaseController {
    */
   @ApiOperation(value = "login", notes = "用户登陆")
   @PostMapping("/login")
+  @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "用户登陆")
   public BaseResponse<Object> login(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
                             @ApiParam(value = "语言请求参数", required = false) Locale locale,
                             @ApiParam(value = "用户会话对象", required = false) HttpSession session) {

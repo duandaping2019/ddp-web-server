@@ -19,6 +19,13 @@
     </dependency>
     <!-- server-service end -->
 
+    <!-- AOP切面控制控件 start-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
+    <!-- AOP切面控制控件 end-->
+
   </dependencies>
 
   <build>

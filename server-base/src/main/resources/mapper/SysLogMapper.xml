@@ -3,11 +3,17 @@
 <mapper namespace="ddp.mapper.security.SysLogMapper" >
     <resultMap id="BaseResultMap" type="ddp.ext.security.SysLogExt">
         <id column="log_id" property="logId" jdbcType="VARCHAR" />
-        <id column="log_type" property="logType" jdbcType="VARCHAR" />
         <id column="log_model" property="logModel" jdbcType="VARCHAR" />
-        <id column="log_operator" property="logOperator" jdbcType="VARCHAR" />
-        <id column="log_time" property="logTime" jdbcType="TIMESTAMP" />
+        <id column="log_type" property="logType" jdbcType="VARCHAR" />
         <id column="log_content" property="logContent" jdbcType="VARCHAR" />
+        <id column="log_req_uri" property="logReqUri" jdbcType="VARCHAR" />
+        <id column="log_req_class" property="logReqClass" jdbcType="VARCHAR" />
+        <id column="log_req_method" property="logReqMethod" jdbcType="VARCHAR" />
+        <id column="log_req_params" property="logReqParams" jdbcType="VARCHAR" />
+        <id column="log_ip" property="logIp" jdbcType="VARCHAR" />
+        <id column="log_operator_id" property="logOperatorId" jdbcType="VARCHAR" />
+        <id column="log_operator_name" property="logOperatorName" jdbcType="VARCHAR" />
+        <id column="log_time" property="logTime" jdbcType="TIMESTAMP" />
     </resultMap>
 
 </mapper>
