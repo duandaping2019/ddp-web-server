@@ -13,7 +13,7 @@ import java.util.Date;
 /**
 * 描述：系统日志表模型
 * @author Ddp
-* @date 2020-08-31 16:41:02
+* @date 2020-08-31 16:47:52
 */
 @Entity
 @Table(name = "sys_log")
