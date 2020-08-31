@@ -52,6 +52,7 @@ public class ${class_name} extends BaseEntity {
     public String get${model.changeColumnName}() {
         return this.${model.changeColumnName?uncap_first};
     }
+
     /**
     * 获取${model.columnComment!}
     */
@@ -66,6 +67,7 @@ public class ${class_name} extends BaseEntity {
     public Date get${model.changeColumnName}() {
         return this.${model.changeColumnName?uncap_first};
     }
+
     /**
     * 获取${model.columnComment!}
     */

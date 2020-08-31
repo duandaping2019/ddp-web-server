@@ -14,7 +14,8 @@ public class PropertiesUtils {
   private static Properties pro = new Properties();
 
   static {
-    try (InputStreamReader in = new InputStreamReader(PropertiesUtils.class.getClassLoader().getResourceAsStream("genTemplates/genProps.properties"), StandardCharsets.UTF_8)) {
+    try (InputStreamReader in = new InputStreamReader(PropertiesUtils.class.getClassLoader()
+            .getResourceAsStream("genTemplates/genProps.properties"), StandardCharsets.UTF_8)) {
       pro.load(in);
     } catch (Exception e) {
       e.printStackTrace();

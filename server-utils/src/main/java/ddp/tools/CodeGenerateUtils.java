@@ -86,10 +86,10 @@ public class CodeGenerateUtils {
 
     //生成文件信息
     Map<String, Object> dataMap = new HashMap<>();
-    dataMap.put("mapperInfo", PropertiesUtils.getProperty("MAPPER_PACKAGE") + "." +
-            MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME")) + "Mapper"); //类全名
-    dataMap.put("typeInfo", PropertiesUtils.getProperty("EXT_PACKAGE") + "." +
-            MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME")) + "Ext"); // 引入信息
+    dataMap.put("mapperInfo", PropertiesUtils.getProperty("MAPPER_PACKAGE") + "."
+            + MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME")) + "Mapper"); //类全名
+    dataMap.put("typeInfo", PropertiesUtils.getProperty("EXT_PACKAGE") + "."
+            + MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME")) + "Ext"); // 引入信息
     dataMap.put("model_column", columnClassList); //列信息
 
     generateFileByTemplate("mapperXml.ftl", mapperXmlFile, dataMap);
@@ -185,7 +185,7 @@ public class CodeGenerateUtils {
    * 读取数据集合
    * @param resultSet 数据来源
    */
-  private static List<ColumnClass> getColumnClassList(ResultSet resultSet){
+  private static List<ColumnClass> getColumnClassList(ResultSet resultSet) {
     //获取实体信息集合
     List<ColumnClass> columnClassList = new ArrayList<>();
     while (true) {

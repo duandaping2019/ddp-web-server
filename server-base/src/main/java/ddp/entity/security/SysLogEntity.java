@@ -13,7 +13,7 @@ import java.util.Date;
 /**
 * 描述：系统日志表模型
 * @author Ddp
-* @date 2020-08-31 16:33:59
+* @date 2020-08-31 16:41:02
 */
 @Entity
 @Table(name = "sys_log")
@@ -63,6 +63,7 @@ public class SysLogEntity extends BaseEntity {
     public String getLogId() {
         return this.logId;
     }
+
     /**
     * 获取主键ID
     */
@@ -76,6 +77,7 @@ public class SysLogEntity extends BaseEntity {
     public String getLogType() {
         return this.logType;
     }
+
     /**
     * 获取类型【CRUD】
     */
@@ -89,6 +91,7 @@ public class SysLogEntity extends BaseEntity {
     public String getLogModel() {
         return this.logModel;
     }
+
     /**
     * 获取板块【B】
     */
@@ -102,6 +105,7 @@ public class SysLogEntity extends BaseEntity {
     public String getLogOperator() {
         return this.logOperator;
     }
+
     /**
     * 获取操作人ID
     */
@@ -115,6 +119,7 @@ public class SysLogEntity extends BaseEntity {
     public Date getLogTime() {
         return this.logTime;
     }
+
     /**
     * 获取操作时间
     */
@@ -128,6 +133,7 @@ public class SysLogEntity extends BaseEntity {
     public String getLogContent() {
         return this.logContent;
     }
+
     /**
     * 获取记录内容
     */
