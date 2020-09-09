@@ -6,13 +6,19 @@
     <result column="user_no" property="userNo" jdbcType="VARCHAR" />
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
     <result column="user_sex" property="userSex" jdbcType="SMALLINT" />
+    <result column="login_id" property="loginId" jdbcType="VARCHAR" />
+    <result column="login_pwd" property="loginPwd" jdbcType="VARCHAR" />
+    <result column="user_state" property="userState" jdbcType="CHAR" />
   </resultMap>
 
   <sql id="BaseQuerySqlCols">
       user_id,
       user_no,
       user_name,
-      user_sex
+      user_sex,
+      login_id,
+      login_pwd,
+      user_state
   </sql>
 
   <select id="findByLoginId" resultMap="BaseResultMap">

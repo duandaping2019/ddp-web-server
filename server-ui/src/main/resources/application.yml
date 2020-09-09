@@ -32,7 +32,7 @@ spring:
     check-template-location: false
 
 mybatis: # Mybatis 配置
-  #mapper-locations: classpath:mapper/*.xml #定义xml文件位置，不是必须的，如果需要在xml写sql请配置此选项
+  mapper-locations: classpath:mapper/*.xml #定义xml文件位置，不是必须的，如果需要在xml写sql请配置此选项
   type-aliases-package: ddp.entity # 注意：对应实体类的路径
 mapper: # 通用Mapper配置
   mappers:  ddp.MyMapper  # 通用Mapper

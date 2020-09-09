@@ -1,6 +1,9 @@
 package ddp.web.configure;
 
+import ddp.constants.CommConstants;
+import ddp.web.filters.MyPassThruAuthenticationFilter;
 import ddp.web.security.MyShiroRealm;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +42,21 @@ public class ShiroConfigure {
      */
     @Bean
     public MyShiroRealm myShiroRealm() {
-        return new MyShiroRealm();
+        MyShiroRealm myShiroRealm = new MyShiroRealm();
+        myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        return myShiroRealm;
+    }
+
+    /**
+     * 密码凭证匹配器，作为自定义认证的基础 （由于我们的密码校验交给Shiro的SimpleAuthenticationInfo进行处理了）
+     */
+    @Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcher() {
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+        hashedCredentialsMatcher.setHashAlgorithmName("MD5"); // 散列算法:这里使用MD5算法;
+        hashedCredentialsMatcher.setHashIterations(CommConstants.HASH_ITERATIONS); // 散列的次数，比如散列两次，相当于 md5(md5(""));
+        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
+        return hashedCredentialsMatcher;
     }
 
     /**
@@ -46,9 +64,9 @@ public class ShiroConfigure {
      */
     @Bean
     public DefaultWebSessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setSessionDAO(redisSessionDAO());
-        return sessionManager;
+        MySessionManager mySessionManager = new MySessionManager();
+        mySessionManager.setSessionDAO(redisSessionDAO());
+        return mySessionManager;
     }
 
 
@@ -118,15 +136,19 @@ public class ShiroConfigure {
         //设置安全管理器
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
+        Map<String, Filter> filtersMap = new HashMap<>(16);
+        MyPassThruAuthenticationFilter authFilter = new MyPassThruAuthenticationFilter();
+        filtersMap.put("authc", authFilter);
+        shiroFilterFactoryBean.setFilters(filtersMap);
 
-        Map<String, String> filterMap = new HashMap<>(16);
-        filterMap.put("/v2/api-docs", "anon"); // 表示可以匿名访问
+        Map<String, String> filterChainDefinitionMap = new HashMap<>(16);
+        filterChainDefinitionMap.put("/v2/api-docs", "anon"); // 表示可以匿名访问
 
-        filterMap.put("/user/logout", "logout"); //系统注销
-        filterMap.put("/**", "authc"); // 对所有用户认证
+        filterChainDefinitionMap.put("/user/logout", "logout"); //系统注销
+        filterChainDefinitionMap.put("/**", "authc"); // 对所有用户认证
 
         shiroFilterFactoryBean.setLoginUrl("/user/login"); // 系统登陆
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return shiroFilterFactoryBean;
     }

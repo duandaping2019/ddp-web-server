@@ -1,20 +1,21 @@
 package ddp.web.security;
 
+import ddp.constants.CommConstants;
 import ddp.entity.security.SysUserEntity;
 import ddp.service.security.SysUserService;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.SimpleAccount;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import tk.mybatis.mapper.entity.Example;
 
 /**
  * 实现自定义Realm
@@ -37,14 +38,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         logger.info("---------------- 执行 Shiro 凭证认证 ----------------------");
 
         UsernamePasswordToken authcToken = (UsernamePasswordToken) token;
-
-        //封装条件
-        Example example = new Example(SysUserEntity.class);
-        example.createCriteria().andEqualTo("loginId", authcToken.getUsername()).andEqualTo("loginPwd", String.valueOf(authcToken.getPassword()));
-
-        //执行查询
-        SysUserEntity user = userService.getEntityInfo(example);
-
+        SysUserEntity user = userService.findByLoginId(authcToken.getUsername());
 
         if (user != null) {
             // 用户为禁用状态
@@ -53,11 +47,7 @@ public class MyShiroRealm extends AuthorizingRealm {
             }
 
             logger.info("---------------- Shiro 凭证认证成功 ----------------------");
-            return new SimpleAuthenticationInfo(
-                    user, //用户
-                    user.getLoginPwd(), //密码
-                    getName()  //realm name
-            );
+            return new SimpleAccount(user.getLoginId(), user.getLoginPwd(), ByteSource.Util.bytes(CommConstants.SALT), this.getName());
         }
 
         throw new UnknownAccountException();
@@ -75,6 +65,5 @@ public class MyShiroRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         return new SimpleAuthorizationInfo();
     }
-
 
 }

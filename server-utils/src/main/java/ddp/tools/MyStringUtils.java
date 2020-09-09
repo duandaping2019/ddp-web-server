@@ -1,6 +1,8 @@
 package ddp.tools;
 
+import ddp.constants.CommConstants;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
 
 import java.io.File;
 import java.util.UUID;
@@ -54,6 +56,22 @@ public class MyStringUtils {
    */
   public static String getUUID() {
     return UUID.randomUUID().toString().replace("-", "");
+  }
+
+  /**
+   * 获取默认MD5加密密码
+   */
+  public static String getDefaultLoginPwd() {
+    Md5Hash md5Hash = new Md5Hash(CommConstants.LOGIN_PWD, CommConstants.SALT, CommConstants.HASH_ITERATIONS);
+    return md5Hash.toString();
+  }
+
+  /**
+   * 获取指定MD5加密密码
+   */
+  public static String getDefaultLoginPwd(String password) {
+    Md5Hash md5Hash = new Md5Hash(password, CommConstants.SALT, CommConstants.HASH_ITERATIONS);
+    return md5Hash.toString();
   }
 
 }

@@ -22,7 +22,7 @@ public abstract class BaseController {
     Subject subject = SecurityUtils.getSubject();
     SysUserEntity user = (SysUserEntity) subject.getPrincipal();
     SysUserExt sysUserExt = new SysUserExt();
-    BeanUtils.copyProperties(user,sysUserExt);
+    BeanUtils.copyProperties(user, sysUserExt);
     return sysUserExt;
   }
 
