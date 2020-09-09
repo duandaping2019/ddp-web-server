@@ -2,9 +2,9 @@ package ddp.mapper.security;
 
 import ddp.MyMapper;
 import ddp.entity.security.SysLangEntity;
-import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
-@Mapper
+@Repository
 public interface SysLangMapper extends MyMapper<SysLangEntity> {
 
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ddp.mapper.security.SysUserRoleMapper" >
+    <resultMap id="BaseResultMap" type="ddp.ext.security.SysUserRoleExt">
+        <id column="ur_id" property="urId" jdbcType="BIGINT" />
+        <id column="user_id" property="userId" jdbcType="BIGINT" />
+        <id column="role_id" property="roleId" jdbcType="BIGINT" />
+    </resultMap>
+
+</mapper>

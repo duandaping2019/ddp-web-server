@@ -2,9 +2,13 @@ package ddp.mapper.security;
 
 import ddp.MyMapper;
 import ddp.entity.security.SysUserEntity;
-import org.apache.ibatis.annotations.Mapper;
+import ddp.ext.security.SysUserExt;
+import org.springframework.stereotype.Repository;
 
-@Mapper
+@Repository
 public interface SysUserMapper extends MyMapper<SysUserEntity> {
+
+    /*通过登陆ID获取用户信息*/
+    SysUserExt findByLoginId(String loginId);
 
 }

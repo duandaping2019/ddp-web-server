@@ -5,7 +5,6 @@ import ddp.beans.BaseResponse;
 import ddp.web.configure.MyLocaleResolver;
 import ddp.web.tools.MessageSourceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -18,7 +17,7 @@ import java.io.IOException;
 /**
  * Session拦截器
  */
-@Configuration
+//@Configuration
 public class SessionCofig implements WebMvcConfigurer {
 
   @Autowired
@@ -35,7 +34,7 @@ public class SessionCofig implements WebMvcConfigurer {
         .addPathPatterns("/**");
   }
 
-  @Configuration
+  //@Configuration
   public class SecurityInterceptor implements HandlerInterceptor {
 
     /**

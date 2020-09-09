@@ -54,6 +54,12 @@ public class SysUserEntity extends BaseEntity {
   @Column(name = "login_pwd", length = 128)
   private String loginPwd;
 
+  /**
+   *  用户状态【0：在用 1：冻结】
+   */
+  @Column(name = "user_state", length = 1)
+  private String userState;
+
   public Long getUserId() {
     return userId;
   }
@@ -101,4 +107,13 @@ public class SysUserEntity extends BaseEntity {
   public void setLoginPwd(String loginPwd) {
     this.loginPwd = loginPwd;
   }
+
+  public String getUserState() {
+    return userState;
+  }
+
+  public void setUserState(String userState) {
+    this.userState = userState;
+  }
+
 }

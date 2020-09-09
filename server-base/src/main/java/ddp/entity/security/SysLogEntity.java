@@ -63,12 +63,6 @@ public class SysLogEntity extends BaseEntity {
     private String logReqMethod;
 
     /**
-    *请求参数
-    */
-    @Column(name = "log_req_params", length = 32)
-    private String logReqParams;
-
-    /**
     *操作人IP
     */
     @Column(name = "log_ip", length = 32)
@@ -189,20 +183,6 @@ public class SysLogEntity extends BaseEntity {
     */
     public void setLogReqMethod(String logReqMethod) {
         this.logReqMethod = logReqMethod;
-    }
-
-    /**
-    * 设置请求参数
-    */
-    public String getLogReqParams() {
-        return this.logReqParams;
-    }
-
-    /**
-    * 获取请求参数
-    */
-    public void setLogReqParams(String logReqParams) {
-        this.logReqParams = logReqParams;
     }
 
     /**

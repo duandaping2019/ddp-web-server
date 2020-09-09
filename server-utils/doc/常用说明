@@ -1,0 +1,86 @@
+
+集合转数组推荐使用
+    List<String> list = new ArrayList<String>(2);
+    list.add("guan");
+    list.add("bao");
+
+    String[] array = new String[list.size()];
+    array = list.toArray(array); // 传入指定大小数组
+
+
+使用工具类Arrays.asList()把数组转换成集合时，
+    1、不能使用其修改集合相关的方法，它的add/remove/clear方法会抛出UnsupportedOperationException异常。
+    2、说明：asList的返回对象是一个Arrays内部类，并没有实现集合的修改方法。Arrays.asList体现的是适配器模式，只是转换接口，后台的数据仍是数组。
+    3、String[] str = new String[] { "you", "wu" }; List list = Arrays.asList(str);
+        A/第一种情况：list.add("yangguanbao"); 运行时异常。
+        B/第二种情况：str[0] = "gujin"; 那么list.get(0)也会随之修改
+
+
+泛型通配符<? extends T>来接收返回的数据，此写法的泛型集合不能使用add方法，而<? super T>不能使用get方法，做为接口调用赋值时易出错。
+说明：扩展说一下PECS(Producer Extends Consumer Super)原则：第一、频繁往外读取内容的，适合用<? extends T>。第二、经常往里插入的，适合用<? super T>。
+
+
+不要在foreach循环里进行元素的remove/add操作。remove元素请使用Iterator方式，如果并发操作，需要对Iterator对象加锁。
+    正例：
+        Iterator<String> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            String item = iterator.next();
+            if (删除元素的条件) {
+                iterator.remove();
+            }
+        }
+
+    反例：
+        List<String> list = new ArrayList<String>();
+        list.add("1");
+        list.add("2");
+        for (String item : list) {
+            if ("1".equals(item)) {
+                list.remove(item);
+            }
+        }
+
+
+Map集合初始化时，指定集合初始值大小。
+说明：HashMap使用HashMap(int initialCapacity) 初始化，
+正例：initialCapacity (需要存储的元素个数 / 负载因子) + 1。
+注意 负载因子（即loader factor 默认为 0.75，如果 暂时无法 确定 初始值大小，请设置为 16（即默认值）。
+反例： HashMap需要 放置 1024个 元素， 由于 没有设置容量 初 始大小，随着元素不断增加，容量 7 次 被迫扩大， resize需要重建 hash表，严重影响性能。
+
+
+使用entrySet遍历Map类集合KV，而不是keySet方式进行遍历。
+说明：keySet其实是遍历了2次，一次是转为Iterator对象，另一次是从hashMap中取出key所对应的value。
+而entrySet只是遍历了一次就把key和value都放到了entry中，效率更高。如果是JDK8，使用Map.foreach方法。
+正例：values()返回的是V值集合，是一个list集合对象；keySet()返回的是K值集合，是一个Set集合对象；entrySet()返回的是K-V值组合集合
+
+
+集合类                 KEY             VALUE               SUPER               说明
+HashTable             NOT NULL        NOT NULL            Dictionary          线程安全
+ConcurrentHashMap     NOT NULL        NOT NULL            AbstractMap         锁分段技术（JDK8:CAS）
+TreeMap               NOT NULL        NULL                AbstractMap         线程不安全
+HashMap               NULL            NULL                AbstractMap         线程不安全
+
+
+合理利用好集合的有序性(sort)和稳定性(order)，避免集合的无序性(unsort)和不稳定性(unorder)带来的负面影响。
+说明：有序性是指遍历的结果是按某种比较规则依次排列的。稳定性指集合每次遍历的元素次序是一定的。
+如：ArrayList是order/unsort（稳定且无序）；HashMap是unorder/unsort（不稳定且无序）；TreeSet是order/sort（稳定且有序）
+利用Set元素唯一的特性，可以快速对一个集合进行去重操作，避免使用List的contains方法进行遍历、对比、去重操作
+
+
+=============================================(六) 并发处理=====================================================
+1、获取单例对象需要保证线程安全，其中的方法也要保证线程安全。 说明：资源驱动类、工具类、单例工厂类都需要注意
+2、线程资源必须通过线程池提供，不允许在应用中自行显式创建线程
+3、线程池不允许使用 Executors 去创建，而是通过 ThreadPoolExecutor的方式
+4、SimpleDateFormat 是线程不安全的类，一般不要定义为static变量，如果定义为static，必须加锁，或者使用DateUtils工具类
+5、如果是JDK8的应用，可以使用Instant代替Date，LocalDateTime代替Calendar，DateTimeFormatter代替SimpleDateFormat（*）
+6、高并发时，同步调用应该去考量锁的性能损耗。能用无锁数据结构，就不要用锁；能锁区块，就不要锁整个方法体；能用对象锁，就不要用类锁
+7、多线程并行处理定时任务时，Timer运行多个TimeTask时，只要其中之一没有捕获抛出的异常，其它任务便会自动终止运行，使用ScheduledExecutorService则没有这个问题
+8、如果是count++操作，使用如下类实现：AtomicInteger count = new AtomicInteger(); count.addAndGet(1); 如果是JDK8，推荐使用LongAdder对象，比AtomicLong性能更好（减少乐观锁的重试次数）
+
+
+=============================================(七) 控制语句=====================================================
+
+
+
+
+

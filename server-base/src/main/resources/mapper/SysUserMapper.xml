@@ -8,4 +8,18 @@
     <result column="user_sex" property="userSex" jdbcType="SMALLINT" />
   </resultMap>
 
+  <sql id="BaseQuerySqlCols">
+      user_id,
+      user_no,
+      user_name,
+      user_sex
+  </sql>
+
+  <select id="findByLoginId" resultMap="BaseResultMap">
+    select
+        <include refid="BaseQuerySqlCols" />
+    from sys_user t
+    where t.login_id = #{loginId}
+  </select>
+
 </mapper>

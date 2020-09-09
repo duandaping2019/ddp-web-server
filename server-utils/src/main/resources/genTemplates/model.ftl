@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
+import java.math.BigDecimal;
 
 
 /**
@@ -35,6 +36,10 @@ public class ${class_name} extends BaseEntity {
     @Column(name = "${model.columnName}")
     private String ${model.changeColumnName?uncap_first};
     </#if>
+    <#if (model.columnType = 'bigint')>
+    @Column(name = "${model.columnName}", length = ${model.columnLen})
+    private BigDecimal ${model.changeColumnName?uncap_first};
+    </#if>
     <#if model.columnType = 'timestamp' || model.columnType = 'datetime'>
     @Column(name = "${model.columnName}", length = ${model.columnLen})
     private Date ${model.changeColumnName?uncap_first};
@@ -57,6 +62,21 @@ public class ${class_name} extends BaseEntity {
     * 获取${model.columnComment!}
     */
     public void set${model.changeColumnName}(String ${model.changeColumnName?uncap_first}) {
+        this.${model.changeColumnName?uncap_first} = ${model.changeColumnName?uncap_first};
+    }
+    </#if>
+    <#if (model.columnType = 'bigint')>
+    /**
+    * 设置${model.columnComment!}
+    */
+    public BigDecimal get${model.changeColumnName}() {
+        return this.${model.changeColumnName?uncap_first};
+    }
+
+    /**
+    * 获取${model.columnComment!}
+    */
+    public void set${model.changeColumnName}(BigDecimal ${model.changeColumnName?uncap_first}) {
         this.${model.changeColumnName?uncap_first} = ${model.changeColumnName?uncap_first};
     }
     </#if>
