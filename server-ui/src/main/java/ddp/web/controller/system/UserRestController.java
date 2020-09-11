@@ -23,9 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.LocaleResolver;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,9 @@ public class UserRestController extends BaseController {
   @Autowired
   private SysUserService userService;
 
+  @Autowired
+  private LocaleResolver localeResolver;
+
   /**
    * 用户登陆
    */
@@ -50,8 +55,14 @@ public class UserRestController extends BaseController {
   @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "用户登陆")
   public BaseResponse<Object> login(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
                             @ApiParam(value = "语言请求参数", required = false) Locale locale,
-                            @ApiParam(value = "用户会话对象", required = false) HttpSession session) {
+                            @ApiParam(value = "用户请求对象", required = false) HttpServletRequest request,
+                            @ApiParam(value = "用户响应对象", required = false) HttpServletResponse response) {
+
+    // 语言环境设置
+    localeResolver.setLocale(request, response, locale);
+
     try {
+      // 登陆验证
       UsernamePasswordToken token = new UsernamePasswordToken(ext.getLoginId(), ext.getLoginPwd());
       Subject subject = SecurityUtils.getSubject();
       subject.login(token);
@@ -129,7 +140,7 @@ public class UserRestController extends BaseController {
 
   @ApiOperation(value = "addUserInfo", notes = "添加用户信息")
   @RequestMapping("/add_user_info")
-  @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "添加用户信息")
+  @OperLog(operModul = "系统管理", operType = CommConstants.ADD_DATA, operDesc = "添加用户信息")
   public BaseResponse<Object> addUserInfo(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
                                   @ApiParam(value = "语言请求参数", required = false) Locale locale) {
     SysUserEntity entity = new SysUserEntity();
@@ -141,7 +152,7 @@ public class UserRestController extends BaseController {
 
   @ApiOperation(value = "addUserInfoList", notes = "添加用户信息")
   @RequestMapping("/add_user_info_list")
-  @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "添加用户信息")
+  @OperLog(operModul = "系统管理", operType = CommConstants.ADD_DATA, operDesc = "添加用户信息")
   public BaseResponse<Object> addUserInfoList(@ApiParam(value = "用户请求参数", required = false) @RequestBody List<SysUserExt> extList,
                                       @ApiParam(value = "语言请求参数", required = false) Locale locale) {
     List<SysUserEntity> entityList = new ArrayList<>();
