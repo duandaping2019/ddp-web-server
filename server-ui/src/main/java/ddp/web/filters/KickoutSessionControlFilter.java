@@ -80,7 +80,7 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
         }
 
         //如果队列里没有此sessionId，且用户没有被踢出；放入队列
-        if(!deque.contains(sessionId) && session.getAttribute("kickout") == null) {
+        if (!deque.contains(sessionId) && session.getAttribute("kickout") == null) {
             //将sessionId存入队列
             deque.push(sessionId);
             //将用户的sessionId队列缓存
@@ -88,9 +88,9 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
         }
 
         //如果队列里的sessionId数超出最大会话数，开始踢人
-        while(deque.size() > maxSession) {
+        while (deque.size() > maxSession) {
             Serializable kickoutSessionId = null;
-            if(kickoutAfter) { //如果踢出后者
+            if (kickoutAfter) { //如果踢出后者
                 kickoutSessionId = deque.removeFirst();
                 //踢出后再更新下缓存队列
                 cache.put(username, deque);
@@ -105,11 +105,12 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
             try {
                 //获取被踢出的sessionId的session对象
                 Session kickoutSession = sessionManager.getSession(new DefaultSessionKey(kickoutSessionId));
-                if(kickoutSession != null) {
+                if (kickoutSession != null) {
                     //设置会话的kickout属性表示踢出了
                     kickoutSession.setAttribute("kickout", true);
                 }
-            } catch (Exception e) {//ignore exception
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
