@@ -1,6 +1,7 @@
 package ddp.web.configure;
 
 import ddp.constants.CommConstants;
+import ddp.web.filters.KickoutSessionControlFilter;
 import ddp.web.filters.MyPassThruAuthenticationFilter;
 import ddp.web.security.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -64,9 +65,12 @@ public class ShiroConfigure {
      */
     @Bean
     public DefaultWebSessionManager sessionManager() {
-        MySessionManager mySessionManager = new MySessionManager();
-        mySessionManager.setSessionDAO(redisSessionDAO());
-        return mySessionManager;
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setSessionDAO(redisSessionDAO());
+
+        // 解决第一次重定向带JESSION_ID
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
+        return sessionManager;
     }
 
 
@@ -80,6 +84,21 @@ public class ShiroConfigure {
         return redisSessionDAO;
     }
 
+    /**
+     * 限制同一账号登录同时登录人数控制
+     *
+     * @return
+     */
+    @Bean
+    public KickoutSessionControlFilter kickoutSessionControlFilter() {
+        KickoutSessionControlFilter kickoutSessionControlFilter = new KickoutSessionControlFilter();
+        kickoutSessionControlFilter.setCacheManager(cacheManager());
+        kickoutSessionControlFilter.setSessionManager(sessionManager());
+        kickoutSessionControlFilter.setKickoutAfter(false);
+        kickoutSessionControlFilter.setMaxSession(1);
+        kickoutSessionControlFilter.setKickoutUrl("/user/kickout");
+        return kickoutSessionControlFilter;
+    }
 
     /**
      * 配置shiro redisManager
@@ -133,21 +152,39 @@ public class ShiroConfigure {
     @RequiresAuthentication
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        //设置安全管理器
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
 
+        /*基础链接限制条件*/
+        shiroFilterFactoryBean.setSecurityManager(securityManager); //设置安全管理器
+        shiroFilterFactoryBean.setLoginUrl("/login.html"); // 登陆页面
+//        shiroFilterFactoryBean.setLoginUrl("/user/login"); // 系统登陆
+
+
+        /*拦截器设置*/
         Map<String, Filter> filtersMap = new HashMap<>(16);
-        MyPassThruAuthenticationFilter authFilter = new MyPassThruAuthenticationFilter();
-        filtersMap.put("authc", authFilter);
+        filtersMap.put("authc", new MyPassThruAuthenticationFilter()); //【强制登陆访问限制】
+        filtersMap.put("kickout", kickoutSessionControlFilter()); //限制同一帐号同时在线的个数
         shiroFilterFactoryBean.setFilters(filtersMap);
 
+        /*设置限制链接*/
         Map<String, String> filterChainDefinitionMap = new HashMap<>(16);
-        filterChainDefinitionMap.put("/v2/api-docs", "anon"); // 表示可以匿名访问
+//        filterChainDefinitionMap.put("/user/kickout", "anon"); //强制踢出
 
-        filterChainDefinitionMap.put("/user/logout", "logout"); //系统注销
-        filterChainDefinitionMap.put("/**", "authc"); // 对所有用户认证
+        // 通用配置
+        filterChainDefinitionMap.put("/public/**", "anon"); //公共资源
+        filterChainDefinitionMap.put("/webjars/**", "anon"); //静态资源
+        filterChainDefinitionMap.put("/api/**", "anon"); //开放接口
 
-        shiroFilterFactoryBean.setLoginUrl("/user/login"); // 系统登陆
+        //swagger配置
+        filterChainDefinitionMap.put("/swagger**", "anon");
+        filterChainDefinitionMap.put("/v2/api-docs", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/configuration/ui", "anon");
+
+        // 具体配置
+        filterChainDefinitionMap.put("/user/login", "anon"); //系统登陆
+        filterChainDefinitionMap.put("/user/logout", "anon"); //系统注销
+        filterChainDefinitionMap.put("/captcha.jpg", "anon"); //验证信息
+
+        filterChainDefinitionMap.put("/**", "authc"); // authc【用户认证】
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return shiroFilterFactoryBean;

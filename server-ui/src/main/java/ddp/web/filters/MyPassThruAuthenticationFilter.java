@@ -11,6 +11,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ *  权限限制过滤器
+ */
 public class MyPassThruAuthenticationFilter extends PassThruAuthenticationFilter {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 

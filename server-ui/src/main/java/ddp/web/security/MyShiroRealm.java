@@ -56,14 +56,24 @@ public class MyShiroRealm extends AuthorizingRealm {
 
 
     /**
-     * 角色权限和对应权限添加
-     * 对ShiroFilterFactoryBean中标记为 filterMap.put("/**","perms")
-     * 或控制器中标记为 @RequiresPermissions("sayHello")，@RequiresRoles("sayHello") 注解的方法，每次访问都会进行权限认证
+     * 角色权限和对应权限添加[菜单或按钮与用户多对多对应关系]
+     * 控制器中标记为 @RequiresPermissions("sayHello")注解的方法，每次访问都会进行权限认证
      * 如果设置了redis等缓存，则doGetAuthorizationInfo只执行一次，除非手工clearCache
      */
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        return new SimpleAuthorizationInfo();
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        logger.info("---------------- 执行 Shiro 权限获取 ---------------------");
+        Object principal = principals.getPrimaryPrincipal();
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        if (principal instanceof String) { // 登陆名称
+//            Set<String> permissions = userService.findPermissionsByUserId(userLogin.getId());
+//            authorizationInfo.addStringPermissions(permissions); // 权限列表
+        }
+        logger.info("---- 获取到以下权限 ----");
+        logger.info(authorizationInfo.getRoles().toString());
+        logger.info(authorizationInfo.getStringPermissions().toString());
+        logger.info("---------------- Shiro 权限获取成功 ----------------------");
+        return authorizationInfo;
     }
 
 }

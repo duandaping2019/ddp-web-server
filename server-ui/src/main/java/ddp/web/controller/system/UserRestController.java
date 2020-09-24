@@ -10,6 +10,7 @@ import ddp.tools.MyPageUtils;
 import ddp.web.BaseController;
 import ddp.web.aop.OperLog;
 import ddp.web.tools.MessageSourceUtils;
+import ddp.web.tools.ShiroUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,7 +29,6 @@ import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -66,6 +66,7 @@ public class UserRestController extends BaseController {
       UsernamePasswordToken token = new UsernamePasswordToken(ext.getLoginId(), ext.getLoginPwd());
       Subject subject = SecurityUtils.getSubject();
       subject.login(token);
+
     } catch (DisabledAccountException e) {
       return BaseResponse.badrequest(MessageSourceUtils.getSourceFromCache("login_fail_forbid", locale));
     } catch (AuthenticationException e) {
@@ -85,18 +86,10 @@ public class UserRestController extends BaseController {
   @RequestMapping("/logout")
   @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "用户退出")
   public BaseResponse<Object> logout(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
-                             @ApiParam(value = "语言请求参数", required = false) Locale locale,
-                             @ApiParam(value = "用户会话对象", required = false) HttpSession session) {
-    //封装条件
-    Example example = new Example(SysUserEntity.class);
-    example.createCriteria().andEqualTo("loginId", ext.getLoginId());
-
-    //执行查询
-    SysUserEntity user = userService.getEntityInfo(example);
-
+                             @ApiParam(value = "语言请求参数", required = false) Locale locale) {
     //逻辑处理
-    if (user != null) {
-      session.removeAttribute(session.getId());
+    if (ShiroUtils.isLogin()) {
+      ShiroUtils.logout();
     } else {
       return BaseResponse.success(MessageSourceUtils.getSourceFromCache("login_out_fail", locale));
     }
@@ -108,6 +101,7 @@ public class UserRestController extends BaseController {
   @ApiOperation(value = "getUserInfo", notes = "获取用户信息")
   @RequestMapping("/get_user_info")
   @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "获取用户信息")
+//  @RequiresPermissions("get_user_info")
   public BaseResponse<Object> getUserInfo(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
                                   @ApiParam(value = "语言请求参数", required = false) Locale locale) {
     //封装条件
@@ -175,6 +169,15 @@ public class UserRestController extends BaseController {
   @OperLog(operModul = "系统错误", operType = CommConstants.GET_DATA, operDesc = "抛出错误")
   public BaseResponse<Object> sysErrorInfo(@ApiParam(value = "语言请求参数", required = false) Locale locale) {
     return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), "系统异常！");
+  }
+
+
+
+  @ApiOperation(value = "kickout", notes = "用户被踢出")
+  @RequestMapping("/kickout")
+  @OperLog(operModul = "系统提示", operType = CommConstants.GET_DATA, operDesc = "用户被踢出")
+  public BaseResponse<Object> kickout(@ApiParam(value = "语言请求参数", required = false) Locale locale) {
+    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), "用户被踢出了！");
   }
 
 
