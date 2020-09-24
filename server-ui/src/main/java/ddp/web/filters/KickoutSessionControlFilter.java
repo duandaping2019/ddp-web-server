@@ -76,7 +76,7 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
         //如果此用户没有session队列，也就是还没有登录过，缓存中没有
         //就new一个空队列，不然deque对象为空，会报空指针
         if (deque == null) {
-            deque = new LinkedList<Serializable>();
+            deque = new LinkedList<>();
         }
 
         //如果队列里没有此sessionId，且用户没有被踢出；放入队列
@@ -124,7 +124,7 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
             }
             saveRequest(request);
 
-            Map<String, String> resultMap = new HashMap<String, String>();
+            Map<String, String> resultMap = new HashMap<>();
             //判断是不是Ajax请求
             if ("XMLHttpRequest".equalsIgnoreCase(((HttpServletRequest) request).getHeader("X-Requested-With"))) {
                 resultMap.put("user_status", "300");
