@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
@@ -30,7 +29,7 @@ public class SysLoginController extends BaseController {
     @ApiOperation(value = "captcha", notes = "登录页验证码生成")
     @RequestMapping("captcha.jpg")
     @OperLog(operModul = "系统管理", operType = CommConstants.ADD_DATA, operDesc = "验证码生成")
-    public void captcha(HttpServletResponse response)throws ServletException, IOException {
+    public void captcha(HttpServletResponse response) throws IOException {
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
 

@@ -11,6 +11,9 @@ import org.apache.shiro.subject.Subject;
  * Shiro工具类
  */
 public class ShiroUtils {
+
+    private ShiroUtils(){}
+
     /**
      * 获取用户会话对象
      */
@@ -49,7 +52,7 @@ public class ShiroUtils {
     /**
      * 获取当前用户信息
      */
-    public static SysUserEntity getCurrUserInfo(){
+    public static SysUserEntity getCurrUserInfo() {
         Subject subject = SecurityUtils.getSubject();
         SysUserEntity user = (SysUserEntity) subject.getPrincipal();
         if (user == null) {
