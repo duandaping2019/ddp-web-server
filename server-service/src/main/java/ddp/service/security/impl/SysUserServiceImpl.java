@@ -19,4 +19,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
     return userMapper.findByLoginId(loginId);
   }
 
+  @Override
+  public SysUserExt getLoginUserInfo(SysUserEntity user) {
+    return userMapper.getLoginUserInfo(user.getLoginId());
+  }
+
+
 }

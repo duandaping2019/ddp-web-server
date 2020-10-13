@@ -1,34 +1,21 @@
 package ddp.web.tools;
 
 import ddp.bean.RRException;
+import ddp.constants.CommConstants;
 import ddp.entity.security.SysUserEntity;
-import ddp.ext.security.SysUserExt;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.BeanUtils;
 
 /**
  * Shiro工具类
  */
 public class ShiroUtils {
-
     /**
      * 获取用户会话对象
      */
     public static Session getSession() {
         return SecurityUtils.getSubject().getSession();
-    }
-
-    /**
-     * 获取用户对象
-     */
-    public static SysUserExt getUserEntity() {
-        Subject subject = SecurityUtils.getSubject();
-        SysUserEntity user = (SysUserEntity) subject.getPrincipal();
-        SysUserExt sysUserExt = new SysUserExt();
-        BeanUtils.copyProperties(user, sysUserExt);
-        return sysUserExt;
     }
 
     /**
@@ -57,6 +44,19 @@ public class ShiroUtils {
      */
     public static void logout() {
         SecurityUtils.getSubject().logout();
+    }
+
+    /**
+     * 获取当前用户信息
+     */
+    public static SysUserEntity getCurrUserInfo(){
+        Subject subject = SecurityUtils.getSubject();
+        SysUserEntity user = (SysUserEntity) subject.getPrincipal();
+        if (user == null) {
+            user = new SysUserEntity();
+            user.setLoginId(CommConstants.ADMIN_USER);
+        }
+        return user;
     }
 
     /**

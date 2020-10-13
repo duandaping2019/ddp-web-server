@@ -4,6 +4,7 @@ import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import ddp.constants.CommConstants;
 import ddp.web.aop.OperLog;
+import ddp.web.controller.BaseController;
 import ddp.web.tools.ShiroUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.io.IOException;
  * 功能描述：登录相关
  */
 @Controller("/")
-public class SysLoginController {
+public class SysLoginController extends BaseController {
 
     @Autowired
     private Producer producer;

@@ -7,7 +7,7 @@ import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysUserService;
 import ddp.tools.MyPageUtils;
-import ddp.web.BaseController;
+import ddp.web.controller.BaseController;
 import ddp.web.aop.OperLog;
 import ddp.web.tools.MessageSourceUtils;
 import ddp.web.tools.ShiroUtils;

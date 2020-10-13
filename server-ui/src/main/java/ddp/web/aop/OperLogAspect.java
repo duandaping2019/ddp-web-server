@@ -1,9 +1,12 @@
 package ddp.web.aop;
 
 import ddp.entity.security.SysLogEntity;
+import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysLogService;
+import ddp.service.security.SysUserService;
 import ddp.tools.IpAdrressUtil;
 import ddp.tools.MyStringUtils;
+import ddp.web.tools.ShiroUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -28,6 +31,8 @@ public class OperLogAspect {
     @Autowired
     private SysLogService logService;
 
+    @Autowired
+    private SysUserService userService;
 
     /**
      * 设置操作日志切入点
@@ -69,8 +74,9 @@ public class OperLogAspect {
                 logEntity.setLogReqClass(joinPoint.getTarget().getClass().getName()); //请求类名
                 logEntity.setLogReqMethod(method.getName()); //请求方法名
                 logEntity.setLogIp(IpAdrressUtil.getIpAdrress(request)); //操作人IP
-                logEntity.setLogOperatorId("ddp"); //操作人ID
-                logEntity.setLogOperatorName("段大平"); //操作人Name
+                SysUserExt currUser = userService.findByLoginId(ShiroUtils.getCurrUserInfo().getLoginId());
+                logEntity.setLogOperatorId(currUser.getUserId().toString()); //操作人ID
+                logEntity.setLogOperatorName(currUser.getUserName()); //操作人Name
                 logEntity.setLogTime(new Date()); //操作时间
 
                 logService.insertLogEntity(logEntity);

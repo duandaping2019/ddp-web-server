@@ -5,25 +5,22 @@ public class CommConstants {
   private CommConstants() {
   }
 
-  /*盐值常量*/
-  public static final String LOGIN_PWD = "123456";
-  public static final String SALT = "7e6f";
+  /*超级管理员ID*/
+  public static final String ADMIN_USER = "ddp"; //超级管理员ID
+
+  /*MD5盐值加密*/
+  public static final String LOGIN_PWD = "123456"; //默认密码
+  public static final String SALT = "7e6f"; //盐值
   public static final Integer HASH_ITERATIONS = 1024;
 
-  /*分页参数【页码数】*/
-  public static final String PAGE_NUM = "pageNum";
-
-  /*分页参数【每页条数】*/
-  public static final String PAGE_SIZE = "pageSize";
+  /*分页参数*/
+  public static final String PAGE_NUM = "pageNum"; //页码数
+  public static final String PAGE_SIZE = "pageSize"; //每页条数
 
   /*数据操作类*/
-  public static final String GET_DATA = "GET_DATA";
-  public static final String DEL_DATA = "DEL_DATA";
-  public static final String ADD_DATA = "ADD_DATA";
-  public static final String UPDATE_DATA = "UPDATE_DATA";
-
-
-
-
+  public static final String GET_DATA = "GET_DATA"; //获取数据
+  public static final String DEL_DATA = "DEL_DATA"; //删除数据
+  public static final String ADD_DATA = "ADD_DATA"; //新增数据
+  public static final String UPDATE_DATA = "UPDATE_DATA"; //更新数据
 
 }
