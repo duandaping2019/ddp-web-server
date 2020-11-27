@@ -47,7 +47,7 @@ public class MyShiroRealm extends AuthorizingRealm {
             }
 
             logger.info("---------------- Shiro 凭证认证成功 ----------------------");
-            return new SimpleAccount(user.getLoginId(), user.getLoginPwd(), ByteSource.Util.bytes(CommConstants.SALT), this.getName());
+            return new SimpleAccount(user, user.getLoginPwd(), ByteSource.Util.bytes(CommConstants.SALT), this.getName());
         }
 
         throw new UnknownAccountException();

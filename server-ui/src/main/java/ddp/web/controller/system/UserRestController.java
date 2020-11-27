@@ -1,14 +1,15 @@
 package ddp.web.controller.system;
 
 import com.github.pagehelper.PageInfo;
+import com.google.code.kaptcha.Constants;
 import ddp.beans.BaseResponse;
 import ddp.constants.CommConstants;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysUserService;
 import ddp.tools.MyPageUtils;
-import ddp.web.controller.BaseController;
 import ddp.web.aop.OperLog;
+import ddp.web.controller.BaseController;
 import ddp.web.tools.MessageSourceUtils;
 import ddp.web.tools.ShiroUtils;
 import io.swagger.annotations.Api;
@@ -57,6 +58,11 @@ public class UserRestController extends BaseController {
                             @ApiParam(value = "语言请求参数", required = false) Locale locale,
                             @ApiParam(value = "用户请求对象", required = false) HttpServletRequest request,
                             @ApiParam(value = "用户响应对象", required = false) HttpServletResponse response) {
+
+    String captcha = (String)ShiroUtils.getSessionAttribute(Constants.KAPTCHA_SESSION_KEY);
+    if (!captcha.equalsIgnoreCase(ext.getCaptcha())) { // 忽略大写小的验证码比对
+      return BaseResponse.badrequest(MessageSourceUtils.getSourceFromCache("login_fail_info", locale));
+    }
 
     // 语言环境设置
     localeResolver.setLocale(request, response, locale);
