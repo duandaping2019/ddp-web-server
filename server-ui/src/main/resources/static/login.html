@@ -111,7 +111,7 @@ var vm = new Vue({
 			    dataType: "json", //响应数据类型
                 contentType: "application/json", //请求数据类型
 			    success: function(result){
-					if(result.code == 0){//登录成功
+					if(result.code == 200){//登录成功
 						parent.location.href ='index.html';
 					}else{
 						vm.error = true;
