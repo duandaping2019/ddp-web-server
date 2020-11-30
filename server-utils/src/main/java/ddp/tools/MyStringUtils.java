@@ -69,7 +69,7 @@ public class MyStringUtils {
   /**
    * 获取指定MD5加密密码
    */
-  public static String getDefaultLoginPwd(String password) {
+  public static String getPointLoginPwd(String password) {
     Md5Hash md5Hash = new Md5Hash(password, CommConstants.SALT, CommConstants.HASH_ITERATIONS);
     return md5Hash.toString();
   }
