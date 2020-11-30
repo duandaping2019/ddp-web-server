@@ -61,7 +61,7 @@ public class UserRestController extends BaseController {
                             @ApiParam(value = "用户响应对象", required = false) HttpServletResponse response) {
 
     // 校验码校验
-    String captcha = (String)ShiroUtils.getSessionAttribute(Constants.KAPTCHA_SESSION_KEY);
+    String captcha = (String) ShiroUtils.getSessionAttribute(Constants.KAPTCHA_SESSION_KEY);
     if (!captcha.equalsIgnoreCase(ext.getCaptcha())) { // 忽略大写小的验证码比对
       return BaseResponse.badrequest(MessageSourceUtils.getSourceFromCache("login_fail_info", locale));
     }
