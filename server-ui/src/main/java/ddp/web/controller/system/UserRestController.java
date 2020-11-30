@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.ModelAndView;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,16 +93,13 @@ public class UserRestController extends BaseController {
   @ApiOperation(value = "logout", notes = "用户注销")
   @RequestMapping("/logout")
   @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "用户退出")
-  public BaseResponse<Object> logout(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
-                             @ApiParam(value = "语言请求参数", required = false) Locale locale) {
+  public ModelAndView logout(@ApiParam(value = "语言请求参数", required = false) Locale locale) {
     //逻辑处理
     if (ShiroUtils.isLogin()) {
       ShiroUtils.logout();
-    } else {
-      return BaseResponse.success(MessageSourceUtils.getSourceFromCache("login_out_fail", locale));
     }
 
-    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("login_out", locale));
+    return new ModelAndView("redirect:/login.html");
   }
 
 
