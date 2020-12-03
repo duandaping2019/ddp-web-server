@@ -80,6 +80,7 @@ public class UserRestController extends BaseController {
 
   }
 
+
   @ApiOperation(value = "logout", notes = "用户注销")
   @RequestMapping("/logout")
   @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "用户退出")

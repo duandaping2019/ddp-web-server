@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ddp.mapper.security.SysMenuMapper" >
+    <resultMap id="BaseResultMap" type="ddp.ext.security.SysMenuExt">
+        <id column="menu_id" property="menuId" jdbcType="BIGINT" />
+        <id column="parent_id" property="parentId" jdbcType="BIGINT" />
+        <id column="menu_type" property="menuType" jdbcType="BIGINT" />
+        <id column="menu_code" property="menuCode" jdbcType="VARCHAR" />
+        <id column="menu_name" property="menuName" jdbcType="VARCHAR" />
+        <id column="menu_name_en" property="menuNameEn" jdbcType="VARCHAR" />
+        <id column="menu_permission" property="menuPermission" jdbcType="VARCHAR" />
+        <id column="menu_index" property="menuIndex" jdbcType="BIGINT" />
+        <id column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
+    </resultMap>
+
+</mapper>
