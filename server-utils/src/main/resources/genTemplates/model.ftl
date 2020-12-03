@@ -28,7 +28,7 @@ public class ${class_name} extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     </#if>
-    <#if (model.columnType = 'varchar')>
+    <#if (model.columnType = 'varchar' || model.columnType = 'char')>
     @Column(name = "${model.columnName}", length = ${model.columnLen})
     private String ${model.changeColumnName?uncap_first};
     </#if>
@@ -50,7 +50,7 @@ public class ${class_name} extends BaseEntity {
 
 <#if model_column?exists>
 <#list model_column as model>
-    <#if (model.columnType = 'varchar' || model.columnType = 'text')>
+    <#if (model.columnType = 'varchar' || model.columnType = 'text' || model.columnType = 'char')>
     /**
     * 设置${model.columnComment!}
     */
@@ -98,7 +98,5 @@ public class ${class_name} extends BaseEntity {
 
 </#list>
 </#if>
-
-
 
 }

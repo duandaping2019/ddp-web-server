@@ -41,8 +41,8 @@ public class CodeGenerateUtils {
 
       DatabaseMetaData databaseMetaData = connection.getMetaData();
 
-      //获取列信息
-      ResultSet columnsResultSet = databaseMetaData.getColumns(null, "%",
+      //获取列信息【首参数：指定用户】
+      ResultSet columnsResultSet = databaseMetaData.getColumns("ddp", "%",
               PropertiesUtils.getProperty("TABLE_NAME"), "%");
 
       //读取数据集合
