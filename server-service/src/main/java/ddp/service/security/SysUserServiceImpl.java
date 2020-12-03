@@ -1,10 +1,9 @@
-package ddp.service.security.impl;
+package ddp.service.security;
 
 import ddp.BaseServiceImpl;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.mapper.security.SysUserMapper;
-import ddp.service.security.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,8 @@
-package ddp.service.security.impl;
+package ddp.service.security;
 
 import ddp.BaseServiceImpl;
 import ddp.entity.security.SysLogEntity;
 import ddp.mapper.security.SysLogMapper;
-import ddp.service.security.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

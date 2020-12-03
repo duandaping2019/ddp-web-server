@@ -40,18 +40,12 @@ import java.util.Locale;
 @RequestMapping("/user")
 public class UserRestController extends BaseController {
 
-  /**
-   * 用户管理服务
-   */
   @Autowired
-  private SysUserService userService;
+  private SysUserService userService; //用户管理服务
 
   @Autowired
   private LocaleResolver localeResolver;
 
-  /**
-   * 用户登陆
-   */
   @ApiOperation(value = "login", notes = "用户登陆")
   @RequestMapping("/login")
   @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "用户登陆")
@@ -86,10 +80,6 @@ public class UserRestController extends BaseController {
 
   }
 
-
-  /**
-   * 用户注销
-   */
   @ApiOperation(value = "logout", notes = "用户注销")
   @RequestMapping("/logout")
   @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "用户退出")

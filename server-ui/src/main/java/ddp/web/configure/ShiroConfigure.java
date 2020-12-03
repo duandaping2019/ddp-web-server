@@ -183,6 +183,7 @@ public class ShiroConfigure {
         filterChainDefinitionMap.put("/user/login", "anon"); //系统登陆
         filterChainDefinitionMap.put("/user/logout", "anon"); //系统注销
         filterChainDefinitionMap.put("/captcha.jpg", "anon"); //验证信息
+        filterChainDefinitionMap.put("/file/**", "anon"); //附件信息下载
 
         filterChainDefinitionMap.put("/**", "authc"); // authc【用户认证】
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
