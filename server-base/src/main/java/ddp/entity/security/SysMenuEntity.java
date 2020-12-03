@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 /**
 * 描述：菜单表模型
 * @author Ddp
-* @date 2020-12-03 18:16:39
+* @date 2020-12-03 18:21:23
 */
 @Entity
 @Table(name = "sys_menu")
@@ -74,6 +74,12 @@ public class SysMenuEntity extends BaseEntity {
     */
     @Column(name = "menu_url", length = 256)
     private String menuUrl;
+
+    /**
+    *菜单图标
+    */
+    @Column(name = "menu_icon", length = 64)
+    private String menuIcon;
 
 
     /**
@@ -200,6 +206,20 @@ public class SysMenuEntity extends BaseEntity {
     */
     public void setMenuUrl(String menuUrl) {
         this.menuUrl = menuUrl;
+    }
+
+    /**
+    * 设置菜单图标
+    */
+    public String getMenuIcon() {
+        return this.menuIcon;
+    }
+
+    /**
+    * 获取菜单图标
+    */
+    public void setMenuIcon(String menuIcon) {
+        this.menuIcon = menuIcon;
     }
 
 

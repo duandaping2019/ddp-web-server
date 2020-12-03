@@ -3,6 +3,7 @@ package ddp.web.controller.common;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import ddp.constants.CommConstants;
+import ddp.service.security.SysIndexService;
 import ddp.web.aop.OperLog;
 import ddp.web.controller.BaseController;
 import ddp.web.tools.ShiroUtils;
@@ -16,6 +17,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 功能描述：登录相关
@@ -25,6 +28,10 @@ public class SysLoginController extends BaseController {
 
     @Autowired
     private Producer producer;
+
+    @Autowired
+    private SysIndexService sysIndexService;
+
 
     @ApiOperation(value = "captcha", notes = "登录页验证码生成")
     @RequestMapping("captcha.jpg")
@@ -43,6 +50,16 @@ public class SysLoginController extends BaseController {
         ServletOutputStream out = response.getOutputStream();
         ImageIO.write(image, "jpg", out);
         out.flush();
+    }
+
+    @ApiOperation(value = "sysMenuUser", notes = "用户菜单权限加载")
+    @RequestMapping("sys/menu/user")
+    @OperLog(operModul = "系统首页", operType = CommConstants.GET_DATA, operDesc = "用户菜单权限加载")
+    public Map<String, Object> sysMenuUser() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("menuList", sysIndexService.selectMenuList(ShiroUtils.getCurrUserInfo())); //菜单
+        data.put("permissions", sysIndexService.selectPermissions(ShiroUtils.getCurrUserInfo())); //权限
+        return data;
     }
 
 

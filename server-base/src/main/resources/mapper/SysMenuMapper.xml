@@ -11,6 +11,30 @@
         <id column="menu_permission" property="menuPermission" jdbcType="VARCHAR" />
         <id column="menu_index" property="menuIndex" jdbcType="BIGINT" />
         <id column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
+        <id column="menu_icon" property="menuIcon" jdbcType="VARCHAR" />
     </resultMap>
+
+
+
+    <select id="selectAllPerms" resultType="java.lang.String">
+        select
+            sm.menu_permission as "permissions"
+        from sys_menu sm
+        where sm.menu_permission is not null
+            and length(sm.menu_permission) > 0
+        group by sm.menu_permission
+    </select>
+
+    <select id="selectPointPerms" resultType="java.lang.String">
+        select
+            sm.menu_permission as "permissions"
+        from sys_menu sm
+        join sys_role_menu srm on srm.menu_id = sm.menu_id
+        join sys_user_role sur on sur.role_id = srm.role_id
+        where sm.menu_permission is not null
+            and length(sm.menu_permission) > 0
+            and sur.user_id = #{userId}
+        group by sm.menu_permission
+    </select>
 
 </mapper>
