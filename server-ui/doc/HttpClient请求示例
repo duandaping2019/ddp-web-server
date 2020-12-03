@@ -1,0 +1,42 @@
+WebService + Soup + Xml 请求常用模式
+
+    <!-- https: // mvnrepository.com/artifact/commons-httpclient/commons-httpclient -->
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1</version>
+    </dependency>
+
+
+    try{
+        PostMethod postMethod = new PostMethod("http://edoc.goldwind.com.cn/JinFeng/JinFengCry.asmx?op=GetToken");
+        byte [] b = getEdocTokenRequestContent(userId).toString().getBytes("utf-8" );
+        InputStream is = new ByteArrayInputStream(b, 0 , b.length);
+        RequestEntity re = new InputStreamRequestEntity(is, b.length, "text/xml; charset=utf-8" );
+        postMethod.setRequestEntity(re);
+
+        //创建请求客户端
+        HttpClient httpClient = new HttpClient();
+        int statusCode = httpClient.executeMethod(postMethod);
+
+        if (statusCode == 200) {
+            result = postMethod.getResponseBodyAsString();
+
+            String regEx = "<[a-zA-Z]*?>(.*?)</[a-zA-Z]*?>";
+            Pattern p = Pattern.compile(regEx);
+            Matcher m = p.matcher(result);
+            if (m.find()) {
+                result = m.group(1).trim();
+            } else {
+                result = "";
+            }
+
+        }
+
+    } catch (UnsupportedEncodingException e) {
+        throw new RuntimeException(e);
+    } catch (HttpException e) {
+        throw new RuntimeException(e);
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
