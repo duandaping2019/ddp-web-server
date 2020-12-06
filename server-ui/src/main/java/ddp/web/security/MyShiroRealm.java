@@ -2,6 +2,7 @@ package ddp.web.security;
 
 import ddp.constants.CommConstants;
 import ddp.entity.security.SysUserEntity;
+import ddp.service.security.SysIndexService;
 import ddp.service.security.SysUserService;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -17,6 +18,8 @@ import org.apache.shiro.util.ByteSource;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Set;
+
 /**
  * 实现自定义Realm
  * 完成用户认证和权限认证
@@ -27,6 +30,9 @@ public class MyShiroRealm extends AuthorizingRealm {
 
     @Autowired
     private SysUserService userService;
+
+    @Autowired
+    private SysIndexService sysIndexService;
 
     /**
      * 用户认证
@@ -63,17 +69,14 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         logger.info("---------------- 执行 Shiro 权限获取 ---------------------");
-        Object principal = principals.getPrimaryPrincipal();
-        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        if (principal instanceof String) { // 登陆名称
-//            Set<String> permissions = userService.findPermissionsByUserId(userLogin.getId());
-//            authorizationInfo.addStringPermissions(permissions); // 权限列表
-        }
-        logger.info("---- 获取到以下权限 ----");
-        logger.info(authorizationInfo.getRoles().toString());
-        logger.info(authorizationInfo.getStringPermissions().toString());
+        SysUserEntity user = (SysUserEntity) principals.getPrimaryPrincipal();
+        Set<String> permsSet = sysIndexService.selectPermissions(user); ////用户权限列表
+
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        info.setStringPermissions(permsSet); //权限控制
         logger.info("---------------- Shiro 权限获取成功 ----------------------");
-        return authorizationInfo;
+        return info;
+
     }
 
 }

@@ -46,11 +46,7 @@ public class SysIndexServiceImpl implements SysIndexService{
         List<SysMenuExt> subMenuList = new ArrayList<>();
 
         for(SysMenuExt entity : menuList){
-            System.out.println(entity.getMenuType());
-            System.out.println(CommConstants.MenuType.CATALOG.getValue());
-
             if(entity.getMenuType().equals(CommConstants.MenuType.CATALOG.getValue())){//目录
-
                 entity.setList(getMenuTreeList(queryListParentId(entity.getMenuId(), menuIdList), menuIdList));
             }
             subMenuList.add(entity);

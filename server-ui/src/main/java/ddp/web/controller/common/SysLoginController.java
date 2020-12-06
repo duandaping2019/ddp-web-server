@@ -8,6 +8,7 @@ import ddp.web.aop.OperLog;
 import ddp.web.controller.BaseController;
 import ddp.web.tools.ShiroUtils;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,12 +65,21 @@ public class SysLoginController extends BaseController {
     }
 
     @ApiOperation(value = "sysUserInfo", notes = "当前登录用户信息")
-    @RequestMapping("/sys/user/info")
+    @RequestMapping("sys/user/info")
     @OperLog(operModul = "系统首页", operType = CommConstants.GET_DATA, operDesc = "当前登录用户信息")
     public Map<String, Object> sysUserInfo() {
         Map<String, Object> data = new HashMap<>();
         data.put("user", ShiroUtils.getCurrUserInfo());
         return data;
+    }
+
+    @ApiOperation(value = "sysUserList", notes = "获取用户信息列表")
+    @RequestMapping("sys/user/list")
+    @OperLog(operModul = "用户管理", operType = CommConstants.GET_DATA, operDesc = "获取用户信息列表")
+    @RequiresPermissions("sys:user:list1")
+    public List<Map<String, Object>> sysUserList(){
+        System.out.println("123456");
+        return null;
     }
 
 }

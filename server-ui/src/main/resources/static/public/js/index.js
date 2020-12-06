@@ -12,7 +12,7 @@ var menuItem = Vue.extend({
 	          '<ul v-if="item.menuType === 0" class="treeview-menu">',
 	          '<menu-item :item="item" v-for="item in item.list"></menu-item>',
 	          '</ul>',
-	          '<a v-if="item.menuType === 1" :href="\'#\'+item.url"><i v-if="item.menuIcon != null" :class="item.menuIcon"></i><i v-else class="fa fa-circle-o"></i> {{item.menuName}}</a>',
+	          '<a v-if="item.menuType === 1" :href="\'#\'+item.menuUrl"><i v-if="item.menuIcon != null" :class="item.menuIcon"></i><i v-else class="fa fa-circle-o"></i> {{item.menuName}}</a>',
 	          '</li>'
 	].join('')
 });
