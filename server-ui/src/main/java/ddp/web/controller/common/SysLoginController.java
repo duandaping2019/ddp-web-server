@@ -9,8 +9,8 @@ import ddp.web.controller.BaseController;
 import ddp.web.tools.ShiroUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * 功能描述：登录相关
  */
-@Controller("/")
+@RestController("/")
 public class SysLoginController extends BaseController {
 
     @Autowired
@@ -62,6 +62,13 @@ public class SysLoginController extends BaseController {
         return data;
     }
 
-
+    @ApiOperation(value = "sysUserInfo", notes = "当前登录用户信息")
+    @RequestMapping("/sys/user/info")
+    @OperLog(operModul = "系统首页", operType = CommConstants.GET_DATA, operDesc = "当前登录用户信息")
+    public Map<String, Object> sysUserInfo() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("user", ShiroUtils.getCurrUserInfo());
+        return data;
+    }
 
 }

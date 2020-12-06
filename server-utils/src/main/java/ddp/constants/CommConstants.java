@@ -23,4 +23,20 @@ public class CommConstants {
   public static final String ADD_DATA = "ADD_DATA"; //新增数据
   public static final String UPDATE_DATA = "UPDATE_DATA"; //更新数据
 
+  /*菜单类型*/
+  public enum MenuType {
+    CATALOG(0), //目录
+    MENU(1), //菜单
+    BUTTON(2); //按钮
+
+    private Integer value;
+
+    private MenuType(Integer value) {
+      this.value = value;
+    }
+    public Integer getValue() {
+      return value;
+    }
+  }
+
 }

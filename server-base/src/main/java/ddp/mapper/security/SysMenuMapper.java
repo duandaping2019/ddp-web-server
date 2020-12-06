@@ -2,8 +2,10 @@ package ddp.mapper.security;
 
 import ddp.MyMapper;
 import ddp.entity.security.SysMenuEntity;
+import ddp.ext.security.SysMenuExt;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -18,5 +20,11 @@ public interface SysMenuMapper extends MyMapper<SysMenuEntity> {
 
     /*获取指定用户权限*/
     List<String> selectPointPerms(Long userId);
+
+    /*获取用户菜单*/
+    List<BigDecimal> queryAllMenuId(Long userId);
+
+    /*通过父级Id获取子菜单*/
+    List<SysMenuExt> queryListParentId(BigDecimal parentId);
 
 }

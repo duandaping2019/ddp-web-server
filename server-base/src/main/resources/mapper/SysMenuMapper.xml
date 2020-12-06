@@ -14,8 +14,6 @@
         <id column="menu_icon" property="menuIcon" jdbcType="VARCHAR" />
     </resultMap>
 
-
-
     <select id="selectAllPerms" resultType="java.lang.String">
         select
             sm.menu_permission as "permissions"
@@ -35,6 +33,32 @@
             and length(sm.menu_permission) > 0
             and sur.user_id = #{userId}
         group by sm.menu_permission
+    </select>
+
+    <select id="queryAllMenuId" resultType="java.math.BigDecimal">
+        select
+            rm.menu_id
+        from sys_role_menu rm
+        join sys_user_role ur on ur.role_id = rm.role_id and ur.user_id = 2
+        where 1 = 1
+        group by rm.menu_id
+    </select>
+
+    <select id="queryListParentId" resultMap="BaseResultMap">
+        select
+            sm.menu_id,
+            sm.parent_id,
+            sm.menu_type,
+            sm.menu_code,
+            sm.menu_name,
+            sm.menu_name_en,
+            sm.menu_permission,
+            sm.menu_index,
+            sm.menu_url,
+            sm.menu_icon
+        from sys_menu sm
+        where parent_id = #{parentId}
+        order by menu_index
     </select>
 
 </mapper>
