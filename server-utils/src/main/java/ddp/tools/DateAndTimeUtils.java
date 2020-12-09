@@ -7,9 +7,9 @@ import java.util.Date;
 /**
  * 日期工具类
  */
-public class DateUtils {
+public class DateAndTimeUtils {
 
-  private DateUtils() {
+  private DateAndTimeUtils() {
   }
 
   /*常见日期格式串*/

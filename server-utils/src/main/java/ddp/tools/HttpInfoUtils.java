@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * IP地址解析工具类
  */
-public class IpAdrressUtil {
+public class HttpInfoUtils {
 
-    private IpAdrressUtil(){}
+    private HttpInfoUtils(){}
 
     /**
      * 获取Ip地址

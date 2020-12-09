@@ -4,7 +4,7 @@ import ddp.entity.security.SysLogEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysLogService;
 import ddp.service.security.SysUserService;
-import ddp.tools.IpAdrressUtil;
+import ddp.tools.HttpInfoUtils;
 import ddp.tools.MyStringUtils;
 import ddp.web.tools.ShiroUtils;
 import org.aspectj.lang.JoinPoint;
@@ -73,7 +73,7 @@ public class OperLogAspect {
                 logEntity.setLogReqUri(request.getRequestURI()); //请求URI
                 logEntity.setLogReqClass(joinPoint.getTarget().getClass().getName()); //请求类名
                 logEntity.setLogReqMethod(method.getName()); //请求方法名
-                logEntity.setLogIp(IpAdrressUtil.getIpAdrress(request)); //操作人IP
+                logEntity.setLogIp(HttpInfoUtils.getIpAdrress(request)); //操作人IP
                 SysUserExt currUser = userService.findByLoginId(ShiroUtils.getCurrUserInfo().getLoginId());
                 logEntity.setLogOperatorId(currUser.getUserId().toString()); //操作人ID
                 logEntity.setLogOperatorName(currUser.getUserName()); //操作人Name

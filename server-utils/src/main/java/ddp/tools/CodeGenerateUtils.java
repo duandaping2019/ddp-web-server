@@ -6,6 +6,7 @@ import freemarker.template.Template;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -20,11 +21,31 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /*
  * 描述：代码生成器
  */
 public class CodeGenerateUtils {
+
+  /*设置属性对象*/
+  private static Properties pro = new Properties();
+
+  static {
+    try (InputStreamReader in = new InputStreamReader(CodeGenerateUtils.class.getClassLoader()
+            .getResourceAsStream("genTemplates/genProps.properties"), StandardCharsets.UTF_8)) {
+      pro.load(in);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * 获取属性值
+   */
+  public static String getProperty(String key) {
+    return pro.getProperty(key);
+  }
 
   /**
    * 启动入口
@@ -35,19 +56,18 @@ public class CodeGenerateUtils {
     Connection connection = null;
     try {
       //驱动加载
-      Class.forName(PropertiesUtils.getProperty("DRIVER"));
-      connection = DriverManager.getConnection(PropertiesUtils.getProperty("URL"),
-              PropertiesUtils.getProperty("USER"), PropertiesUtils.getProperty("PASSWORD"));
+      Class.forName(getProperty("DRIVER"));
+      connection = DriverManager.getConnection(getProperty("URL"),
+              getProperty("USER"), getProperty("PASSWORD"));
 
       DatabaseMetaData databaseMetaData = connection.getMetaData();
 
       //获取列信息【首参数：指定用户】
       ResultSet columnsResultSet = databaseMetaData.getColumns("ddp", "%",
-              PropertiesUtils.getProperty("TABLE_NAME"), "%");
+              getProperty("TABLE_NAME"), "%");
 
       //读取数据集合
       List<ColumnClass> columnClassList = getColumnClassList(columnsResultSet);
-
 
       //生成Model文件
       generateModelFile(columnClassList);
@@ -56,8 +76,6 @@ public class CodeGenerateUtils {
       //生成Mapper文件
       generateMapperFile();
       generateMapperXmlFile(columnClassList);
-
-
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -79,17 +97,17 @@ public class CodeGenerateUtils {
   private static void generateMapperXmlFile(List<ColumnClass> columnClassList) {
     //获取文件【basePath + packagePath + fileName】
     final String path =
-            PropertiesUtils.getProperty("DISK_PATH") + PropertiesUtils.getProperty("BASE_PACKAGE_SOURCE_BATH")
-                    + MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME"))
+            getProperty("DISK_PATH") + getProperty("BASE_PACKAGE_SOURCE_BATH")
+                    + MyStringUtils.replaceUnderLineAndUpperCase(getProperty("TABLE_NAME"))
                     + "Mapper.xml";
     File mapperXmlFile = new File(path);
 
     //生成文件信息
     Map<String, Object> dataMap = new HashMap<>();
-    dataMap.put("mapperInfo", PropertiesUtils.getProperty("MAPPER_PACKAGE") + "."
-            + MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME")) + "Mapper"); //类全名
-    dataMap.put("typeInfo", PropertiesUtils.getProperty("EXT_PACKAGE") + "."
-            + MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME")) + "Ext"); // 引入信息
+    dataMap.put("mapperInfo", getProperty("MAPPER_PACKAGE") + "."
+            + MyStringUtils.replaceUnderLineAndUpperCase(getProperty("TABLE_NAME")) + "Mapper"); //类全名
+    dataMap.put("typeInfo", getProperty("EXT_PACKAGE") + "."
+            + MyStringUtils.replaceUnderLineAndUpperCase(getProperty("TABLE_NAME")) + "Ext"); // 引入信息
     dataMap.put("model_column", columnClassList); //列信息
 
     generateFileByTemplate("mapperXml.ftl", mapperXmlFile, dataMap);
@@ -101,22 +119,22 @@ public class CodeGenerateUtils {
   private static void generateMapperFile() {
     //获取文件【basePath + packagePath + fileName】
     final String path =
-            PropertiesUtils.getProperty("DISK_PATH") + PropertiesUtils.getProperty("BASE_PACKAGE_JAVA_BATH")
-                    + MyStringUtils.transPackage2Path(PropertiesUtils.getProperty("MAPPER_PACKAGE"))
-                    + MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME"))
+            getProperty("DISK_PATH") + getProperty("BASE_PACKAGE_JAVA_BATH")
+                    + MyStringUtils.transPackage2Path(getProperty("MAPPER_PACKAGE"))
+                    + MyStringUtils.replaceUnderLineAndUpperCase(getProperty("TABLE_NAME"))
                     + "Mapper.java";
     File mapperFile = new File(path);
 
     //生成文件信息
     Map<String, Object> dataMap = new HashMap<>();
-    dataMap.put("package_name", PropertiesUtils.getProperty("MAPPER_PACKAGE")); //包名
-    dataMap.put("class_name", MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME"))
+    dataMap.put("package_name", getProperty("MAPPER_PACKAGE")); //包名
+    dataMap.put("class_name", MyStringUtils.replaceUnderLineAndUpperCase(getProperty("TABLE_NAME"))
             + "Mapper"); //类名
-    dataMap.put("point_class_info", PropertiesUtils.getProperty("MODEL_PACKAGE") + "."
-            + MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME")) + "Entity"); //对应实体包名
-    dataMap.put("point_class", MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME")) + "Entity"); //对应实体类名
-    dataMap.put("table_remark", PropertiesUtils.getProperty("TABLE_REMARK")); //表描述
-    dataMap.put("author", PropertiesUtils.getProperty("AUTHOR")); //作者
+    dataMap.put("point_class_info", getProperty("MODEL_PACKAGE") + "."
+            + MyStringUtils.replaceUnderLineAndUpperCase(getProperty("TABLE_NAME")) + "Entity"); //对应实体包名
+    dataMap.put("point_class", MyStringUtils.replaceUnderLineAndUpperCase(getProperty("TABLE_NAME")) + "Entity"); //对应实体类名
+    dataMap.put("table_remark", getProperty("TABLE_REMARK")); //表描述
+    dataMap.put("author", getProperty("AUTHOR")); //作者
     dataMap.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())); //日期
 
     generateFileByTemplate("mapper.ftl", mapperFile, dataMap);
@@ -129,24 +147,24 @@ public class CodeGenerateUtils {
   private static void generateExtFile() {
     //获取文件【basePath + packagePath + fileName】
     final String path =
-            PropertiesUtils.getProperty("DISK_PATH") + PropertiesUtils.getProperty("BASE_PACKAGE_JAVA_BATH")
-                    + MyStringUtils.transPackage2Path(PropertiesUtils.getProperty("EXT_PACKAGE"))
-                    + MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME"))
+            getProperty("DISK_PATH") + getProperty("BASE_PACKAGE_JAVA_BATH")
+                    + MyStringUtils.transPackage2Path(getProperty("EXT_PACKAGE"))
+                    + MyStringUtils.replaceUnderLineAndUpperCase(getProperty("TABLE_NAME"))
                     + "Ext.java";
     File extFile = new File(path);
 
 
     //生成文件信息
     Map<String, Object> dataMap = new HashMap<>();
-    dataMap.put("package_name", PropertiesUtils.getProperty("EXT_PACKAGE")); //包名
-    dataMap.put("class_name", MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME"))
+    dataMap.put("package_name", getProperty("EXT_PACKAGE")); //包名
+    dataMap.put("class_name", MyStringUtils.replaceUnderLineAndUpperCase(getProperty("TABLE_NAME"))
             + "Ext"); //类名
-    dataMap.put("parent_class_name", MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME"))
+    dataMap.put("parent_class_name", MyStringUtils.replaceUnderLineAndUpperCase(getProperty("TABLE_NAME"))
             + "Entity"); //父级类名
-    dataMap.put("parent_import_info", PropertiesUtils.getProperty("MODEL_PACKAGE") + "."
+    dataMap.put("parent_import_info", getProperty("MODEL_PACKAGE") + "."
             + dataMap.get("parent_class_name").toString()); //父级包名
-    dataMap.put("table_remark", PropertiesUtils.getProperty("TABLE_REMARK")); //表描述
-    dataMap.put("author", PropertiesUtils.getProperty("AUTHOR")); //作者
+    dataMap.put("table_remark", getProperty("TABLE_REMARK")); //表描述
+    dataMap.put("author", getProperty("AUTHOR")); //作者
     dataMap.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())); //日期
 
     generateFileByTemplate("ext.ftl", extFile, dataMap);
@@ -159,21 +177,21 @@ public class CodeGenerateUtils {
   private static void generateModelFile(List<ColumnClass> columnClassList) {
     //获取文件【basePath + packagePath + fileName】
     final String path =
-        PropertiesUtils.getProperty("DISK_PATH") + PropertiesUtils.getProperty("BASE_PACKAGE_JAVA_BATH")
-            + MyStringUtils.transPackage2Path(PropertiesUtils.getProperty("MODEL_PACKAGE"))
-            + MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME"))
+        getProperty("DISK_PATH") + getProperty("BASE_PACKAGE_JAVA_BATH")
+            + MyStringUtils.transPackage2Path(getProperty("MODEL_PACKAGE"))
+            + MyStringUtils.replaceUnderLineAndUpperCase(getProperty("TABLE_NAME"))
             + "Entity.java";
     File modelFile = new File(path);
 
     /*基础信息设置*/
     Map<String, Object> dataMap = new HashMap<>();
     dataMap.put("model_column", columnClassList); //列信息
-    dataMap.put("package_name", PropertiesUtils.getProperty("MODEL_PACKAGE")); //包名
-    dataMap.put("table_remark", PropertiesUtils.getProperty("TABLE_REMARK")); //表描述
-    dataMap.put("author", PropertiesUtils.getProperty("AUTHOR")); //作者
+    dataMap.put("package_name", getProperty("MODEL_PACKAGE")); //包名
+    dataMap.put("table_remark", getProperty("TABLE_REMARK")); //表描述
+    dataMap.put("author", getProperty("AUTHOR")); //作者
     dataMap.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())); //日期
-    dataMap.put("table_name", PropertiesUtils.getProperty("TABLE_NAME")); //表名
-    dataMap.put("class_name", MyStringUtils.replaceUnderLineAndUpperCase(PropertiesUtils.getProperty("TABLE_NAME")) + "Entity"); //类名
+    dataMap.put("table_name", getProperty("TABLE_NAME")); //表名
+    dataMap.put("class_name", MyStringUtils.replaceUnderLineAndUpperCase(getProperty("TABLE_NAME")) + "Entity"); //类名
 
     //生成文件信息
     generateFileByTemplate("model.ftl", modelFile, dataMap);
@@ -224,13 +242,11 @@ public class CodeGenerateUtils {
   private static void generateFileByTemplate(String templateName, File file, Map<String, Object> dataMap) {
     // 读取磁盘文件【utf-8】
     try (Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8), 10240)) {
-      Template template = FreeMarkerTemplateUtils.getTemplate(templateName);
+      Template template = FreeMarkerUtils.getTemplate(templateName);
       template.process(dataMap, out);
     } catch (Exception e) {
       e.printStackTrace();
     }
 
   }
-
-
 }
