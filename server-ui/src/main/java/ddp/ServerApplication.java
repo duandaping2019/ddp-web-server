@@ -20,7 +20,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @ComponentScan(basePackages = {
     "ddp.web", //server-ui
     "ddp.service", //server-service
-    "ddp.beans", "ddp.configure", "ddp.demo", "ddp.tools" //server-tools
+    "ddp.beans", "ddp.configure", "ddp.demo", "ddp.tools" //server-utils
 })
 @MapperScan(basePackages = {"ddp.mapper"})
 public class ServerApplication {

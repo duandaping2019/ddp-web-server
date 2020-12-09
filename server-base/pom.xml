@@ -11,13 +11,13 @@
   <artifactId>server-base</artifactId>
 
   <dependencies>
-    <!-- server-tools start -->
+    <!-- server-utils start -->
     <dependency>
       <groupId>ddp.web</groupId>
-      <artifactId>server-tools</artifactId>
+      <artifactId>server-utils</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
-    <!-- server-tools end -->
+    <!-- server-utils end -->
 
     <!--Druid 连接池  start-->
     <dependency>
