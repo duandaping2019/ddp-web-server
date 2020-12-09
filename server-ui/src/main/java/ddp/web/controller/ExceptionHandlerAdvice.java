@@ -26,9 +26,9 @@ public class ExceptionHandlerAdvice {
 
             //异常信息
             BaseResponse<Object> resultData = BaseResponse.error();
-            resultData.setMsg("异常信息：" + exception.getMessage());
-            resultData.setData("异常类型：" + (exception.toString().contains(":") ?
-                    exception.toString().substring(0, exception.toString().indexOf(":")) : exception.toString()));
+            resultData.setMsg(exception.getMessage());
+            resultData.setData(exception.toString().contains(":") ?
+                    exception.toString().substring(0, exception.toString().indexOf(":")) : exception.toString());
             String data = JSON.toJSONString(resultData);
 
             //将字符转换成字节数组，指定以UTF-8编码进行转换

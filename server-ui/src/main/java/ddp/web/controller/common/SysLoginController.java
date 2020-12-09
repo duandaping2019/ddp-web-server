@@ -76,7 +76,7 @@ public class SysLoginController extends BaseController {
     @ApiOperation(value = "sysUserList", notes = "获取用户信息列表")
     @RequestMapping("sys/user/list")
     @OperLog(operModul = "用户管理", operType = CommConstants.GET_DATA, operDesc = "获取用户信息列表")
-    @RequiresPermissions("sys:user:list1")
+    @RequiresPermissions("sys:user:list")
     public List<Map<String, Object>> sysUserList(){
         System.out.println("123456");
         return null;
