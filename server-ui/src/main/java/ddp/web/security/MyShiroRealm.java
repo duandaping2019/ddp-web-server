@@ -2,6 +2,7 @@ package ddp.web.security;
 
 import ddp.constants.CommConstants;
 import ddp.entity.security.SysUserEntity;
+import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysIndexService;
 import ddp.service.security.SysUserService;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -44,7 +45,9 @@ public class MyShiroRealm extends AuthorizingRealm {
         logger.info("---------------- 执行 Shiro 凭证认证 ----------------------");
 
         UsernamePasswordToken authcToken = (UsernamePasswordToken) token;
-        SysUserEntity user = userService.findByLoginId(authcToken.getUsername());
+        SysUserExt condition = new SysUserExt();
+        condition.setLoginId(authcToken.getUsername());
+        SysUserExt user = userService.getExtInfo(condition);
 
         if (user != null) {
             // 用户为禁用状态

@@ -74,7 +74,9 @@ public class OperLogAspect {
                 logEntity.setLogReqClass(joinPoint.getTarget().getClass().getName()); //请求类名
                 logEntity.setLogReqMethod(method.getName()); //请求方法名
                 logEntity.setLogIp(HttpInfoUtils.getIpAdrress(request)); //操作人IP
-                SysUserExt currUser = userService.findByLoginId(ShiroUtils.getCurrUserInfo().getLoginId());
+                SysUserExt condition = new SysUserExt();
+                condition.setLoginId(ShiroUtils.getCurrUserInfo().getLoginId());
+                SysUserExt currUser = userService.getExtInfo(condition);
                 logEntity.setLogOperatorId(currUser.getUserId().toString()); //操作人ID
                 logEntity.setLogOperatorName(currUser.getUserName()); //操作人Name
                 logEntity.setLogTime(new Date()); //操作时间

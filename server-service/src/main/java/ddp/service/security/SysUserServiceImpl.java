@@ -7,21 +7,21 @@ import ddp.mapper.security.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implements SysUserService {
   @Autowired
   private SysUserMapper userMapper;
 
-
   @Override
-  public SysUserExt findByLoginId(String loginId) {
-    return userMapper.findByLoginId(loginId);
+  public SysUserExt getExtInfo(SysUserExt ext) {
+    return userMapper.getExtInfo(ext);
   }
 
   @Override
-  public SysUserExt getLoginUserInfo(SysUserEntity user) {
-    return userMapper.getLoginUserInfo(user.getLoginId());
+  public List<SysUserExt> getExtListInfo(SysUserExt ext) {
+    return userMapper.getExtListInfo(ext);
   }
-
 
 }

@@ -11,30 +11,22 @@
         <result column="user_state" property="userState" jdbcType="CHAR"/>
     </resultMap>
 
-    <sql id="BaseQuerySqlCols">
-        user_id,
-        user_no,
-        user_name,
-        user_sex,
-        login_id,
-        login_pwd,
-        user_state
-    </sql>
-
-    <select id="findByLoginId" resultMap="BaseResultMap">
-        select
-            <include refid="BaseQuerySqlCols"/>
-        from sys_user t
-        where t.login_id = #{loginId}
+    <select id="getExtInfo" resultMap="BaseResultMap">
+        select * from sys_user t
+        <where>
+            1 = 1
+            <if test="loginId != null and loginId != ''">
+                and t.login_id = #{loginId}
+            </if>
+        </where>
     </select>
 
-    <select id="getLoginUserInfo" resultMap="BaseResultMap">
-        select
-            <include refid="BaseQuerySqlCols"/>
-        from sys_user t
-        where t.login_id = #{loginId}
+    <select id="getExtListInfo" resultMap="BaseResultMap">
+        select * from sys_user t
+        <where>
+            1 = 1
+        </where>
     </select>
-
 
 
 </mapper>

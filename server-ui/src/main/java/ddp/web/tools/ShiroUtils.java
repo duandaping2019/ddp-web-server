@@ -2,7 +2,7 @@ package ddp.web.tools;
 
 import ddp.bean.RRException;
 import ddp.constants.CommConstants;
-import ddp.entity.security.SysUserEntity;
+import ddp.ext.security.SysUserExt;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -52,14 +52,14 @@ public class ShiroUtils {
     /**
      * 获取当前用户信息
      */
-    public static SysUserEntity getCurrUserInfo() {
+    public static SysUserExt getCurrUserInfo() {
         Subject subject = SecurityUtils.getSubject();
-        SysUserEntity user = (SysUserEntity) subject.getPrincipal();
-        if (user == null) {
-            user = new SysUserEntity();
-            user.setLoginId(CommConstants.ADMIN_USER);
+        SysUserExt ext = (SysUserExt) subject.getPrincipal();
+        if (ext == null) {
+            ext = new SysUserExt();
+            ext.setLoginId(CommConstants.ADMIN_USER);
         }
-        return user;
+        return ext;
     }
 
     /**

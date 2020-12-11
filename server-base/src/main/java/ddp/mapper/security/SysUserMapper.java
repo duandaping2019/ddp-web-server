@@ -5,13 +5,15 @@ import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface SysUserMapper extends MyMapper<SysUserEntity> {
 
-    /*通过登陆ID获取用户信息【单表】*/
-    SysUserExt findByLoginId(String loginId);
+    /*获取用户实体信息*/
+    SysUserExt getExtInfo(SysUserExt ext);
 
-    /*获取登陆用户信息【联表】*/
-    SysUserExt getLoginUserInfo(String loginId);
+    /*获取用户分页信息*/
+    List<SysUserExt> getExtListInfo(SysUserExt ext);
 
 }

@@ -1,9 +1,7 @@
 package ddp;
 
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -18,27 +16,13 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
   //////////////////////////////////////Transactional manager///////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////////////////
   @Override
-  public int addEntityInfo(T t) {
+  public int insertEntityInfo(T t) {
     return mapper.insert(t);
   }
 
   @Override
-  public int addEntityInfoList(List<T> list) {
+  public int insertEntityListInfo(List<T> list) {
     return mapper.insertList(list);
-  }
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////Normol manager//////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-  @Override
-  public T getEntityInfo(Example example) {
-    return mapper.selectOneByExample(example);
-  }
-
-  @Override
-  public PageInfo<T> getEntityInfoList(Example example) {
-    List<T> list = mapper.selectByExample(example);
-    return new PageInfo<>(list);
   }
 
 }

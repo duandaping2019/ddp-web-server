@@ -4,15 +4,17 @@ import ddp.BaseService;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 
+import java.util.List;
+
 /**
  * 用户管理服务
  */
 public interface SysUserService extends BaseService<SysUserEntity> {
+    /*获取用户实体信息*/
+    SysUserExt getExtInfo(SysUserExt ext);
 
-    /*通过登陆ID获取用户信息*/
-    SysUserExt findByLoginId(String loginId);
-
-    /*获取登陆用户信息*/
-    SysUserExt getLoginUserInfo(SysUserEntity user);
+    /*获取用户分页信息*/
+    List<SysUserExt> getExtListInfo(SysUserExt ext);
 
 }
+

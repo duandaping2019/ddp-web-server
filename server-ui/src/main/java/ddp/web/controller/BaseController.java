@@ -23,7 +23,7 @@ public abstract class BaseController {
    * 获取登陆用户信息
    */
   public SysUserExt getLoginUserInfo() {
-    return userService.getLoginUserInfo(ShiroUtils.getCurrUserInfo());
+    return userService.getExtInfo(ShiroUtils.getCurrUserInfo());
   }
 
 

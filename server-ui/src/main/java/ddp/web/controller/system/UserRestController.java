@@ -1,11 +1,24 @@
 package ddp.web.controller.system;
 
+import com.github.pagehelper.PageInfo;
+import ddp.beans.BaseResponse;
+import ddp.constants.CommConstants;
+import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysUserService;
+import ddp.tools.MyPageUtils;
+import ddp.web.aop.OperLog;
 import ddp.web.controller.BaseController;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
 
 @Api(tags = "用户管理类", value = "UserRestController")
 @RestController
@@ -15,6 +28,17 @@ public class UserRestController extends BaseController {
   @Autowired
   private SysUserService userService; //用户管理服务
 
+  @ApiOperation(value = "sysUserList", notes = "获取用户信息列表")
+  @RequestMapping("list")
+  @OperLog(operModul = "用户管理", operType = CommConstants.GET_DATA, operDesc = "获取用户信息列表")
+  @RequiresPermissions("sys:user:list")
+  public BaseResponse<Object> sysUserList(@ApiParam(value = "用户请求参数", required = false) @RequestBody(required = false) SysUserExt ext,
+                                               @ApiParam(value = "用户请求对象", required = false) HttpServletRequest request,
+                                               @ApiParam(value = "语言请求参数", required = false) Locale locale){
+
+    MyPageUtils.setPageInfo(request); //分页设定
+    return BaseResponse.success(new PageInfo(userService.getExtListInfo(ext)));
+  }
 
 
 //  @ApiOperation(value = "getUserInfo", notes = "获取用户信息")
@@ -33,23 +57,6 @@ public class UserRestController extends BaseController {
 //    //返回结果
 //    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), entity);
 //  }
-//
-//
-//  @ApiOperation(value = "getUserInfoList", notes = "获取用户集合信息")
-//  @RequestMapping("/get_user_info_list")
-//  @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "获取用户集合信息")
-//  public BaseResponse<Object> getUserInfoList(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
-//      @ApiParam(value = "用户请求对象", required = false) HttpServletRequest request, @ApiParam(value = "语言请求参数", required = false) Locale locale) {
-//
-//    //封装条件
-//    Example example = new Example(SysUserEntity.class);
-//    example.createCriteria().andEqualTo(ext);
-//
-//    MyPageUtils.setPageInfo(request); //分页设定
-//    PageInfo<SysUserEntity> pageInfo = userService.getEntityInfoList(example);
-//    return BaseResponse.success(pageInfo);
-//  }
-//
 //
 //  @ApiOperation(value = "addUserInfo", notes = "添加用户信息")
 //  @RequestMapping("/add_user_info")

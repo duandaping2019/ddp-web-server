@@ -1,8 +1,6 @@
 package ddp;
 
-import com.github.pagehelper.PageInfo;
 import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -15,25 +13,12 @@ public interface BaseService<T extends BaseEntity> {
    * 插入单实体对象
    */
   @Transactional
-  int addEntityInfo(T t);
+  int insertEntityInfo(T t);
 
   /**
    * 插入单实体对象集合
    */
   @Transactional
-  int addEntityInfoList(List<T> list);
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////Normol manager//////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-  /**
-   * 根据特定信息获取唯一实体
-   */
-  T getEntityInfo(Example example);
-
-  /**
-   * 根据特定信息获取实体集合【分页】
-   */
-  PageInfo<T> getEntityInfoList(Example example);
+  int insertEntityListInfo(List<T> list);
 
 }
