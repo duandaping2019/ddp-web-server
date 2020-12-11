@@ -156,8 +156,6 @@ public class ShiroConfigure {
         /*基础链接限制条件*/
         shiroFilterFactoryBean.setSecurityManager(securityManager); //设置安全管理器
         shiroFilterFactoryBean.setLoginUrl("/login.html"); // 登陆页面
-//        shiroFilterFactoryBean.setLoginUrl("/user/login"); // 系统登陆
-
 
         /*拦截器设置*/
         Map<String, Filter> filtersMap = new HashMap<>(16);
@@ -180,8 +178,8 @@ public class ShiroConfigure {
         filterChainDefinitionMap.put("/swagger-resources/configuration/ui", "anon");
 
         // 具体配置
-        filterChainDefinitionMap.put("/user/login", "anon"); //系统登陆
-        filterChainDefinitionMap.put("/user/logout", "anon"); //系统注销
+        filterChainDefinitionMap.put("/sys/login", "anon"); //系统登陆
+        filterChainDefinitionMap.put("/sys/logout", "anon"); //系统注销
         filterChainDefinitionMap.put("/captcha.jpg", "anon"); //验证信息
         filterChainDefinitionMap.put("/file/**", "anon"); //附件信息下载
 

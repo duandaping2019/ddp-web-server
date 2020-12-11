@@ -102,7 +102,7 @@ var vm = new Vue({
             // 登陆操作
 			$.ajax({
 				type: "POST",
-			    url: "/user/login?language=en_US",
+			    url: "/sys/login?language=en_US",
 			    data: JSON.stringify({
 				    "loginId": vm.loginId,
                     "loginPwd": vm.loginPwd,

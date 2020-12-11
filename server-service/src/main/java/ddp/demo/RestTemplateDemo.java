@@ -34,7 +34,7 @@ public class RestTemplateDemo {
     //请求服务器
     RestTemplate template = new RestTemplate();
     HttpEntity<JSONObject> strEntity = new HttpEntity<>(json, headers);
-    JSONObject result = template.postForObject("http://localhost:8080/user/login?language=en_US", strEntity, JSONObject.class);
+    JSONObject result = template.postForObject("http://localhost:8080/sys/login?language=en_US", strEntity, JSONObject.class);
 
     //输出响应结果
     logger.info(result.getString("msg"));
