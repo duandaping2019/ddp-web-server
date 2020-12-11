@@ -26,14 +26,14 @@ $(function () {
         multiselect: false,
         pager: "#jqGridPager",
         jsonReader : {
-            root: "page.list",
-            page: "page.currPage",
-            total: "page.totalPage",
-            records: "page.totalCount"
+            root: "data.list",
+            page: "data.pageNum",
+            total: "data.pages",
+            records: "data.total"
         },
         prmNames : {
-            page:"page", 
-            rows:"limit", 
+            page:"pageNum",
+            rows:"pageSize",
             order: "order"
         },
         gridComplete:function(){
