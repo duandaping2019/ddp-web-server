@@ -54,8 +54,11 @@ public class UserRestController extends BaseController {
                             @ApiParam(value = "用户请求对象", required = false) HttpServletRequest request,
                             @ApiParam(value = "用户响应对象", required = false) HttpServletResponse response) {
 
-    // 校验码校验
-    if (ext.getAppCode() == null || ext.getAppCode().equals("")) { // 非登录模式
+
+    if (ext.getCaptcha() != null && ext.getCaptcha().equals("POST_MAN_DDP")) { // PostMan测试模式
+      System.out.println("this is postMan testing!!!");
+    } else {
+      // 校验码校验
       String captcha = (String) ShiroUtils.getSessionAttribute(Constants.KAPTCHA_SESSION_KEY);
       if (!captcha.equalsIgnoreCase(ext.getCaptcha())) { // 忽略大写小的验证码比对
         return BaseResponse.badrequest(MessageSourceUtils.getSourceFromCache("login_fail_info", locale));

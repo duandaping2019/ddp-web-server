@@ -32,6 +32,13 @@
     </dependency>
     <!-- swagger end-->
 
+    <!-- 发送邮件 start-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+    <!-- 发送邮件 end-->
+
   </dependencies>
 
 </project>
