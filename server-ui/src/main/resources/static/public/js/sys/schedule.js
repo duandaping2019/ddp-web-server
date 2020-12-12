@@ -33,7 +33,7 @@ $(function () {
         prmNames : {
             page:"pageNum",
             rows:"pageSize",
-            order: "order"
+            order: "orderRule"
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
