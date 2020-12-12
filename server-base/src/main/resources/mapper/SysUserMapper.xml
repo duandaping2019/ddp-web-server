@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ddp.mapper.security.SysUserMapper">
+    <!--==============================================结果集如上======================================================-->
     <resultMap id="BaseResultMap" type="ddp.ext.security.SysUserExt">
         <id column="user_id" property="userId" jdbcType="BIGINT"/>
         <result column="user_no" property="userNo" jdbcType="VARCHAR"/>
@@ -11,7 +12,8 @@
         <result column="user_state" property="userState" jdbcType="CHAR"/>
     </resultMap>
 
-    <select id="getExtInfo" resultMap="BaseResultMap">
+    <!--==============================================mysql语句======================================================-->
+    <select id="getExtInfo" resultMap="BaseResultMap" databaseId="mysql">
         select * from sys_user t
         <where>
             1 = 1
@@ -21,10 +23,13 @@
         </where>
     </select>
 
-    <select id="getExtListInfo" resultMap="BaseResultMap">
+    <select id="getExtListInfo" resultMap="BaseResultMap" databaseId="mysql">
         select * from sys_user t
         <where>
             1 = 1
+            <if test="userName != null and userName !=''">
+                and t.user_name like CONCAT('%',#{userName},'%')
+            </if>
         </where>
         <choose>
             <when test="orderColumn != null and orderColumn.trim() != ''">
@@ -36,5 +41,6 @@
         </choose>
     </select>
 
+    <!--==============================================oracle语句======================================================-->
 
 </mapper>
