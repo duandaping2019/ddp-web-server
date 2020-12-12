@@ -31,7 +31,7 @@
                 order by ${orderColumn} ${orderRule}
             </when>
             <otherwise>
-                order by user_no desc
+                order by t.user_no desc
             </otherwise>
         </choose>
     </select>
