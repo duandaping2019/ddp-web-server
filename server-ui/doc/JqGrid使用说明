@@ -1,0 +1,8 @@
+表格中常用的属性：
+    label: 显示内容
+    name: 取值字段名称
+    index: 传到服务器端用来排序用的列名称
+    align: 对齐方式，不建议使用！！！
+    sortable： 是否可以排序
+    hidden:true 是否隐藏
+    key:true 是否主键

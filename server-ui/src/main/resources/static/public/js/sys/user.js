@@ -2,17 +2,28 @@ $(function () {
     $("#jqGrid").jqGrid({
         url: '/user/list',
         datatype: "json",
-        colModel: [			
-			{ label: '用户ID', name: 'userId', index: "user_id", width: 45, key: true },
-			{ label: '用户名', name: 'username', width: 75 },
-			{ label: '邮箱', name: 'email', width: 90 },
-			{ label: '手机号', name: 'mobile', width: 100 },
-			{ label: '状态', name: 'status', width: 80, formatter: function(value, options, row){
-				return value === 0 ? 
-					'<span class="label label-danger">禁用</span>' : 
-					'<span class="label label-success">正常</span>';
+        colModel: [
+			{ label: '主键', name: 'userId', hidden:true, key: true},
+			{ label: '编号', name: 'userNo', index: 'user_no'},
+			{ label: '姓名', name: 'userName', index: 'user_name'},
+			{ label: '性别', name: 'userSex', sortable: false, formatter: function (value, options, row) {
+				if (value === 0) {
+					return '<span class="label label-info">男</span>';
+				} else if (value === 1) {
+					return '<span class="label label-info">女</span>';
+				} else {
+					return '<span class="label label-warning">未知</span>';
+				}
 			}},
-			{ label: '创建时间', name: 'createTime', index: "create_time", width: 80}
+			{ label: '账号', name: 'loginId', sortable: false},
+
+			{ label: '状态', name: 'userState', sortable: false, formatter: function(value, options, row){
+				if (value === '0') {
+					return '<span class="label label-success">在用</span>';
+				} else {
+					return '<span class="label label-danger">冻结</span>';
+				}
+			}}
         ],
 		viewrecords: true,
         height: 385,
