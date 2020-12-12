@@ -32,7 +32,7 @@ public class UserRestController extends BaseController {
   @RequestMapping("list")
   @OperLog(operModul = "用户管理", operType = CommConstants.GET_DATA, operDesc = "获取用户信息列表")
   @RequiresPermissions("sys:user:list")
-  public BaseResponse<Object> sysUserList(@ApiParam(value = "用户请求参数", required = false) @RequestBody(required = false) SysUserExt ext,
+  public BaseResponse<Object> sysUserList(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
                                                @ApiParam(value = "用户请求对象", required = false) HttpServletRequest request,
                                                @ApiParam(value = "语言请求参数", required = false) Locale locale){
 

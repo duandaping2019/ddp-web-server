@@ -1,7 +1,14 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: '/user/list',
-        datatype: "json",
+        url: '/user/list', //获取数据的地址
+		mtype: 'POST', //ajax提交方式，POST或者GET。默认GET
+		ajaxGridOptions: {
+			contentType: "application/json",
+		},//post请求需要加
+		serializeGridData: function(postData) {
+			return JSON.stringify(postData);
+		},//post请求需要加
+		datatype: "json", //从服务器端返回的数据类型，默认为xml。可选类型有：xml，local，json等
         colModel: [
 			{ label: '主键', name: 'userId', hidden:true, key: true},
 			{ label: '编号', name: 'userNo', index: 'user_no'},
@@ -25,22 +32,23 @@ $(function () {
 				}
 			}}
         ],
-		viewrecords: true,
-        height: 385,
-        rowNum: 10,
-		rowList : [10,30,50],
-        rownumbers: true, 
-        rownumWidth: 25, 
-        autowidth:true,
-        multiselect: true,
-        pager: "#jqGridPager",
+		caption: '用户列表', //表格名称
+		viewrecords: true, //定义是否要显示总记录数
+        height: 385, //表格高度，可以是数字，像素值或者百分比
+        rowNum: 10, //在grid上显示记录条数，这个参数要被传递到后台
+		rowList : [10,30,50], //一个下拉选择框，用来改变显示记录数，当选择时会覆盖rowNum参数传递到后台
+        rownumbers: true, //显示行号
+        rownumWidth: 25, //行号宽度
+        autowidth:true, //自动宽度
+        multiselect: true, //是否多选
+        pager: "#jqGridPager", //定义翻页用的导航栏，必须是有效的html元素
         jsonReader : {
-			root: "data.list",
-            page: "data.pageNum",
-            total: "data.pages",
-            records: "data.total"
+			root: "data.list", //包含实际数据的数组
+            page: "data.pageNum", //当前页
+            total: "data.pages", //总的页数
+            records: "data.total" //总的记录数（查出来的总条数）
         },
-        prmNames : {
+        prmNames : { // 参数定义
             page:"pageNum",
             rows:"pageSize",
             order: "orderRule"
@@ -56,7 +64,7 @@ var vm = new Vue({
 	el:'#rrapp',
 	data:{
 		q:{
-			username: null
+			userName: null
 		},
 		showList: true,
 		title:null,
