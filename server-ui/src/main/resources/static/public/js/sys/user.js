@@ -57,7 +57,11 @@ $(function () {
         	//隐藏grid底部滚动条
         	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
         }
-    });
+    })
+
+	// 加载下拉数据
+	$("#searchSelect").selectpicker({liveSearch: true, liveSearchPlaceholder: "数据检索" });
+
 });
 
 var vm = new Vue({
@@ -146,8 +150,8 @@ var vm = new Vue({
 			});
 		},
 		getRoleList: function(){
-			$.get("../sys/role/select", function(r){
-				vm.roleList = r.list;
+			$.get("/role/select", function(r){
+				vm.roleList = r.roleList;
 			});
 		},
 		reload: function (event) {

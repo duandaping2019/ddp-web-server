@@ -1,12 +1,14 @@
 package ddp.entity.security;
 
 import ddp.BaseEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
 /**
  *  系统国际化
@@ -21,7 +23,7 @@ public class SysLangEntity extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "lang_id", length = 32)
-  private Long langId;
+  private BigDecimal langId;
 
   /**
    *  语言编码
@@ -41,11 +43,11 @@ public class SysLangEntity extends BaseEntity {
   @Column(name = "lang_en", length = 255)
   private String langEn;
 
-  public Long getLangId() {
+  public BigDecimal getLangId() {
     return langId;
   }
 
-  public void setLangId(Long langId) {
+  public void setLangId(BigDecimal langId) {
     this.langId = langId;
   }
 

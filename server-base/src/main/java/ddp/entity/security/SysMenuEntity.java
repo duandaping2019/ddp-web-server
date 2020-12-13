@@ -24,7 +24,7 @@ public class SysMenuEntity extends BaseEntity {
     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "menu_id", length = 19)
+    @Column(name = "menu_id", length = 32)
     private BigDecimal menuId;
 
     /**

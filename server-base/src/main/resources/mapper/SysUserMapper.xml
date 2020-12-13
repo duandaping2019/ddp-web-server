@@ -3,7 +3,7 @@
 <mapper namespace="ddp.mapper.security.SysUserMapper">
     <!--==============================================结果集如上======================================================-->
     <resultMap id="BaseResultMap" type="ddp.ext.security.SysUserExt">
-        <id column="user_id" property="userId" jdbcType="BIGINT"/>
+        <id column="user_id" property="userId" jdbcType="DECIMAL"/>
         <result column="user_no" property="userNo" jdbcType="VARCHAR"/>
         <result column="user_name" property="userName" jdbcType="VARCHAR"/>
         <result column="user_sex" property="userSex" jdbcType="SMALLINT"/>

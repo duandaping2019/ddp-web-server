@@ -19,10 +19,10 @@ public interface SysMenuMapper extends MyMapper<SysMenuEntity> {
     List<String> selectAllPerms();
 
     /*获取指定用户权限*/
-    List<String> selectPointPerms(Long userId);
+    List<String> selectPointPerms(BigDecimal userId);
 
     /*获取用户菜单*/
-    List<BigDecimal> queryAllMenuId(Long userId);
+    List<BigDecimal> queryAllMenuId(BigDecimal userId);
 
     /*通过父级Id获取子菜单*/
     List<SysMenuExt> queryListParentId(BigDecimal parentId);

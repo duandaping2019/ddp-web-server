@@ -24,7 +24,7 @@ public class SysIndexServiceImpl implements SysIndexService{
     @Override
     public List<SysMenuExt> selectMenuList(SysUserEntity userEntity) {
         //系统管理员，拥有最高权限
-        if(userEntity.getUserId() == 1){
+        if(userEntity.getUserId().compareTo(new BigDecimal("1")) == 0){
             return getAllMenuList(null);
         }
 
@@ -75,7 +75,7 @@ public class SysIndexServiceImpl implements SysIndexService{
     public Set<String> selectPermissions(SysUserEntity userEntity) {
         List<String> permsList;
 
-        if(userEntity.getUserId() == 1){ //系统管理员，拥有最高权限
+        if(userEntity.getUserId().compareTo(new BigDecimal("1")) == 0){ //系统管理员，拥有最高权限
             permsList = sysMenuMapper.selectAllPerms();
         }else{
             permsList = sysMenuMapper.selectPointPerms(userEntity.getUserId());

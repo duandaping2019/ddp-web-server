@@ -24,7 +24,7 @@ public class SysRoleEntity extends BaseEntity {
     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id", length = 20)
+    @Column(name = "role_id", length = 32)
     private BigDecimal roleId;
 
     /**

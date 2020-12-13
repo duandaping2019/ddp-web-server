@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>管理员列表</title>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<link rel="stylesheet" href="../public/css/bootstrap.min.css">
-<link rel="stylesheet" href="../public/css/font-awesome.min.css">
-<link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
-<link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
-<link rel="stylesheet" href="../public/css/main.css">
-<script src="../public/libs/jquery.min.js"></script>
-<script src="../public/plugins/layer/layer.js"></script>
-<script src="../public/libs/bootstrap.min.js"></script>
-<script src="../public/libs/vue.min.js"></script>
-<script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
-<script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
-<script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
-<script src="../public/js/common.js"></script>
+	<title>管理员列表</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="../public/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../public/css/bootstrap-select.min.css">
+	<link rel="stylesheet" href="../public/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
+	<link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
+	<link rel="stylesheet" href="../public/css/main.css">
+
+	<script src="../public/libs/jquery.min.js"></script>
+	<script src="../public/plugins/layer/layer.js"></script>
+	<script src="../public/libs/bootstrap.min.js"></script>
+	<script src="../public/js/bootstrap-select.min.js"></script>
+	<script src="../public/libs/vue.min.js"></script>
+	<script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
+	<script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+	<script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
+	<script src="../public/js/common.js"></script>
 </head>
 <body>
 <div id="rrapp" v-cloak>
@@ -37,48 +40,56 @@
     
     <div v-show="!showList" class="panel panel-default">
 		<div class="panel-heading">{{title}}</div>
-		<form class="form-horizontal">
+		<form class="form-horizontal" style="width: 100%;">
 			<div class="form-group">
-			   	<div class="col-sm-2 control-label">用户名</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="user.userName" placeholder="登录账号"/>
+				<div class="col-sm-1 control-label">编号</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="user.userNo" placeholder="用户编号"/>
+				</div>
+
+			   	<div class="col-sm-1 control-label">姓名</div>
+			   	<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="user.userName" placeholder="用户姓名"/>
 			    </div>
 			</div>
+
 			<div class="form-group">
-			   	<div class="col-sm-2 control-label">密码</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="user.password" placeholder="密码"/>
-			    </div>
+				<div class="col-sm-1 control-label">性别</div>
+				<div class="col-sm-4">
+					<select id="searchSelect" class="form-control" v-model="user.userSex" placeholder="用户性别">
+						<option value="0">男</option>
+						<option value="1">女</option>
+						<option value="2">未知</option>
+					</select>
+				</div>
+
+				<div class="col-sm-1 control-label">账号</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="user.loginId" placeholder="用户账号"/>
+				</div>
 			</div>
+
 			<div class="form-group">
-			   	<div class="col-sm-2 control-label">邮箱</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="user.email" placeholder="邮箱"/>
-			    </div>
+				<div class="col-sm-1 control-label">邮箱</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="user.email" placeholder="邮箱"/>
+				</div>
+
+				<div class="col-sm-1 control-label">手机号</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="user.mobile" placeholder="手机号"/>
+				</div>
 			</div>
+
 			<div class="form-group">
-			   	<div class="col-sm-2 control-label">手机号</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="user.mobile" placeholder="手机号"/>
-			    </div>
-			</div>
-			<div class="form-group">
-			   	<div class="col-sm-2 control-label">角色</div>
-			   	<div class="col-sm-10">
-				   	<label v-for="role in roleList" class="checkbox-inline">
-					  <input type="checkbox" :value="role.roleId" v-model="user.roleIdList">{{role.roleName}}
+				<div class="col-sm-1 control-label">角色</div>
+				<div class="col-sm-11">
+					<label v-for="role in roleList" class="checkbox-inline">
+						<input type="checkbox" :value="role.roleId" v-model="user.roleIdList">{{role.roleName}}
 					</label>
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="col-sm-2 control-label">状态</div> 
-				<label class="radio-inline">
-				  <input type="radio" name="status" value="0" v-model="user.status"/> 禁用
-				</label>
-				<label class="radio-inline">
-				  <input type="radio" name="status" value="1" v-model="user.status"/> 正常
-				</label>
-			</div>
+
 			<div class="form-group">
 				<div class="col-sm-2 control-label"></div> 
 				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>

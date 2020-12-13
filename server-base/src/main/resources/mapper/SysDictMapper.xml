@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ddp.mapper.security.SysDictMapper" >
     <resultMap id="BaseResultMap" type="ddp.ext.security.SysDictExt">
-        <id column="dict_id" property="dictId" jdbcType="BIGINT" />
+        <id column="dict_id" property="dictId" jdbcType="DECIMAL" />
         <id column="dict_type_big" property="dictTypeBig" jdbcType="VARCHAR" />
         <id column="dict_type_small" property="dictTypeSmall" jdbcType="VARCHAR" />
         <id column="dict_code" property="dictCode" jdbcType="VARCHAR" />

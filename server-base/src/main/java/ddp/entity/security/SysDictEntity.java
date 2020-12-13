@@ -24,7 +24,7 @@ public class SysDictEntity extends BaseEntity {
     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dict_id", length = 19)
+    @Column(name = "dict_id", length = 32)
     private BigDecimal dictId;
 
     /**
