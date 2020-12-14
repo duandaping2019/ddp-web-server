@@ -91,6 +91,18 @@
 			</div>
 
 			<div class="form-group">
+				<div class="col-sm-1 control-label">状态</div>
+				<div class="col-sm-11">
+					<label class="radio-inline">
+						<input type="radio" name="userState" value="0" v-model="user.userState"/> 在用
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="userState" value="1" v-model="user.userState"/> 冻结
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
 				<div class="col-sm-2 control-label"></div> 
 				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
 				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
