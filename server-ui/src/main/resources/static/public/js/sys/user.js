@@ -62,6 +62,8 @@ $(function () {
 	// 加载下拉数据
 	$("#searchSelect").selectpicker({liveSearch: true, liveSearchPlaceholder: "数据检索" });
 
+	//开启校验
+	Vue.use(VeeValidate); // good to go.
 });
 
 var vm = new Vue({
@@ -128,11 +130,7 @@ var vm = new Vue({
 			});
 		},
 		saveOrUpdate: function (event) {
-			$("#userForm").validate(); //执行表单校验
 
-			if ($("#userForm").valid()) { //获取校验结果
-				alert(123);
-			}
 
 			// var url = vm.user.userId == null ? "../sys/user/save" : "../sys/user/update";
 			// $.ajax({
