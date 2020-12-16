@@ -128,21 +128,27 @@ var vm = new Vue({
 			});
 		},
 		saveOrUpdate: function (event) {
-			var url = vm.user.userId == null ? "../sys/user/save" : "../sys/user/update";
-			$.ajax({
-				type: "POST",
-			    url: url,
-			    data: JSON.stringify(vm.user),
-			    success: function(r){
-			    	if(r.code === 0){
-						alert('操作成功', function(index){
-							vm.reload();
-						});
-					}else{
-						alert(r.msg);
-					}
-				}
-			});
+			$("#userForm").validate(); //执行表单校验
+
+			if ($("#userForm").valid()) { //获取校验结果
+				alert(123);
+			}
+
+			// var url = vm.user.userId == null ? "../sys/user/save" : "../sys/user/update";
+			// $.ajax({
+			// 	type: "POST",
+			//     url: url,
+			//     data: JSON.stringify(vm.user),
+			//     success: function(r){
+			//     	if(r.code === 0){
+			// 			alert('操作成功', function(index){
+			// 				vm.reload();
+			// 			});
+			// 		}else{
+			// 			alert(r.msg);
+			// 		}
+			// 	}
+			// });
 		},
 		getUser: function(userId){
 			$.get("../sys/user/info/"+userId, function(r){
