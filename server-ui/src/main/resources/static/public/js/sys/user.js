@@ -62,8 +62,76 @@ $(function () {
 	// 加载下拉数据
 	$("#searchSelect").selectpicker({liveSearch: true, liveSearchPlaceholder: "数据检索" });
 
-	//开启校验
-	Vue.use(VeeValidate); // good to go.
+    //表单校验内容
+	$('#userForm').bootstrapValidator({
+		live: 'disabled',
+		message: 'This value is not valid',
+		feedbackIcons: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		fields: {
+			userNo:{
+				validators:{
+					notEmpty: {
+						message: '请填写用户编号!'
+					}
+				}
+			},
+			userName:{
+				validators:{
+					notEmpty:{
+						message: '请填写用户名称!'
+					}
+				}
+			},
+			userSex:{
+				validators:{
+					notEmpty:{
+						message: '请填写用户性别!'
+					}
+				}
+			},
+			loginId:{
+				validators:{
+					notEmpty:{
+						message: '请填写用户账号!'
+					}
+				}
+			},
+			email:{
+				validators:{
+					notEmpty:{
+						message: '请填写用户邮箱!'
+					}
+				}
+			},
+			mobile:{
+				validators:{
+					notEmpty:{
+						message: '请填写用户手机号!'
+					}
+				}
+			},
+			'roleIdList[]':{
+				validators:{
+					notEmpty:{
+						message: '请填写用户角色!'
+					}
+				}
+			},
+			userState:{
+				validators:{
+					notEmpty:{
+						message: '请填写用户状态!'
+					}
+				}
+			}
+		}
+
+	});
+
 });
 
 var vm = new Vue({
@@ -130,7 +198,7 @@ var vm = new Vue({
 			});
 		},
 		saveOrUpdate: function (event) {
-
+			$('#userForm').bootstrapValidator('validate');
 
 			// var url = vm.user.userId == null ? "../sys/user/save" : "../sys/user/update";
 			// $.ajax({
