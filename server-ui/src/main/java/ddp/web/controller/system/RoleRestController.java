@@ -39,7 +39,7 @@ public class RoleRestController {
             roleList = roleService.queryUserRoleList(userId);
         }
 
-        map.put("roleList", roleList);
+        map.put("data", roleList);
         return map;
     }
 

@@ -7,18 +7,16 @@
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<link rel="stylesheet" href="/public/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/public/css/bootstrap-select.min.css">
-	<link rel="stylesheet" href="/public/css/bootstrapValidator.min.css">
 	<link rel="stylesheet" href="/public/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
 	<link rel="stylesheet" href="/public/plugins/ztree/css/metroStyle/metroStyle.css">
 	<link rel="stylesheet" href="/public/css/main.css">
 
 	<script src="/public/libs/jquery.min.js"></script>
+	<script src="/public/js/jquery.validate.min.js"></script>
 	<script src="/public/plugins/layer/layer.js"></script>
 	<script src="/public/libs/bootstrap.min.js"></script>
 	<script src="/public/js/bootstrap-select.min.js"></script>
-	<script src="/public/js/bootstrapValidator.min.js"></script>
-	<script src="/public/js/language/zh_CN.js"></script>
 	<script src="/public/libs/vue.min.js"></script>
 	<script src="/public/plugins/jqgrid/grid.locale-cn.js"></script>
 	<script src="/public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
@@ -87,11 +85,9 @@
 			<div class="form-group">
 				<div class="col-sm-1 control-label"><strong style="color: red">*</strong>角色</div>
 				<div class="col-sm-11">
-					<div class="checkbox" v-for="role in roleList">
-						<label>
-							<input type="checkbox" name="roleIdList[]" :value="role.roleId" v-model="user.roleIdList">{{role.roleName}}
-						</label>
-					</div>
+					<label class="checkbox-inline" v-for="role in roleList">
+						<input type="checkbox" name="roleIdList[]" :value="role.code" v-model="user.roleIdList">{{role.name}}
+					</label>
 				</div>
 			</div>
 
@@ -109,7 +105,7 @@
 
 			<div class="form-group">
 				<div class="col-sm-5 control-label"></div>
-					<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+					<input type="submit" class="btn btn-primary" value="确定"/>
 					<input type="button" class="btn btn-warning" @click="reload" value="关闭"/>
 			</div>
 		</form>
