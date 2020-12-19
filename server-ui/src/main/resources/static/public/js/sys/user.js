@@ -57,7 +57,7 @@ $(function () {
         	//隐藏grid底部滚动条
         	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
         }
-    })
+    });
 
 	// 加载下拉数据
 	$("#searchSelect").selectpicker({liveSearch: true, liveSearchPlaceholder: "数据检索" });
@@ -90,51 +90,6 @@ $(function () {
 			userState:{
 				required: true
 			}
-		},
-		messages: {
-			userNo:{
-				required: '请输入用户编号!'
-			},
-			userName:{
-				required: '请输入用户姓名!'
-			},
-			userSex:{
-				required: '请选择用户性别!'
-			},
-			loginId:{
-				required: '请输入用户账号!'
-			},
-			email:{
-				required: '请输入用户邮箱!',
-				email: '邮箱格式不正确!'
-			},
-			mobile:{
-				required: '请输入用户手机号!'
-			},
-			'roleIdList[]':{
-				required: '请选择用户角色!'
-			},
-			userState:{
-				required: '请选择用户状态!'
-			}
-		},
-		submitHandler:function(form){
-			vm.reload();
-			// var url = vm.user.userId == null ? "../sys/user/save" : "../sys/user/update";
-			// $.ajax({
-			// 	type: "POST",
-			//     url: url,
-			//     data: JSON.stringify(vm.user),
-			//     success: function(r){
-			//     	if(r.code === 0){
-			// 			alert('操作成功', function(index){
-			// 				vm.reload();
-			// 			});
-			// 		}else{
-			// 			alert(r.msg);
-			// 		}
-			// 	}
-			// });
 		}
 	});
 
@@ -160,7 +115,7 @@ var vm = new Vue({
 			vm.showList = false;
 			vm.title = "新增";
 			vm.roleList = {};
-			vm.user = {};
+			vm.user = {userState: 0};
 			
 			//获取角色信息
 			this.getRoleList();
@@ -200,6 +155,26 @@ var vm = new Vue({
 					}
 				});
 			});
+		},
+		saveOrUpdate: function (event) {
+			if ($("#userForm").valid()) {
+				vm.reload();
+				// var url = vm.user.userId == null ? "../sys/user/save" : "../sys/user/update";
+				// $.ajax({
+				// 	type: "POST",
+				//     url: url,
+				//     data: JSON.stringify(vm.user),
+				//     success: function(r){
+				//     	if(r.code === 0){
+				// 			alert('操作成功', function(index){
+				// 				vm.reload();
+				// 			});
+				// 		}else{
+				// 			alert(r.msg);
+				// 		}
+				// 	}
+				// });
+			}
 		},
 		getUser: function(userId){
 			$.get("../sys/user/info/"+userId, function(r){
