@@ -1,7 +1,7 @@
 // 初始化事件处理
 $(function () {
     // 下拉框处理事件
-    $(".selectpicker").bind("change",function(){
+    $("select").bind("change",function(){
         $(this).closest("form").valid();
     });
 
@@ -92,6 +92,25 @@ jQuery.validator.addMethod(
     },
     $.validator.format("输入不允许存在中文")
 );
+
+// 请输入数字、字母、下划线
+$.validator.addMethod("baseValidStd", function(value, element) {
+    let regex =/^[0-9a-zA-Z_]+$/;
+    if((!value) || (!regex.test(value))){
+        return false;
+    }
+    return true;
+}, "请输入数字、字母、下划线");
+
+
+// 请输入手机号
+$.validator.addMethod("mobileStd", function(value, element) {
+    let regex =/^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/;
+    if((!value) || (!regex.test(value))){
+        return false;
+    }
+    return true;
+}, "请输入手机号");
 
 
 

@@ -66,7 +66,8 @@ $(function () {
 	$('#userForm').validate({
 		rules: {
 			userNo:{
-				required: true
+				required: true,
+				baseValidStd: true
 			},
 			userName:{
 				required: true
@@ -75,14 +76,16 @@ $(function () {
 				required: true
 			},
 			loginId:{
-				required: true
+				required: true,
+				baseValidStd: true
 			},
 			email:{
 				required: true,
 				email: true
 			},
 			mobile:{
-				required: true
+				required: true,
+				mobileStd: true
 			},
 			'roleIdList[]':{
 				required: true
