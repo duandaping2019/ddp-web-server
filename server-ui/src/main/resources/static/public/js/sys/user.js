@@ -63,7 +63,7 @@ $(function () {
 	$("#searchSelect").selectpicker({liveSearch: true, liveSearchPlaceholder: "数据检索" });
 
     // 表单校验
-	$('#userForm').validate({
+	let myValidate = $('#userForm').validate({
 		rules: {
 			userNo:{
 				required: true,
@@ -96,6 +96,9 @@ $(function () {
 		}
 	});
 
+	// 初始化校验器
+	myValidate.resetForm();
+
 });
 
 var vm = new Vue({
@@ -124,17 +127,12 @@ var vm = new Vue({
 			this.getRoleList();
 		},
 		update: function () {
-			var userId = getSelectedRow();
-			if(userId == null){
-				return ;
-			}
-			
 			vm.showList = false;
-            vm.title = "修改";
-			
-			vm.getUser(userId);
-			//获取角色信息
-			this.getRoleList();
+			vm.title = "修改";
+			let key = getSelectedRow(); //获取主键
+			vm.getUser(key); //初始化实体
+
+			this.getRoleList(); //获取角色信息
 		},
 		del: function () {
 			var userIds = getSelectedRows();
@@ -170,32 +168,17 @@ var vm = new Vue({
 					dataType: "json", //响应数据类型
 					contentType: "application/json", //请求数据类型
 					success: function(result){
-						if(result.data === 1){//存储成功
-							alert("操作成功！", function () {
-								vm.reload();
-							});
+						if(result.code === 200){//存储成功
+							vm.user = result.data;
+							alert("操作成功！");
+							// alert("操作成功！", function () {
+							// 	vm.reload();
+							// });
 						}else{
 							alert("操作失败！");
 						}
 					}
 				});
-
-
-				// var url = vm.user.userId == null ? "../sys/user/save" : "../sys/user/update";
-				// $.ajax({
-				// 	type: "POST",
-				//     url: url,
-				//     data: JSON.stringify(vm.user),
-				//     success: function(r){
-				//     	if(r.code === 0){
-				// 			alert('操作成功', function(index){
-				// 				vm.reload();
-				// 			});
-				// 		}else{
-				// 			alert(r.msg);
-				// 		}
-				// 	}
-				// });
 			}
 		},
 		getUser: function(userId){

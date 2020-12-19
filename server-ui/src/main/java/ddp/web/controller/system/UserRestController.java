@@ -3,12 +3,14 @@ package ddp.web.controller.system;
 import com.github.pagehelper.PageInfo;
 import ddp.beans.BaseResponse;
 import ddp.constants.CommConstants;
+import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysUserService;
 import ddp.tools.MyPageUtils;
 import ddp.web.aop.OperLog;
 import ddp.web.controller.BaseController;
 import ddp.web.tools.MessageSourceUtils;
+import ddp.web.tools.ShiroUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -47,8 +49,8 @@ public class UserRestController extends BaseController {
   public BaseResponse<Object> saveOrUpdate(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
                                   @ApiParam(value = "语言请求参数", required = false) Locale locale) {
 
-    Integer result = userService.saveOrUpdate(ext);
-    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), result);
+    SysUserEntity entity = userService.saveOrUpdate(ext, ShiroUtils.getCurrUserInfo());
+    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), entity);
 
   }
 

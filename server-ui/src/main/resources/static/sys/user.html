@@ -44,6 +44,8 @@
     <div v-show="!showList" class="panel panel-default">
 		<div class="panel-heading">{{title}}</div>
 		<form id="userForm" class="form-horizontal" style="width: 100%;">
+			<input type="hidden" name="user.userId"><!--业务主键-->
+
 			<div class="form-group">
 				<div class="col-sm-1 control-label"><strong style="color: red">*</strong>编号</div>
 				<div class="col-sm-4">

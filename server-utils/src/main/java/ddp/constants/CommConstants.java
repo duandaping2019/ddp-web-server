@@ -23,6 +23,10 @@ public class CommConstants {
   public static final String ADD_DATA = "ADD_DATA"; //新增数据
   public static final String UPDATE_DATA = "UPDATE_DATA"; //更新数据
 
+  /*删除标记*/
+  public static final Short DEL_NORMAL_FLAG = new Short("0"); //正常状态
+  public static final Short DEL_DROP_FLAG = new Short("1"); //废弃状态
+
   /*菜单类型*/
   public enum MenuType {
     CATALOG(0), //目录
