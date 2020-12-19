@@ -8,6 +8,7 @@ import ddp.service.security.SysUserService;
 import ddp.tools.MyPageUtils;
 import ddp.web.aop.OperLog;
 import ddp.web.controller.BaseController;
+import ddp.web.tools.MessageSourceUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -40,6 +41,17 @@ public class UserRestController extends BaseController {
     return BaseResponse.success(new PageInfo(userService.getExtListInfo(ext)));
   }
 
+  @ApiOperation(value = "saveOrUpdate", notes = "添加用户信息")
+  @RequestMapping("/save_or_update")
+  @OperLog(operModul = "系统管理", operType = CommConstants.ADD_DATA, operDesc = "添加用户信息")
+  public BaseResponse<Object> saveOrUpdate(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
+                                  @ApiParam(value = "语言请求参数", required = false) Locale locale) {
+
+    Integer result = userService.saveOrUpdate(ext);
+    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), result);
+
+  }
+
 
 //  @ApiOperation(value = "getUserInfo", notes = "获取用户信息")
 //  @RequestMapping("/get_user_info")
@@ -58,16 +70,7 @@ public class UserRestController extends BaseController {
 //    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), entity);
 //  }
 //
-//  @ApiOperation(value = "addUserInfo", notes = "添加用户信息")
-//  @RequestMapping("/add_user_info")
-//  @OperLog(operModul = "系统管理", operType = CommConstants.ADD_DATA, operDesc = "添加用户信息")
-//  public BaseResponse<Object> addUserInfo(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
-//                                  @ApiParam(value = "语言请求参数", required = false) Locale locale) {
-//    SysUserEntity entity = new SysUserEntity();
-//    BeanUtils.copyProperties(ext, entity);
-//    int result = userService.addEntityInfo(entity);
-//    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), result);
-//  }
+
 //
 //
 //  @ApiOperation(value = "addUserInfoList", notes = "添加用户信息")

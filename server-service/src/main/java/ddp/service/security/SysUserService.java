@@ -16,5 +16,7 @@ public interface SysUserService extends BaseService<SysUserEntity> {
     /*获取用户分页信息*/
     List<SysUserExt> getExtListInfo(SysUserExt ext);
 
+    /*用户信息存储*/
+    Integer saveOrUpdate(SysUserExt ext);
 }
 

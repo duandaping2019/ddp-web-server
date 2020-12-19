@@ -161,7 +161,26 @@ var vm = new Vue({
 		},
 		saveOrUpdate: function (event) {
 			if ($("#userForm").valid()) {
-				vm.reload();
+
+				// 登陆操作
+				$.ajax({
+					type: "POST",
+					url: "/user/save_or_update",
+					data: JSON.stringify(vm.user),
+					dataType: "json", //响应数据类型
+					contentType: "application/json", //请求数据类型
+					success: function(result){
+						if(result.data === 1){//存储成功
+							alert("操作成功！", function () {
+								vm.reload();
+							});
+						}else{
+							alert("操作失败！");
+						}
+					}
+				});
+
+
 				// var url = vm.user.userId == null ? "../sys/user/save" : "../sys/user/update";
 				// $.ajax({
 				// 	type: "POST",

@@ -33,15 +33,15 @@
         <h4 style="margin-bottom: 0px;"><i class="fa fa-exclamation-triangle"></i> {{errorMsg}}</h4>
       </div>
       <div class="form-group has-feedback">
-        <input type="text" class="form-control" v-model="loginId" placeholder="账号">
+        <input type="text" class="form-control" v-model="user.loginId" placeholder="账号">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" v-model="loginPwd" placeholder="密码">
+        <input type="password" class="form-control" v-model="user.loginPwd" placeholder="密码">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="text" class="form-control" v-model="captcha" @keyup.enter="login" placeholder="验证码">
+        <input type="text" class="form-control" v-model="user.captcha" @keyup.enter="login" placeholder="验证码">
         <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
@@ -78,12 +78,10 @@
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
-		loginId: '',
-		loginPwd: '',
-		captcha: '',
 		error: false,
 		errorMsg: '',
-		src: 'captcha.jpg'
+		src: 'captcha.jpg',
+        user:{}
 	},
 	beforeCreate: function(){
 		if(self != top){
@@ -104,11 +102,7 @@ var vm = new Vue({
 			$.ajax({
 				type: "POST",
 			    url: "/sys/login?language=en_US",
-			    data: JSON.stringify({
-				    "loginId": vm.loginId,
-                    "loginPwd": vm.loginPwd,
-                    "captcha": vm.captcha,
-                }),
+			    data: JSON.stringify(vm.user),
 			    dataType: "json", //响应数据类型
                 contentType: "application/json", //请求数据类型
 			    success: function(result){
@@ -127,17 +121,17 @@ var vm = new Vue({
 });
 
 function validData() {
-    if(!vm.loginId){
+    if(!vm.user.loginId){
         layer.alert("请输入用户名称！！！");
         return false;
     }
 
-    if(!vm.loginPwd){
+    if(!vm.user.loginPwd){
         layer.alert("请输入用户密码！！！");
         return false;
     }
 
-    if(!vm.captcha){
+    if(!vm.user.captcha){
         layer.alert("请输入验证码！！！");
         return false;
     }

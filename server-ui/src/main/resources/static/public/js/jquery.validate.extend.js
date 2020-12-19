@@ -2,7 +2,7 @@
 $(function () {
     // 下拉框处理事件
     $("select").bind("change",function(){
-        $(this).closest("form").valid();
+        $(this).closest("form").validate().element($(this));
     });
 
 });

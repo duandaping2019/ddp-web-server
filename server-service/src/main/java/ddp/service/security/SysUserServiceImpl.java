@@ -24,4 +24,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
     return userMapper.getExtListInfo(ext);
   }
 
+  @Override
+  public Integer saveOrUpdate(SysUserExt ext) {
+    return 1;
+  }
+
+
+
 }
