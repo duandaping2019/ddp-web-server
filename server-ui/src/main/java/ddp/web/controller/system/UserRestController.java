@@ -43,9 +43,11 @@ public class UserRestController extends BaseController {
     return BaseResponse.success(new PageInfo(userService.getExtListInfo(ext)));
   }
 
-  @ApiOperation(value = "saveOrUpdate", notes = "添加用户信息")
+
+  @ApiOperation(value = "saveOrUpdate", notes = "存储用户信息")
   @RequestMapping("/save_or_update")
-  @OperLog(operModul = "系统管理", operType = CommConstants.ADD_DATA, operDesc = "添加用户信息")
+  @OperLog(operModul = "系统管理", operType = CommConstants.ADD_DATA, operDesc = "存储用户信息")
+  @RequiresPermissions("sys:user:save")
   public BaseResponse<Object> saveOrUpdate(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
                                   @ApiParam(value = "语言请求参数", required = false) Locale locale) {
 
@@ -55,26 +57,20 @@ public class UserRestController extends BaseController {
   }
 
 
-//  @ApiOperation(value = "getUserInfo", notes = "获取用户信息")
-//  @RequestMapping("/get_user_info")
-//  @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "获取用户信息")
-////  @RequiresPermissions("get_user_info")
-//  public BaseResponse<Object> getUserInfo(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
-//                                  @ApiParam(value = "语言请求参数", required = false) Locale locale) {
-//    //封装条件
-//    Example example = new Example(SysUserEntity.class);
-//    example.createCriteria().andEqualTo(ext);
-//
-//    //执行查询
-//    SysUserEntity entity = userService.getEntityInfo(example);
-//
-//    //返回结果
-//    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), entity);
-//  }
-//
+  @ApiOperation(value = "getUserInfo", notes = "获取用户信息")
+  @RequestMapping("/get_user_info")
+  @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "获取用户信息")
+  @RequiresPermissions("sys:user:info")
+  public BaseResponse<Object> getUserInfo(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
+                                  @ApiParam(value = "语言请求参数", required = false) Locale locale) {
 
-//
-//
+    SysUserExt userInfo = userService.getExtInfo(ext);
+    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), userInfo);
+  }
+
+
+
+
 //  @ApiOperation(value = "addUserInfoList", notes = "添加用户信息")
 //  @RequestMapping("/add_user_info_list")
 //  @OperLog(operModul = "系统管理", operType = CommConstants.ADD_DATA, operDesc = "添加用户信息")

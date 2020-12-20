@@ -15,12 +15,16 @@ public class SysRoleServiceImpl implements SysRoleService{
     private SysRoleMapper roleMapper;
 
     @Override
-    public List<Map<String, Object>> querySuperRoleList() {
-        return roleMapper.querySuperRoleList();
+    public List<Map<String, Object>> sysRoleSelect(BigDecimal userId) {
+        List<Map<String ,Object>> roleList = null;
+
+        if (userId.compareTo(new BigDecimal("1")) == 0){ //超级管理员
+            roleList = roleMapper.querySuperRoleList();
+        } else { // 自己所拥有的角色列表
+            roleList = roleMapper.queryUserRoleList(userId);
+        }
+
+        return roleList;
     }
 
-    @Override
-    public List<Map<String, Object>> queryUserRoleList(BigDecimal userId) {
-        return roleMapper.queryUserRoleList(userId);
-    }
 }

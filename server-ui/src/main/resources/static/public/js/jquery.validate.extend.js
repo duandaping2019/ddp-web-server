@@ -1,11 +1,11 @@
 // 初始化事件处理
-$(function () {
-    // 下拉框处理事件
-    $("select").bind("change",function(){
-        $(this).closest("form").validate().element($(this));
+function selectValid(selectId) {
+    $("#"+ selectId).selectpicker({liveSearch: true, liveSearchPlaceholder: "数据检索" }).on('changed.bs.select', function () {
+        if($(this) && $(this).val()){
+            $(this).closest("form").validate().element($(this));
+        }
     });
-
-});
+}
 
 // 变更配置信息
 $.validator.setDefaults({

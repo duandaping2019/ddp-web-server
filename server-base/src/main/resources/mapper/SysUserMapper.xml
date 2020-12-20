@@ -20,6 +20,9 @@
             <if test="loginId != null and loginId != ''">
                 and t.login_id = #{loginId}
             </if>
+            <if test="userId != null">
+                and t.user_id = #{userId}
+            </if>
         </where>
     </select>
 

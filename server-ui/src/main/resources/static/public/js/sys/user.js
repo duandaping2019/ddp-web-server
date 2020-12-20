@@ -1,3 +1,5 @@
+let myValidate = null;
+
 $(function () {
     $("#jqGrid").jqGrid({
         url: '/user/list', //获取数据的地址
@@ -60,10 +62,10 @@ $(function () {
     });
 
 	// 加载下拉数据
-	$("#searchSelect").selectpicker({liveSearch: true, liveSearchPlaceholder: "数据检索" });
+	selectValid("userSex");
 
     // 表单校验
-	let myValidate = $('#userForm').validate({
+	myValidate = $('#userForm').validate({
 		rules: {
 			userNo:{
 				required: true,
@@ -96,9 +98,6 @@ $(function () {
 		}
 	});
 
-	// 初始化校验器
-	myValidate.resetForm();
-
 });
 
 var vm = new Vue({
@@ -118,21 +117,42 @@ var vm = new Vue({
 			vm.reload();
 		},
 		add: function(){
-			vm.showList = false;
-			vm.title = "新增";
-			vm.roleList = {};
-			vm.user = {userState: 0};
-			
-			//获取角色信息
-			this.getRoleList();
+			$.ajax({
+				type: "POST",
+				url: "/role/select",
+				data: JSON.stringify(vm.user),
+				dataType: "json", //响应数据类型
+				contentType: "application/json", //请求数据类型
+				success: function(result){
+					if(result.code === 200){//存储成功
+						vm.user = {};//清理缓存数据
+						vm.showList = false;//展示页面
+						vm.title = "新增";//显示标题
+						vm.user.userState = 0; //赋默认值
+						vm.roleList = result.data;//加载数据源
+						myValidate.resetForm(); // 重置表单校验器
+					}
+				}
+			});
 		},
 		update: function () {
-			vm.showList = false;
-			vm.title = "修改";
-			let key = getSelectedRow(); //获取主键
-			vm.getUser(key); //初始化实体
-
-			this.getRoleList(); //获取角色信息
+			$.ajax({
+				type: "POST",
+				url: "/user/get_user_info",
+				data: JSON.stringify({
+					"userId": getSelectedRow() //获取主键
+				}),
+				dataType: "json", //响应数据类型
+				contentType: "application/json", //请求数据类型
+				success: function(result){
+					if(result.code === 200){//存储成功
+						vm.showList = false; //展示页面
+						vm.title = "修改"; //显示标题
+						vm.user = result.data; //记载数据
+						//vm.getRoleList(); //获取角色信息
+					}
+				}
+			});
 		},
 		del: function () {
 			var userIds = getSelectedRows();
@@ -180,16 +200,6 @@ var vm = new Vue({
 					}
 				});
 			}
-		},
-		getUser: function(userId){
-			$.get("../sys/user/info/"+userId, function(r){
-				vm.user = r.user;
-			});
-		},
-		getRoleList: function(){
-			$.get("/role/select", function(r){
-				vm.roleList = r.data;
-			});
 		},
 		reload: function (event) {
 			vm.showList = true;

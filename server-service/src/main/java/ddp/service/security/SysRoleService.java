@@ -9,10 +9,7 @@ import java.util.Map;
  */
 public interface SysRoleService {
 
-    /*获取超级管理员角色列表*/
-    List<Map<String, Object>> querySuperRoleList();
-
-    /*获取普通用户角色列表*/
-    List<Map<String, Object>> queryUserRoleList(BigDecimal userId);
+    /*获取用户角色配置信息*/
+    List<Map<String, Object>> sysRoleSelect(BigDecimal userId);
 
 }
