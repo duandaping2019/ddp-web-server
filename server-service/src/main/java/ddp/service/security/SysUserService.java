@@ -3,21 +3,30 @@ package ddp.service.security;
 import ddp.BaseService;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
  * 用户管理服务
  */
 public interface SysUserService extends BaseService<SysUserEntity> {
-    /*获取用户实体信息*/
+    /*获取用户实体信息【简单】*/
+    SysUserExt getEntityInfo(SysUserExt ext);
+
+    /*获取用户实体信息【复杂】*/
     SysUserExt getExtInfo(SysUserExt ext);
 
     /*获取用户分页信息*/
     List<SysUserExt> getExtListInfo(SysUserExt ext);
 
     /*用户信息存储*/
-    SysUserEntity saveOrUpdate(SysUserExt ext, SysUserExt operator);
+    @Transactional
+    SysUserEntity saveOrUpdate(SysUserExt ext);
 
+    /*用户信息删除*/
+    @Transactional
+    void delUserInfo(List<BigDecimal> idsList);
 }
 

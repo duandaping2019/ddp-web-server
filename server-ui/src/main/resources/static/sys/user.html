@@ -89,7 +89,7 @@
 			<div class="form-group">
 				<div class="col-sm-1 control-label"><strong style="color: red">*</strong>角色</div>
 				<div class="col-sm-11">
-					<label class="checkbox-inline" v-for="role in roleList">
+					<label class="checkbox-inline" v-for="role in user.roleList">
 						<input type="checkbox" name="roleIdList[]" :value="role.code" v-model="user.roleIdList">{{role.name}}
 					</label>
 				</div>
@@ -109,7 +109,7 @@
 
 			<div class="form-group">
 				<div class="col-sm-5 control-label"></div>
-					<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+					<input type="button" id="saveOrUpdateBtn" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
 					<input type="button" class="btn btn-warning" @click="reload" value="关闭"/>
 			</div>
 		</form>

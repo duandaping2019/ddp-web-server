@@ -1,8 +1,10 @@
-package ddp.web.tools;
+package ddp.service.tools;
 
 import ddp.bean.RRException;
 import ddp.constants.CommConstants;
 import ddp.ext.security.SysUserExt;
+import ddp.service.security.SysUserService;
+import ddp.tools.SpringBeanUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -56,8 +58,10 @@ public class ShiroUtils {
         Subject subject = SecurityUtils.getSubject();
         SysUserExt ext = (SysUserExt) subject.getPrincipal();
         if (ext == null) {
-            ext = new SysUserExt();
-            ext.setLoginId(CommConstants.ADMIN_USER);
+            SysUserService userService = SpringBeanUtils.getBean(SysUserService.class);
+            SysUserExt condition = new SysUserExt();
+            condition.setUserId(CommConstants.ADMIN_USER);
+            ext = userService.getEntityInfo(condition);
         }
         return ext;
     }

@@ -100,17 +100,15 @@ $(function () {
 
 });
 
-var vm = new Vue({
+let vm = new Vue({
 	el:'#rrapp',
 	data:{
-		q:{
+		q:{//查询条件对象
 			userName: null
 		},
-		showList: true,
-		title:null,
-		roleList:{},
-		user:{}
-
+		showList: true, //列表控制对象
+		title:null, //标题控制对象
+		user:{} // 用户操作对象
 	},
 	methods: {
 		query: function () {
@@ -125,22 +123,36 @@ var vm = new Vue({
 				contentType: "application/json", //请求数据类型
 				success: function(result){
 					if(result.code === 200){//存储成功
-						vm.user = {};//清理缓存数据
 						vm.showList = false;//展示页面
 						vm.title = "新增";//显示标题
-						vm.user.userState = 0; //赋默认值
-						vm.roleList = result.data;//加载数据源
-						myValidate.resetForm(); // 重置表单校验器
+						vm.user = {
+							roleList: result.data,//角色列表
+							roleIdList:[] //选中集合
+						};//清理缓存数据
+						vm.user.userState = 0; // 赋值操作
+
+						// 重置表单校验器
+						myValidate.resetForm();
 					}
 				}
 			});
 		},
+		setSelectValue: function(){
+			// 性别设置
+			$("#userSex").selectpicker('val', vm.user.userSex);
+
+		},
 		update: function () {
+			let userId = getSelectedRow();
+			if (!userId) {
+				return;
+			}
+
 			$.ajax({
 				type: "POST",
 				url: "/user/get_user_info",
 				data: JSON.stringify({
-					"userId": getSelectedRow() //获取主键
+					"userId": userId //获取主键
 				}),
 				dataType: "json", //响应数据类型
 				contentType: "application/json", //请求数据类型
@@ -148,39 +160,42 @@ var vm = new Vue({
 					if(result.code === 200){//存储成功
 						vm.showList = false; //展示页面
 						vm.title = "修改"; //显示标题
+
 						vm.user = result.data; //记载数据
-						//vm.getRoleList(); //获取角色信息
+						vm.setSelectValue(); // 下拉框赋值
+
+						// 重置表单校验器
+						myValidate.resetForm(); // 重置表单校验器
 					}
 				}
 			});
 		},
 		del: function () {
-			var userIds = getSelectedRows();
-			if(userIds == null){
-				return ;
+			let userIds = getSelectedRows();
+			if (!userIds) {
+				return;
 			}
-			
+
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
-				    url: "../sys/user/delete",
-				    data: JSON.stringify(userIds),
-				    success: function(r){
-						if(r.code == 0){
-							alert('操作成功', function(index){
-                                vm.reload();
+					url: "/user/del_user_info",
+					data: JSON.stringify(userIds),
+					dataType: "json", //响应数据类型
+					contentType: "application/json", //请求数据类型
+					success: function(result){
+						if(result.code === 200){//存储成功
+							alert('操作成功', function(){
+								vm.reload();
 							});
-						}else{
-							alert(r.msg);
 						}
 					}
 				});
 			});
 		},
 		saveOrUpdate: function (event) {
-			if ($("#userForm").valid()) {
-
-				// 登陆操作
+			if ($("#userForm").valid()) {//表单校验
+				$("#saveOrUpdateBtn").attr("disabled", true); // 置灰按钮
 				$.ajax({
 					type: "POST",
 					url: "/user/save_or_update",
@@ -189,13 +204,13 @@ var vm = new Vue({
 					contentType: "application/json", //请求数据类型
 					success: function(result){
 						if(result.code === 200){//存储成功
-							vm.user = result.data;
-							alert("操作成功！");
-							// alert("操作成功！", function () {
-							// 	vm.reload();
-							// });
+							alert("操作成功！", function () {
+								vm.reload();
+							});
 						}else{
-							alert("操作失败！");
+							alert("操作失败！", function () {
+								$("#saveOrUpdateBtn").attr("disabled", false); // 还原按钮
+							});
 						}
 					}
 				});
@@ -203,7 +218,7 @@ var vm = new Vue({
 		},
 		reload: function (event) {
 			vm.showList = true;
-			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			let page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 postData:{'userName': vm.q.userName},
                 page:page

@@ -1,4 +1,4 @@
-package ddp.web.tools;
+package ddp.service.tools;
 
 import ddp.entity.security.SysLangEntity;
 import ddp.service.security.SysLangService;

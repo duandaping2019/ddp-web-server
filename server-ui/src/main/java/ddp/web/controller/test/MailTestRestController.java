@@ -2,7 +2,7 @@ package ddp.web.controller.test;
 
 import ddp.beans.BaseResponse;
 import ddp.service.common.MailService;
-import ddp.web.tools.MessageSourceUtils;
+import ddp.service.tools.MessageSourceUtils;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,12 +1,14 @@
 package ddp.constants;
 
+import java.math.BigDecimal;
+
 public class CommConstants {
 
   private CommConstants() {
   }
 
   /*超级管理员ID*/
-  public static final String ADMIN_USER = "ddp"; //超级管理员ID
+  public static final BigDecimal ADMIN_USER = new BigDecimal(1); //超级管理员ID
 
   /*MD5盐值加密*/
   public static final String LOGIN_PWD = "123456"; //默认密码
