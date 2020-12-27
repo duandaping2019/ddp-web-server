@@ -92,7 +92,7 @@ public class SysLoginController extends BaseController {
         localeResolver.setLocale(request, response, locale);
 
         try {
-            // 登陆验证
+            // 登陆验证【传入客户端账号/密码】
             UsernamePasswordToken token = new UsernamePasswordToken(ext.getLoginId(), ext.getLoginPwd());
             Subject subject = SecurityUtils.getSubject();
             subject.login(token);
@@ -137,6 +137,14 @@ public class SysLoginController extends BaseController {
         }
 
         return new ModelAndView("redirect:/login.html");
+    }
+
+    @ApiOperation(value = "sysUserPassword", notes = "密码修改")
+    @RequestMapping("sys/user/password")
+    @OperLog(operModul = "系统管理", operType = CommConstants.UPDATE_DATA, operDesc = "密码修改")
+    public BaseResponse<Object> sysUserPassword(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext) {
+        String result = sysIndexService.updateSysUserPassword(ext);
+        return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", Locale.getDefault()), result);
     }
 
 }

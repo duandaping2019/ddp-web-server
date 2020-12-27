@@ -2,6 +2,7 @@ package ddp.service.security;
 
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysMenuExt;
+import ddp.ext.security.SysUserExt;
 
 import java.util.List;
 import java.util.Set;
@@ -16,5 +17,8 @@ public interface SysIndexService {
 
     /*获取用户权限信息*/
     Set<String> selectPermissions(SysUserEntity userEntity);
+
+    /*用户密码修改*/
+    String updateSysUserPassword(SysUserExt ext);
 
 }

@@ -7,8 +7,8 @@ import ddp.service.security.SysIndexService;
 import ddp.service.security.SysUserService;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.shiro.authc.SimpleAccount;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -36,33 +36,30 @@ public class MyShiroRealm extends AuthorizingRealm {
     private SysIndexService sysIndexService;
 
     /**
-     * 用户认证
-     * 可在此处调用loginservice实现login逻辑；
-     * 也可以在其它地方login验证完后，只是在此处生成一个用户票据，principal
+     * 用户认证，只是在此处生成一个用户票据，principal
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
         logger.info("---------------- 执行 Shiro 凭证认证 ----------------------");
 
         UsernamePasswordToken authcToken = (UsernamePasswordToken) token;
+
         SysUserExt condition = new SysUserExt();
         condition.setLoginId(authcToken.getUsername());
         SysUserExt user = userService.getExtInfo(condition);
 
         if (user != null) {
-            // 用户为禁用状态
-            if (!"0".equals(user.getUserState())) {
-                throw new DisabledAccountException();
+            if (!"0".equals(user.getUserState())) {// 用户为禁用状态
+                throw new LockedAccountException();
             }
 
             logger.info("---------------- Shiro 凭证认证成功 ----------------------");
-            return new SimpleAccount(user, user.getLoginPwd(), ByteSource.Util.bytes(CommConstants.SALT), this.getName());
+            return new SimpleAuthenticationInfo(user, user.getLoginPwd(), ByteSource.Util.bytes(CommConstants.SALT), this.getName());
         }
 
         throw new UnknownAccountException();
 
     }
-
 
     /**
      * 角色权限和对应权限添加[菜单或按钮与用户多对多对应关系]

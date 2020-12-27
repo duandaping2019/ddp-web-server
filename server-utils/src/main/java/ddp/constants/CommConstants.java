@@ -13,6 +13,8 @@ public class CommConstants {
   /*MD5盐值加密*/
   public static final String LOGIN_PWD = "123456"; //默认密码
   public static final String SALT = "7e6f"; //盐值
+
+  public static final String HASH_NAME= "MD5";
   public static final Integer HASH_ITERATIONS = 1024;
 
   /*分页参数*/

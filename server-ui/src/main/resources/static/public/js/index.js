@@ -35,8 +35,6 @@ var vm = new Vue({
 		user:{},
 		menuList:{},
 		main:"sys/main.html",
-		password:'',
-		newPassword:'',
         navTitle:"控制台"
 	},
 	methods: {
@@ -61,20 +59,25 @@ var vm = new Vue({
 				content: jQuery("#passwordLayer"),
 				btn: ['修改','取消'],
 				btn1: function (index) {
-					var data = "password="+vm.password+"&newPassword="+vm.newPassword;
+					if (!validatePwd(vm.user.newPassword)) {
+						return;
+					}
+
 					$.ajax({
 						type: "POST",
-					    url: "sys/user/password",
-					    data: data,
-					    dataType: "json",
-					    success: function(result){
-							if(result.code == 0){
+						url: "sys/user/password",
+						data: JSON.stringify({
+							"password": vm.user.password,
+							"newPassword": vm.user.newPassword
+						}),
+						dataType: "json", //响应数据类型
+						contentType: "application/json", //请求数据类型
+						success: function(result){
+							if(result.code === 200){//存储成功
 								layer.close(index);
-								layer.alert('修改成功', function(index){
+								layer.alert(result.data, function(index){
 									location.reload();
 								});
-							}else{
-								layer.alert(result.msg);
 							}
 						}
 					});
@@ -87,23 +90,20 @@ var vm = new Vue({
 		this.getUser();
 	},
 	updated: function(){
-		//路由
-		var router = new Router();
+		let router = new Router();
 		routerList(router, vm.menuList);
 		router.start();
 	}
 });
 
-
-
 function routerList(router, menuList){
-	for(var key in menuList){
-		var menu = menuList[key];
-		if(menu.menuType == 0){
+	for(let key in menuList){
+		let menu = menuList[key];
+		if(menu.menuType === 0){
 			routerList(router, menu.list);
 		}else if(menu.menuType == 1){
 			router.add('#'+menu.menuUrl, function() {
-				var url = window.location.hash;
+				let url = window.location.hash;
 				
 				//替换iframe的url
 			    vm.main = url.replace('#', '');
@@ -116,4 +116,14 @@ function routerList(router, menuList){
 			});
 		}
 	}
+}
+
+/*密码强度校验*/
+function validatePwd(newPassword) {
+	let regex =/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
+	if(!regex.test(newPassword)){
+		alert("至少8-16个字符，至少1个大写字母，1个小写字母和1个数字，其他可以是任意字符");
+		return false;
+	}
+	return true;
 }

@@ -89,9 +89,6 @@ $(function () {
 				required: true,
 				mobileStd: true
 			},
-			'roleIdList[]':{
-				required: true
-			},
 			userState:{
 				required: true
 			}
@@ -117,7 +114,7 @@ let vm = new Vue({
 		add: function(){
 			$.ajax({
 				type: "POST",
-				url: "/role/select",
+				url: "/user/role_select",
 				data: JSON.stringify(vm.user),
 				dataType: "json", //响应数据类型
 				contentType: "application/json", //请求数据类型
@@ -185,7 +182,7 @@ let vm = new Vue({
 					contentType: "application/json", //请求数据类型
 					success: function(result){
 						if(result.code === 200){//存储成功
-							alert('操作成功', function(){
+							alert(result.msg, function(){
 								vm.reload();
 							});
 						}
@@ -205,6 +202,7 @@ let vm = new Vue({
 					success: function(result){
 						if(result.code === 200){//存储成功
 							alert("操作成功！", function () {
+								$("#saveOrUpdateBtn").attr("disabled", false); // 还原按钮
 								vm.reload();
 							});
 						}else{

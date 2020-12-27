@@ -7,13 +7,4 @@
         <id column="role_name" property="roleName" jdbcType="VARCHAR" />
     </resultMap>
 
-    <select id="querySuperRoleList" resultType="java.util.Map">
-        select role_id as "code", role_name as "name" from sys_role sr where sr.del_flag = 0
-    </select>
-
-    <select id="queryUserRoleList" resultType="java.util.Map">
-
-    </select>
-
-
 </mapper>

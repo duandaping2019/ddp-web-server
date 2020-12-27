@@ -3,16 +3,23 @@ package ddp.service.security;
 import ddp.constants.CommConstants;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysMenuExt;
+import ddp.ext.security.SysUserExt;
 import ddp.mapper.security.SysMenuMapper;
+import ddp.mapper.security.SysUserMapper;
+import ddp.service.tools.MessageSourceUtils;
+import ddp.service.tools.ShiroUtils;
+import ddp.tools.MyStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 @Service
@@ -20,6 +27,9 @@ public class SysIndexServiceImpl implements SysIndexService{
 
     @Autowired
     private SysMenuMapper sysMenuMapper;
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
     @Override
     public List<SysMenuExt> selectMenuList(SysUserEntity userEntity) {
@@ -91,4 +101,26 @@ public class SysIndexServiceImpl implements SysIndexService{
         }
         return permsSet;
     }
+
+    @Override
+    @Transactional
+    public String updateSysUserPassword(SysUserExt ext) {
+        // 密码校验
+        String oldPwdMd5 = MyStringUtils.getPointLoginPwd(ext.getPassword());
+        SysUserExt currOperator = ShiroUtils.getCurrUserInfo();
+        if (!currOperator.getLoginPwd().equals(oldPwdMd5)) {
+            return MessageSourceUtils.getSourceFromCache("pwd_valid_fail", Locale.getDefault());
+        }
+
+        // 修改密码
+        ext.setUserId(currOperator.getUserId());
+        ext.setLoginPwd(MyStringUtils.getPointLoginPwd(ext.getNewPassword()));
+        sysUserMapper.updateUserPassword(ext);
+
+        // 删除该用户Shiro缓存
+        ShiroUtils.logout();
+
+        return MessageSourceUtils.getSourceFromCache("login_review", Locale.getDefault());
+    }
+
 }

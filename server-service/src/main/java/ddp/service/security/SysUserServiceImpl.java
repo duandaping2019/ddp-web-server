@@ -10,19 +10,17 @@ import ddp.tools.MyStringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implements SysUserService {
   @Autowired
   private SysUserMapper userMapper;
-
-  @Autowired
-  private SysRoleService roleService;
 
   @Override
   public SysUserExt getEntityInfo(SysUserExt ext) {
@@ -34,28 +32,34 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
     // 获取用户主信息
     SysUserExt user = userMapper.getExtInfo(ext);
 
-    // 获取用户角色信息[授权范围]
-    user.setRoleList(roleService.sysRoleSelect(ShiroUtils.getCurrUserInfo().getUserId()));
+    // 获取用户可配置角色信息[授权信息]
+    user.setRoleList(this.userRoleSelect(ShiroUtils.getCurrUserInfo().getUserId()));
 
-    // 获取用户角色信息[拥有范围]
-    List<String> roleIdList = new ArrayList<>();
-    roleIdList.add("1");
-    roleIdList.add("2");
-    user.setRoleIdList(roleIdList);
+    // 获取用户拥有角色信息[被授予]
+    user.setRoleIdList(userMapper.getRoleIdList(user.getUserId()));
 
     return user;
   }
 
   @Override
   public List<SysUserExt> getExtListInfo(SysUserExt ext) {
+    // 获取当前用户信息
+    ext.setCurrOperator(ShiroUtils.getCurrUserInfo());
     return userMapper.getExtListInfo(ext);
   }
 
   @Override
+  public List<Map<String, Object>> userRoleSelect(BigDecimal currUserId) {
+    return userMapper.getRoleInfoList(currUserId);
+  }
+
+  @Override
+  @Transactional
   public SysUserEntity saveOrUpdate(SysUserExt ext) {
     // 获取当前用户信息
     SysUserExt operator = ShiroUtils.getCurrUserInfo();
 
+    /**主表信息操作**/
     SysUserEntity entity = new SysUserEntity();
     BeanUtils.copyProperties(ext, entity);
     if (entity.getUserId() != null && !"".equals(entity.getUserId())) {
@@ -76,13 +80,20 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
       userMapper.insertSelective(entity);
     }
 
+    /**角色信息操作**/
+    userMapper.delUserRoleInfo(entity.getUserId());
+    userMapper.insertUserRoleInfo(entity.getUserId(), ext.getRoleIdList());
+
     return entity;
   }
 
   @Override
+  @Transactional
   public void delUserInfo(List<BigDecimal> idsList) {
     // 删除用户主数据
     userMapper.delUserInfo(idsList);
   }
+
+
 
 }

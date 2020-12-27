@@ -3,6 +3,7 @@ package ddp.web.configure;
 import ddp.constants.CommConstants;
 import ddp.web.filters.KickoutSessionControlFilter;
 import ddp.web.filters.MyPassThruAuthenticationFilter;
+import ddp.web.security.MyCredentialsMatcher;
 import ddp.web.security.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -53,11 +54,11 @@ public class ShiroConfigure {
      */
     @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-        hashedCredentialsMatcher.setHashAlgorithmName("MD5"); // 散列算法:这里使用MD5算法;
-        hashedCredentialsMatcher.setHashIterations(CommConstants.HASH_ITERATIONS); // 散列的次数，比如散列两次，相当于 md5(md5(""));
-        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
-        return hashedCredentialsMatcher;
+        MyCredentialsMatcher credentialsMatcher = new MyCredentialsMatcher();
+        credentialsMatcher.setHashAlgorithmName(CommConstants.HASH_NAME); // 散列算法:这里使用MD5算法;
+        credentialsMatcher.setHashIterations(CommConstants.HASH_ITERATIONS); // 散列的次数，相当于 md5(md5(""));
+        credentialsMatcher.setStoredCredentialsHexEncoded(true);
+        return credentialsMatcher;
     }
 
     /**

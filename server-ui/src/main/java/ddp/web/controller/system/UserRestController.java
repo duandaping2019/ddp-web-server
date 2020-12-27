@@ -7,6 +7,7 @@ import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysUserService;
 import ddp.service.tools.MessageSourceUtils;
+import ddp.service.tools.ShiroUtils;
 import ddp.tools.MyPageUtils;
 import ddp.web.aop.OperLog;
 import ddp.web.controller.BaseController;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @Api(tags = "用户管理类", value = "UserRestController")
 @RestController
@@ -44,6 +46,15 @@ public class UserRestController extends BaseController {
     return BaseResponse.success(new PageInfo(userService.getExtListInfo(ext)));
   }
 
+
+  @ApiOperation(value = "userRoleSelect", notes = "获取当前用户可配置角色列表")
+  @RequestMapping("role_select")
+  @OperLog(operModul = "用户角色配置", operType = CommConstants.GET_DATA, operDesc = "获取当前用户可配置角色列表")
+  @RequiresPermissions("sys:user:role")
+  public BaseResponse<Object> userRoleSelect(@ApiParam(value = "语言请求参数", required = false) Locale locale){
+    List<Map<String ,Object>> roleList = userService.userRoleSelect(ShiroUtils.getCurrUserInfo().getUserId());
+    return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), roleList);
+  }
 
   @ApiOperation(value = "saveOrUpdate", notes = "存储用户信息")
   @RequestMapping("/save_or_update")
@@ -76,6 +87,12 @@ public class UserRestController extends BaseController {
   @RequiresPermissions("sys:user:delete")
   public BaseResponse<Object> delUserInfo(@ApiParam(value = "用户请求参数", required = false) @RequestBody List<BigDecimal> idsList,
                                           @ApiParam(value = "语言请求参数", required = false) Locale locale) {
+
+    for (int i = 0; i < idsList.size(); i++) {
+      if (idsList.get(i).compareTo(new BigDecimal("1")) == 0){ // 超级管理员
+        return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_fail", locale));
+      }
+    }
 
     userService.delUserInfo(idsList);
     return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale));

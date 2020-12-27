@@ -11,6 +11,9 @@ public class SysUserExt extends SysUserEntity {
     private String captcha; //验证码
     private List<String> roleIdList; //用户角色列表
     private List<Map<String ,Object>> roleList; //角色列表
+    private SysUserExt currOperator; //当前登录用户
+    private String password;//旧密码
+    private String newPassword;//新密码
 
     public String getCaptcha() {
         return captcha;
@@ -36,4 +39,27 @@ public class SysUserExt extends SysUserEntity {
         this.roleList = roleList;
     }
 
+    public SysUserExt getCurrOperator() {
+        return currOperator;
+    }
+
+    public void setCurrOperator(SysUserExt currOperator) {
+        this.currOperator = currOperator;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
 }
