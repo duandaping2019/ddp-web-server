@@ -12,6 +12,7 @@ import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
@@ -62,15 +63,36 @@ public class ShiroConfigure {
     }
 
     /**
+     * sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID
+     * @return
+     */
+    @Bean
+    public SimpleCookie sessionIdCookie() {
+        SimpleCookie simpleCookie = new SimpleCookie();
+        //cookie的name,对应的默认是 JSESSIONID
+        simpleCookie.setName(CommConstants.SHIRO_SESSION_COOKIES);
+        simpleCookie.setMaxAge(-1);//设置浏览器关闭才删除cookie
+        simpleCookie.setPath("/");
+        simpleCookie.setHttpOnly(true);//只支持http
+        return simpleCookie;
+    }
+
+
+    /**
      * websessionManager 采用redisSessionDao
      */
     @Bean
     public DefaultWebSessionManager sessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setSessionDAO(redisSessionDAO());
+        sessionManager.setSessionDAO(redisSessionDAO());//自定义redis的sessionDao
+        sessionManager.setGlobalSessionTimeout(CommConstants.SESSION_EXPIRETIME * 1000);//设置全局session超时时间 ms
+        sessionManager.setCacheManager(cacheManager()); //使用redis缓存管理
+        sessionManager.setSessionIdCookieEnabled(true);//启用自定义的SessionIdCookie
+        sessionManager.setSessionIdCookie(sessionIdCookie());//自定义SessionIdCookie
+        sessionManager.setSessionIdUrlRewritingEnabled(false);//关闭URL中带上JSESSIONID
+        sessionManager.setSessionValidationSchedulerEnabled(true);//定时检查失效的session
+        sessionManager.setDeleteInvalidSessions(true);//启用删除无效sessioin
 
-        // 解决第一次重定向带JESSION_ID
-        sessionManager.setSessionIdUrlRewritingEnabled(false);
         return sessionManager;
     }
 
@@ -108,7 +130,7 @@ public class ShiroConfigure {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(redisConfig.getHost());
         redisManager.setPort(redisConfig.getPort());
-        redisManager.setExpire(1800); // 配置缓存过期时间
+        redisManager.setExpire(CommConstants.SESSION_EXPIRETIME.intValue()); // 配置缓存过期时间
         redisManager.setTimeout(redisConfig.getTimeout());
         redisManager.setPassword(redisConfig.getPassword());
         return redisManager;
@@ -138,6 +160,7 @@ public class ShiroConfigure {
     public RedisCacheManager cacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());
+        redisCacheManager.setKeyPrefix(CommConstants.REDIS_SESSION_PREFIX);
         return redisCacheManager;
     }
 

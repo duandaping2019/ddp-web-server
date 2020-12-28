@@ -5,6 +5,7 @@ import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysIndexService;
 import ddp.service.security.SysUserService;
+import ddp.service.tools.ShiroUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.LockedAccountException;
@@ -42,8 +43,10 @@ public class MyShiroRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
         logger.info("---------------- 执行 Shiro 凭证认证 ----------------------");
 
+        // 获取令牌信息
         UsernamePasswordToken authcToken = (UsernamePasswordToken) token;
 
+        // 获取数据库信息
         SysUserExt condition = new SysUserExt();
         condition.setLoginId(authcToken.getUsername());
         SysUserExt user = userService.getExtInfo(condition);
@@ -54,7 +57,7 @@ public class MyShiroRealm extends AuthorizingRealm {
             }
 
             logger.info("---------------- Shiro 凭证认证成功 ----------------------");
-            return new SimpleAuthenticationInfo(user, user.getLoginPwd(), ByteSource.Util.bytes(CommConstants.SALT), this.getName());
+            return new SimpleAuthenticationInfo(user.getLoginId(), user.getLoginPwd(), ByteSource.Util.bytes(CommConstants.SALT), this.getName());
         }
 
         throw new UnknownAccountException();
@@ -69,7 +72,7 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         logger.info("---------------- 执行 Shiro 权限获取 ---------------------");
-        SysUserEntity user = (SysUserEntity) principals.getPrimaryPrincipal();
+        SysUserEntity user = ShiroUtils.getCurrUserInfo();
         Set<String> permsSet = sysIndexService.selectPermissions(user); ////用户权限列表
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();

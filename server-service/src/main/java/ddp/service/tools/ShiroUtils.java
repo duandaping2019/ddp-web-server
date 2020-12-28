@@ -56,13 +56,20 @@ public class ShiroUtils {
      */
     public static SysUserExt getCurrUserInfo() {
         Subject subject = SecurityUtils.getSubject();
-        SysUserExt ext = (SysUserExt) subject.getPrincipal();
-        if (ext == null) {
-            SysUserService userService = SpringBeanUtils.getBean(SysUserService.class);
+        String loginId = (String) subject.getPrincipal();
+        SysUserService userService = SpringBeanUtils.getBean(SysUserService.class);
+        SysUserExt ext = null;
+        if (loginId != null) {
+            SysUserExt condition = new SysUserExt();
+            condition.setLoginId(loginId);
+            ext = userService.getEntityInfo(condition);
+
+        } else {
             SysUserExt condition = new SysUserExt();
             condition.setUserId(CommConstants.ADMIN_USER);
             ext = userService.getEntityInfo(condition);
         }
+
         return ext;
     }
 

@@ -2,6 +2,7 @@ package ddp.web.filters;
 
 import com.alibaba.fastjson.JSON;
 import ddp.entity.security.SysUserEntity;
+import ddp.service.tools.ShiroUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.session.Session;
@@ -66,7 +67,7 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
         }
 
         Session session = subject.getSession();
-        SysUserEntity user = (SysUserEntity) subject.getPrincipal();
+        SysUserEntity user = ShiroUtils.getCurrUserInfo();
         String username = user.getLoginId();
         Serializable sessionId = session.getId();
 

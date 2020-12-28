@@ -77,7 +77,6 @@ public class SysLoginController extends BaseController {
                                       @ApiParam(value = "用户请求对象", required = false) HttpServletRequest request,
                                       @ApiParam(value = "用户响应对象", required = false) HttpServletResponse response) {
 
-
         if (ext.getCaptcha() != null && ext.getCaptcha().equals("POST_MAN_DDP")) { // PostMan测试模式
             System.out.println("this is postMan testing!!!");
         } else {
@@ -131,7 +130,6 @@ public class SysLoginController extends BaseController {
     @RequestMapping("sys/logout")
     @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "系统注销")
     public ModelAndView sysLogout(@ApiParam(value = "语言请求参数", required = false) Locale locale) {
-        //逻辑处理
         if (ShiroUtils.isLogin()) {
             ShiroUtils.logout();
         }
