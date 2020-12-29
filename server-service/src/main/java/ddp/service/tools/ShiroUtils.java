@@ -37,6 +37,7 @@ public class ShiroUtils {
         return getSession().getAttribute(key);
     }
 
+
     /**
      * 判断是否登陆
      */
@@ -77,7 +78,7 @@ public class ShiroUtils {
      * 获取验证码文本
      */
     public static String getKaptcha(String key) {
-        Object kaptcha = getSessionAttribute(key);
+        Object kaptcha = getSession().getAttribute(key);
         if (kaptcha == null) {
             throw new RRException("验证码已失效");
         }

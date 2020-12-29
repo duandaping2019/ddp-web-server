@@ -71,7 +71,7 @@ public class ShiroConfigure {
         SimpleCookie simpleCookie = new SimpleCookie();
         //cookie的name,对应的默认是 JSESSIONID
         simpleCookie.setName(CommConstants.SHIRO_SESSION_COOKIES);
-        simpleCookie.setMaxAge(-1);//设置浏览器关闭才删除cookie
+        simpleCookie.setMaxAge(CommConstants.SESSION_EXPIRETIME.intValue());//单位秒 -1 代表退出即删除
         simpleCookie.setPath("/");
         simpleCookie.setHttpOnly(true);//只支持http
         return simpleCookie;

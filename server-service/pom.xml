@@ -39,6 +39,22 @@
     </dependency>
     <!-- 发送邮件 end-->
 
+    <dependency>
+      <groupId>org.crazycake</groupId>
+      <artifactId>shiro-redis</artifactId>
+      <version>2.4.2.1-RELEASE</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>shiro-core</artifactId>
+          <groupId>org.apache.shiro</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jedis</artifactId>
+          <groupId>redis.clients</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
   </dependencies>
 
 </project>
