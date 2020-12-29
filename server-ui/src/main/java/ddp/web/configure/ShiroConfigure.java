@@ -3,11 +3,13 @@ package ddp.web.configure;
 import ddp.constants.CommConstants;
 import ddp.web.filters.KickoutSessionControlFilter;
 import ddp.web.filters.MyPassThruAuthenticationFilter;
+import ddp.web.listeners.CustomShiroSessionListener;
 import ddp.web.security.MyCredentialsMatcher;
 import ddp.web.security.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -23,7 +25,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -92,6 +96,10 @@ public class ShiroConfigure {
         sessionManager.setSessionIdUrlRewritingEnabled(false);//关闭URL中带上JSESSIONID
         sessionManager.setSessionValidationSchedulerEnabled(true);//定时检查失效的session
         sessionManager.setDeleteInvalidSessions(true);//启用删除无效sessioin
+
+        List<SessionListener> listeners = new ArrayList<>();
+        listeners.add(new CustomShiroSessionListener());
+        sessionManager.setSessionListeners(listeners); // 自定义Sesion 监听器
 
         return sessionManager;
     }

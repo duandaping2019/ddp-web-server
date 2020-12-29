@@ -96,6 +96,9 @@ public class SysLoginController extends BaseController {
             Subject subject = SecurityUtils.getSubject();
             subject.login(token);
 
+            // session 信息写入
+
+
         } catch (DisabledAccountException e) {
             return BaseResponse.badrequest(MessageSourceUtils.getSourceFromCache("login_fail_forbid", locale));
         } catch (AuthenticationException e) {

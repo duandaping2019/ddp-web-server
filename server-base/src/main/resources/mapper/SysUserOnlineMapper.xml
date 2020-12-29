@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ddp.mapper.security.SysUserOnlineMapper" >
+    <resultMap id="BaseResultMap" type="ddp.ext.security.SysUserOnlineExt">
+        <id column="uo_id" property="uoId" jdbcType="VARCHAR" />
+        <id column="session_id" property="sessionId" jdbcType="VARCHAR" />
+        <id column="user_id" property="userId" jdbcType="BIGINT" />
+        <id column="host" property="host" jdbcType="VARCHAR" />
+        <id column="ip" property="ip" jdbcType="VARCHAR" />
+        <id column="status" property="status" jdbcType="VARCHAR" />
+        <id column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+        <id column="last_access_time" property="lastAccessTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+</mapper>
