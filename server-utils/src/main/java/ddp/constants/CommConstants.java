@@ -10,7 +10,12 @@ public class CommConstants {
   /*超级管理员ID*/
   public static final BigDecimal ADMIN_USER = new BigDecimal(1); //超级管理员ID
 
-  /*redis session 前缀设置*/
+  /*用户在线状态*/
+  public static final String USER_ONLINE_STATUS = "online";
+  public static final String USER_AWAY_STATUS = "away";
+
+
+  /*redis session 设置*/
   public static final String REDIS_SESSION_PREFIX = "SHIRO_REDIS_SESSION:";
   public static final String SHIRO_SESSION_COOKIES = "COOKIE_SESSION";
   public static final Long SESSION_EXPIRETIME = 3600L;
@@ -18,7 +23,6 @@ public class CommConstants {
   /*MD5盐值加密*/
   public static final String LOGIN_PWD = "123456"; //默认密码
   public static final String SALT = "7e6f"; //盐值
-
   public static final String HASH_NAME= "MD5";
   public static final Integer HASH_ITERATIONS = 1024;
 

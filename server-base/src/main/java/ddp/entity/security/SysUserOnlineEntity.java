@@ -46,12 +46,6 @@ public class SysUserOnlineEntity extends BaseEntity {
     private String host;
 
     /**
-    *IP地址
-    */
-    @Column(name = "ip", length = 32)
-    private String ip;
-
-    /**
     *状态
     */
     @Column(name = "status", length = 10)
@@ -124,20 +118,6 @@ public class SysUserOnlineEntity extends BaseEntity {
     */
     public void setHost(String host) {
         this.host = host;
-    }
-
-    /**
-    * 设置IP地址
-    */
-    public String getIp() {
-        return this.ip;
-    }
-
-    /**
-    * 获取IP地址
-    */
-    public void setIp(String ip) {
-        this.ip = ip;
     }
 
     /**

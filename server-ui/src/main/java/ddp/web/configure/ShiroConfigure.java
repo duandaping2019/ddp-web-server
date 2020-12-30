@@ -3,7 +3,7 @@ package ddp.web.configure;
 import ddp.constants.CommConstants;
 import ddp.web.filters.KickoutSessionControlFilter;
 import ddp.web.filters.MyPassThruAuthenticationFilter;
-import ddp.web.listeners.CustomShiroSessionListener;
+import ddp.service.listeners.CustomShiroSessionListener;
 import ddp.web.security.MyCredentialsMatcher;
 import ddp.web.security.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -214,6 +214,7 @@ public class ShiroConfigure {
         filterChainDefinitionMap.put("/sys/logout", "anon"); //系统注销
         filterChainDefinitionMap.put("/captcha.jpg", "anon"); //验证信息
         filterChainDefinitionMap.put("/file/**", "anon"); //附件信息下载
+        filterChainDefinitionMap.put("/mqtt/**", "anon"); // mtqq消息队列
 
         filterChainDefinitionMap.put("/**", "authc"); // authc【用户认证】
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

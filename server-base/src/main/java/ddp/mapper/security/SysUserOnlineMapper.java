@@ -2,6 +2,7 @@ package ddp.mapper.security;
 
 import ddp.MyMapper;
 import ddp.entity.security.SysUserOnlineEntity;
+import ddp.ext.security.SysUserOnlineExt;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,5 +12,7 @@ import org.springframework.stereotype.Repository;
 */
 @Repository
 public interface SysUserOnlineMapper extends MyMapper<SysUserOnlineEntity> {
+    /*获取在线用户信息实体*/
+    SysUserOnlineExt getExtInfo(SysUserOnlineExt condition);
 
 }

@@ -2,14 +2,19 @@ package ddp.service.security;
 
 import ddp.constants.CommConstants;
 import ddp.entity.security.SysUserEntity;
+import ddp.entity.security.SysUserOnlineEntity;
 import ddp.ext.security.SysMenuExt;
 import ddp.ext.security.SysUserExt;
+import ddp.ext.security.SysUserOnlineExt;
 import ddp.mapper.security.SysMenuMapper;
 import ddp.mapper.security.SysUserMapper;
+import ddp.mapper.security.SysUserOnlineMapper;
+import ddp.service.listeners.CustomShiroSessionListener;
 import ddp.service.tools.MessageSourceUtils;
 import ddp.service.tools.ShiroUtils;
 import ddp.tools.MyStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -30,6 +36,9 @@ public class SysIndexServiceImpl implements SysIndexService{
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private SysUserOnlineMapper sysUserOnlineMapper;
 
     @Override
     public List<SysMenuExt> selectMenuList(SysUserEntity userEntity) {
@@ -121,6 +130,33 @@ public class SysIndexServiceImpl implements SysIndexService{
         ShiroUtils.logout();
 
         return MessageSourceUtils.getSourceFromCache("login_review", Locale.getDefault());
+    }
+
+    @Override
+    @Transactional
+    public void recorderUserLoginInfo(Subject subject) {
+        // 获取在线用户信息
+        SysUserOnlineExt condition = new SysUserOnlineExt();
+        condition.setSessionId(subject.getSession().getId().toString());
+        SysUserOnlineExt userOnlineExt = sysUserOnlineMapper.getExtInfo(condition);
+        if (userOnlineExt == null){
+            SysUserOnlineEntity entity = new SysUserOnlineEntity();
+            entity.setUoId(MyStringUtils.getUUID()); // 主键ID
+            entity.setSessionId(subject.getSession().getId().toString()); //会话标识ID
+            entity.setUserId(ShiroUtils.getCurrUserInfo().getUserId()); //用户ID
+            entity.setHost(subject.getSession().getHost());// 用户主机
+            entity.setStatus(CommConstants.USER_ONLINE_STATUS); //在线状态
+            entity.setStartTime(new Date()); //开始时间
+            sysUserOnlineMapper.insert(entity);
+
+            // 增加在线统计人数
+            CustomShiroSessionListener listener = new CustomShiroSessionListener();
+            listener.addSessionCount();
+        } else {
+            userOnlineExt.setLastAccessTime(new Date());
+            sysUserOnlineMapper.updateByPrimaryKeySelective(userOnlineExt);
+        }
+
     }
 
 }

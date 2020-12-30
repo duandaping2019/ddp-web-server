@@ -1,4 +1,4 @@
-package ddp.web.listeners;
+package ddp.service.listeners;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;
@@ -22,6 +22,10 @@ public class CustomShiroSessionListener implements SessionListener {
      */
     public void addSessionCount(){
         sessionCount.getAndIncrement();
+    }
+
+    public AtomicInteger getSessionCount(){
+        return sessionCount;
     }
 
     @Override

@@ -37,7 +37,6 @@ spring:
     nickname: 系统管理员 #指定自定义发送人的昵称
     password: daping521
 
-
 mybatis: # Mybatis 配置
   mapper-locations: classpath:mapper/*.xml #定义xml文件位置，不是必须的，如果需要在xml写sql请配置此选项
   type-aliases-package: ddp.entity # 注意：对应实体类的路径
@@ -54,3 +53,13 @@ logging:
   config: classpath:logback-spring.xml
   file:
     path: G:\usr\java\ddp-web-server
+
+mtqq:
+  username: mqtt-test # 账号
+  password: mqtt-test # 密码
+  host-url: tcp://127.0.0.1:1883 # 主机信息
+  client-id: d6176290-318d-4c01-aa06-c7acc3b95dac # 主题Id
+  default-topic: fams # 主题Name
+  qos: 0 # 模式
+  timeout: 100 # 超时，单位
+  keepalive: 100 # 存活时间

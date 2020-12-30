@@ -3,6 +3,7 @@ package ddp.service.security;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysMenuExt;
 import ddp.ext.security.SysUserExt;
+import org.apache.shiro.subject.Subject;
 
 import java.util.List;
 import java.util.Set;
@@ -20,5 +21,8 @@ public interface SysIndexService {
 
     /*用户密码修改*/
     String updateSysUserPassword(SysUserExt ext);
+
+    /*记录在线用户登陆信息*/
+    void recorderUserLoginInfo(Subject subject);
 
 }

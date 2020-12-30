@@ -6,10 +6,19 @@
         <id column="session_id" property="sessionId" jdbcType="VARCHAR" />
         <id column="user_id" property="userId" jdbcType="BIGINT" />
         <id column="host" property="host" jdbcType="VARCHAR" />
-        <id column="ip" property="ip" jdbcType="VARCHAR" />
         <id column="status" property="status" jdbcType="VARCHAR" />
         <id column="start_time" property="startTime" jdbcType="TIMESTAMP" />
         <id column="last_access_time" property="lastAccessTime" jdbcType="TIMESTAMP" />
     </resultMap>
+
+    <select id="getExtInfo" resultMap="BaseResultMap">
+        select * from sys_user_online suo
+        <where>
+            1 = 1
+            <if test="sessionId != null and sessionId != ''">
+                and suo.session_id = #{sessionId}
+            </if>
+        </where>
+    </select>
 
 </mapper>
