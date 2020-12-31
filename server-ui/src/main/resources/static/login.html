@@ -92,6 +92,9 @@
                 top.location.href = self.location.href;
             }
         },
+        created:function(){
+            getRsaPubKey();
+        },
         methods: {
             refreshCode: function(){ // 刷新验证码
                 this.src = "captcha.jpg?t=" + $.now();
@@ -123,6 +126,23 @@
             }
         }
     });
+
+    // 获取Rsa公钥
+    function getRsaPubKey() {
+        // 登陆操作
+        $.ajax({
+            type: "POST",
+            url: "/sys/login?language=zh_CN",
+            data: JSON.stringify({}),
+            dataType: "json", //响应数据类型
+            contentType: "application/json", //请求数据类型
+            success: function(result){
+                if(result.code == 200){//登录成功
+                    parent.location.href ='index.html';
+                }
+            }
+        });
+    }
 
     function validData() {
         if(!vm.user.loginId){
