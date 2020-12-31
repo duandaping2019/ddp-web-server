@@ -75,23 +75,6 @@ public class MyStringUtils {
     return md5Hash.toString();
   }
 
-
-
-  /**
-   * RSA解密过程
-   */
-  public static char[] decodePwdInfo(String loginPwd) {
-    try {
-      byte[] privateKeyArr = RsaUtils.decryptByPrivateKey(loginPwd.getBytes(), RsaUtils.getPrivateKey());
-      System.out.println(new String(privateKeyArr));
-
-    } catch (Exception e) {
-      new RuntimeException(e);
-    }
-
-    return loginPwd.toCharArray();
-  }
-
   /**
    * RSA密码解析过程
    */
