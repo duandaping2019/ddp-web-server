@@ -42,7 +42,8 @@ public class ShiroUtils {
      * 判断是否登陆
      */
     public static boolean isLogin() {
-        return SecurityUtils.getSubject().getPrincipal() != null;
+        // 判断用户是否已经登录
+        return SecurityUtils.getSubject().isAuthenticated();
     }
 
     /**

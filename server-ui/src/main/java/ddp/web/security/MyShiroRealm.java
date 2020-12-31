@@ -1,7 +1,6 @@
 package ddp.web.security;
 
 import ddp.constants.CommConstants;
-import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysIndexService;
 import ddp.service.security.SysUserService;
@@ -17,7 +16,6 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
@@ -28,38 +26,47 @@ import java.util.Set;
  */
 public class MyShiroRealm extends AuthorizingRealm {
 
-    private static org.slf4j.Logger logger = LoggerFactory.getLogger(MyShiroRealm.class);
-
     @Autowired
     private SysUserService userService;
 
     @Autowired
     private SysIndexService sysIndexService;
 
+    @Override
+    public String getName() {
+        return CommConstants.SHIRO_NAME;
+    }
+
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        // 仅支持UsernamePasswordToken类型token
+        return token instanceof UsernamePasswordToken;
+    }
+
     /**
      * 用户认证，只是在此处生成一个用户票据，principal
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
-        logger.info("---------------- 执行 Shiro 凭证认证 ----------------------");
 
-        // 获取令牌信息
-        UsernamePasswordToken authcToken = (UsernamePasswordToken) token;
+        // 获取令牌中信息
+        String userName = (String)token.getPrincipal(); // 多原则登陆入口【身份ID，手机号，邮箱】
 
-        // 获取数据库信息
+        // 获取数据库信息【支持如上三种方式认证】
         SysUserExt condition = new SysUserExt();
-        condition.setLoginId(authcToken.getUsername());
-        SysUserExt user = userService.getExtInfo(condition);
+        condition.setLoginId(userName);
+        SysUserExt user = userService.getEntityInfo(condition);
 
         if (user != null) {
-            if (!"0".equals(user.getUserState())) {// 用户为禁用状态
+            if (!"0".equals(user.getUserState())) {//禁用账号
                 throw new LockedAccountException();
             }
 
-            logger.info("---------------- Shiro 凭证认证成功 ----------------------");
+            // 关键凭证验证代码
             return new SimpleAuthenticationInfo(user.getLoginId(), user.getLoginPwd(), ByteSource.Util.bytes(CommConstants.SALT), this.getName());
         }
 
+        // 非法账号登陆
         throw new UnknownAccountException();
 
     }
@@ -71,13 +78,12 @@ public class MyShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        logger.info("---------------- 执行 Shiro 权限获取 ---------------------");
-        SysUserEntity user = ShiroUtils.getCurrUserInfo();
-        Set<String> permsSet = sysIndexService.selectPermissions(user); ////用户权限列表
+        // 获取用户权限列表
+        Set<String> permsSet = sysIndexService.selectPermissions(ShiroUtils.getCurrUserInfo());
 
+        // 设置权限认证对象
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.setStringPermissions(permsSet); //权限控制
-        logger.info("---------------- Shiro 权限获取成功 ----------------------");
+        info.setStringPermissions(permsSet);
         return info;
 
     }

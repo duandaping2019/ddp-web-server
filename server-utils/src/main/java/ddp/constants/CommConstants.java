@@ -16,6 +16,7 @@ public class CommConstants {
 
 
   /*redis session 设置*/
+  public static final String SHIRO_NAME = "REALM_DDP_WEB_SERVER";
   public static final String REDIS_SESSION_PREFIX = "SHIRO_REDIS_SESSION:";
   public static final String SHIRO_SESSION_COOKIES = "COOKIE_SESSION";
   public static final Long SESSION_EXPIRETIME = 3600L;

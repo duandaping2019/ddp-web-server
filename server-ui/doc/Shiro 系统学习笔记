@@ -1,0 +1,42 @@
+简介
+Apache Shiro 是java的一个安全框架。相比Spring Security 体量小，没有那么复杂。
+适用于JavaSE环境，也可以在JavaEE环境
+主要功能实现：
+    1、认证（Authentication），身份认证/登陆，验证用户身份
+    2、授权(Authorization)，授权，验证用户具备系统权限
+    3、加密(Cryptography)，加密，保证数据安全性
+    4、会话管理(Session Management)，用户登陆会话（Session）管理
+    5、Web集成(Web Support)，良好的Web环境支持
+    6、缓存(Caching)，主要是对用户信息和授权信息的检查
+
+备注：Shiro 不会去维护用户、维护权限，需要通过接口自己实现
+
+
+工作机制：
+    1、应用代码直接交互的对象是Subject
+    2、Subject 代表当前“用户”，这里的用户可以是任何交互对象
+    3、所有的Subject都绑定到SecurityManager中
+    4、SecurityManager（安全管理器），负责所有安全类相关操作
+    5、Realm（域）,提供安全数据（用户，角色，权限），可以看成是SecurityManager的数据源
+
+备注：
+    1、SecurityManager是Shiro的心脏，负责认证、授权、会话（管理器、存储）、缓存管理
+    2、SessionDao 数据访问对象，可以用户实现会话对象的存储，可以使用缓存模式实现
+    3、Cryptography 密码模块，提供加密和解密服务
+
+
+Shiro 身份验证
+    1、在验证时需要提供principals（身份）和credentials（证明）
+    2、principals身份主体标识，需要具备唯一性，一般可以是用户名、手机号、邮箱等
+    3、credentials证明/凭证，只有主体知道的安全值，如密码、数字证书
+    4、认证流程
+        a) 首先调用Subject.login(token) 进行登录，其自动委托给SecurityManager
+        b) SecurityManager将任务派发给Authenticator进行身份认证
+        c) Authenticator从Realm获取验证信息，可以配置多Realm（各自顺序和策略）
+
+
+
+
+
+
+
