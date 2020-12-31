@@ -14,7 +14,8 @@
         <id column="menu_icon" property="menuIcon" jdbcType="VARCHAR" />
     </resultMap>
 
-    <select id="selectAllPerms" resultType="java.lang.String">
+    <!--==============================================mysql语句======================================================-->
+    <select id="selectAllPerms" resultType="java.lang.String" databaseId="mysql">
         select
             sm.menu_permission as "permissions"
         from sys_menu sm
@@ -23,7 +24,7 @@
         group by sm.menu_permission
     </select>
 
-    <select id="selectPointPerms" resultType="java.lang.String">
+    <select id="selectPointPerms" resultType="java.lang.String" databaseId="mysql">
         select
             sm.menu_permission as "permissions"
         from sys_menu sm
@@ -35,7 +36,7 @@
         group by sm.menu_permission
     </select>
 
-    <select id="queryAllMenuId" resultType="java.math.BigDecimal">
+    <select id="queryAllMenuId" resultType="java.math.BigDecimal" databaseId="mysql">
         select
             rm.menu_id
         from sys_role_menu rm
@@ -45,7 +46,7 @@
         group by rm.menu_id
     </select>
 
-    <select id="queryListParentId" resultMap="BaseResultMap">
+    <select id="queryListParentId" resultMap="BaseResultMap" databaseId="mysql">
         select
             sm.menu_id,
             sm.parent_id,
@@ -61,5 +62,7 @@
         where parent_id = #{parentId}
         order by menu_index
     </select>
+
+    <!--==============================================oracle语句======================================================-->
 
 </mapper>

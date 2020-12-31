@@ -46,12 +46,6 @@ public class SysUserOnlineEntity extends BaseEntity {
     private String host;
 
     /**
-    *状态
-    */
-    @Column(name = "status", length = 10)
-    private String status;
-
-    /**
     *开始时间
     */
     @Column(name = "start_time", length = 19)
@@ -118,20 +112,6 @@ public class SysUserOnlineEntity extends BaseEntity {
     */
     public void setHost(String host) {
         this.host = host;
-    }
-
-    /**
-    * 设置状态
-    */
-    public String getStatus() {
-        return this.status;
-    }
-
-    /**
-    * 获取状态
-    */
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     /**

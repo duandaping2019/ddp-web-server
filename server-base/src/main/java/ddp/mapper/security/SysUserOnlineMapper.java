@@ -15,4 +15,7 @@ public interface SysUserOnlineMapper extends MyMapper<SysUserOnlineEntity> {
     /*获取在线用户信息实体*/
     SysUserOnlineExt getExtInfo(SysUserOnlineExt condition);
 
+    /*删除在线用户信息实体*/
+    void deleteshirosession(SysUserOnlineExt condition);
+
 }

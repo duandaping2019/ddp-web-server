@@ -1,9 +1,9 @@
 package ddp.service.listeners;
 
+import ddp.service.security.SysIndexService;
+import ddp.tools.SpringBeanUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -12,18 +12,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class CustomShiroSessionListener implements SessionListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomShiroSessionListener.class);
-
     //用于统计在线Session的数量
     private final AtomicInteger sessionCount = new AtomicInteger(0);
 
-    /**
-     *  对外调用
-     */
+    // 增加在线用户数
     public void addSessionCount(){
         sessionCount.getAndIncrement();
     }
 
+    // 获取在线用户数
     public AtomicInteger getSessionCount(){
         return sessionCount;
     }
@@ -35,13 +32,15 @@ public class CustomShiroSessionListener implements SessionListener {
 
     @Override
     public void onStop(Session session) {
+        SysIndexService sysIndexService = SpringBeanUtils.getBean(SysIndexService.class);
+        sysIndexService.deleteshirosession(session.getId().toString());
         sessionCount.decrementAndGet();
-        logger.info("用户登录人数减少一人" + sessionCount.get());
     }
 
     @Override
     public void onExpiration(Session session) {
+        SysIndexService sysIndexService = SpringBeanUtils.getBean(SysIndexService.class);
+        sysIndexService.deleteshirosession(session.getId().toString());
         sessionCount.decrementAndGet();
-        logger.info("用户登录过期一人" + sessionCount.get());
     }
 }

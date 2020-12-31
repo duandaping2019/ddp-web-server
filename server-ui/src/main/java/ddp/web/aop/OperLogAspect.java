@@ -2,10 +2,12 @@ package ddp.web.aop;
 
 import ddp.entity.security.SysLogEntity;
 import ddp.ext.security.SysUserExt;
+import ddp.service.security.SysIndexService;
 import ddp.service.security.SysLogService;
 import ddp.service.tools.ShiroUtils;
 import ddp.tools.HttpInfoUtils;
 import ddp.tools.MyStringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -29,6 +31,10 @@ public class OperLogAspect {
 
     @Autowired
     private SysLogService logService;
+
+    @Autowired
+    private SysIndexService sysIndexService;
+
 
     /**
      * 设置操作日志切入点
@@ -60,6 +66,7 @@ public class OperLogAspect {
             // 获取操作
             OperLog opLog = method.getAnnotation(OperLog.class);
 
+            // 写入操作日志
             if (opLog != null) {
                 SysLogEntity logEntity = new SysLogEntity();
                 logEntity.setLogId(MyStringUtils.getUUID()); //获取主键
@@ -77,6 +84,9 @@ public class OperLogAspect {
 
                 logService.insertLogEntity(logEntity);
             }
+
+            // 写入心跳日志
+            sysIndexService.monitorshirosession(SecurityUtils.getSubject(), "saveOperLog");
 
         } catch (Exception e) {
             e.printStackTrace();

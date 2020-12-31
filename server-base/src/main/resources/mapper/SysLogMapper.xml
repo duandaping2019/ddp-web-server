@@ -9,11 +9,15 @@
         <id column="log_req_uri" property="logReqUri" jdbcType="VARCHAR" />
         <id column="log_req_class" property="logReqClass" jdbcType="VARCHAR" />
         <id column="log_req_method" property="logReqMethod" jdbcType="VARCHAR" />
-        <id column="log_req_params" property="logReqParams" jdbcType="VARCHAR" />
         <id column="log_ip" property="logIp" jdbcType="VARCHAR" />
         <id column="log_operator_id" property="logOperatorId" jdbcType="VARCHAR" />
         <id column="log_operator_name" property="logOperatorName" jdbcType="VARCHAR" />
         <id column="log_time" property="logTime" jdbcType="TIMESTAMP" />
     </resultMap>
+
+    <!--==============================================mysql语句======================================================-->
+
+
+    <!--==============================================oracle语句======================================================-->
 
 </mapper>

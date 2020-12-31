@@ -22,7 +22,10 @@ public interface SysIndexService {
     /*用户密码修改*/
     String updateSysUserPassword(SysUserExt ext);
 
-    /*记录在线用户登陆信息*/
-    void recorderUserLoginInfo(Subject subject);
+    /*Shiro Session 心跳监听*/
+    void monitorshirosession(Subject subject, String fromRequest);
+
+    /*Shiro Session 离线删除*/
+    void deleteshirosession(String sessionId);
 
 }

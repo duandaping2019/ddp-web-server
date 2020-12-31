@@ -63,14 +63,14 @@
         </choose>
     </select>
 
-    <delete id="delUserInfo">
+    <delete id="delUserInfo" databaseId="mysql">
         delete from sys_user where user_id in
         <foreach collection="idsList" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
     </delete>
 
-    <select id="getRoleInfoList" resultType="java.util.Map">
+    <select id="getRoleInfoList" resultType="java.util.Map" databaseId="mysql">
         <choose>
             <when test="userId != 1">
                 select sr.role_id as "code", sr.role_name as "name" from sys_role_config src
@@ -83,7 +83,7 @@
         </choose>
     </select>
 
-    <select id="getRoleIdList" resultType="java.lang.String">
+    <select id="getRoleIdList" resultType="java.lang.String" databaseId="mysql">
         <choose>
             <when test="userId != 1">
                 select sur.role_id from sys_user_role sur where sur.user_id = #{userId}
@@ -94,18 +94,18 @@
         </choose>
     </select>
 
-    <delete id="delUserRoleInfo">
+    <delete id="delUserRoleInfo" databaseId="mysql">
         delete from sys_user_role where user_id = #{userId}
     </delete>
 
-    <insert id="insertUserRoleInfo">
+    <insert id="insertUserRoleInfo" databaseId="mysql">
         insert into sys_user_role (user_id, role_id) VALUES
         <foreach collection="roleIdList" item="roleId" separator=",">
             (#{userId}, #{roleId})
         </foreach>
     </insert>
 
-    <update id="updateUserPassword">
+    <update id="updateUserPassword" databaseId="mysql">
         update sys_user set login_pwd = #{loginPwd} where user_id = #{userId}
     </update>
 

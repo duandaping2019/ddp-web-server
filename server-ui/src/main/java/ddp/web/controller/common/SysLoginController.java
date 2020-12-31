@@ -97,7 +97,7 @@ public class SysLoginController extends BaseController {
             subject.login(token);
 
             // 写入登陆信息记录表
-            sysIndexService.recorderUserLoginInfo(subject);
+            sysIndexService.monitorshirosession(subject, "login");
 
         } catch (DisabledAccountException e) {
             return BaseResponse.badrequest(MessageSourceUtils.getSourceFromCache("login_fail_forbid", locale));
