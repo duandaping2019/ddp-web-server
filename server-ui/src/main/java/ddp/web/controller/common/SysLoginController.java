@@ -92,8 +92,7 @@ public class SysLoginController extends BaseController {
 
         try {
             // 登陆验证【账号/凭证】****这里的凭证是用户输入原始凭证，若前端加密这里需要有对应的解密过程支持
-            char[] pwd  = MyStringUtils.getRsaDecodePwd(ext.getLoginPwd());
-            UsernamePasswordToken token = new UsernamePasswordToken(ext.getLoginId(), pwd);
+            UsernamePasswordToken token = new UsernamePasswordToken(ext.getLoginId(), MyStringUtils.getRsaDecodePwd(ext.getLoginPwd()));
             Subject subject = SecurityUtils.getSubject();
             subject.login(token);
 
