@@ -74,4 +74,20 @@ public class MyStringUtils {
     return md5Hash.toString();
   }
 
+
+
+  /**
+   * RSA解密过程
+   */
+  public static char[] decodePwdInfo(String loginPwd) {
+    try {
+      
+
+    } catch (Exception e) {
+      new RuntimeException(e);
+    }
+
+    return loginPwd.toCharArray();
+  }
+
 }

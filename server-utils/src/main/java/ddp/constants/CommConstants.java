@@ -14,12 +14,14 @@ public class CommConstants {
   public static final String USER_ONLINE_STATUS = "online";
   public static final String USER_AWAY_STATUS = "away";
 
-
   /*redis session 设置*/
   public static final String SHIRO_NAME = "REALM_DDP_WEB_SERVER";
   public static final String REDIS_SESSION_PREFIX = "SHIRO_REDIS_SESSION:";
   public static final String SHIRO_SESSION_COOKIES = "COOKIE_SESSION";
   public static final Long SESSION_EXPIRETIME = 3600L;
+
+  /*前后端Hmac加密算法*/
+  public static final String KEY_MAC = "HmacMD5";
 
   /*MD5盐值加密*/
   public static final String LOGIN_PWD = "123456"; //默认密码
