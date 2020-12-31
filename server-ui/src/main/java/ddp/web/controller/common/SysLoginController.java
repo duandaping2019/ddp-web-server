@@ -8,13 +8,13 @@ import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysIndexService;
 import ddp.service.tools.MessageSourceUtils;
 import ddp.service.tools.ShiroUtils;
+import ddp.tools.MyStringUtils;
+import ddp.tools.RsaUtils;
 import ddp.web.aop.OperLog;
 import ddp.web.controller.BaseController;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,17 +92,15 @@ public class SysLoginController extends BaseController {
 
         try {
             // 登陆验证【账号/凭证】****这里的凭证是用户输入原始凭证，若前端加密这里需要有对应的解密过程支持
-            System.out.println(ext.getLoginPwd());
-            UsernamePasswordToken token = new UsernamePasswordToken(ext.getLoginId(), ext.getLoginPwd());
+            char[] pwd  = MyStringUtils.getRsaDecodePwd(ext.getLoginPwd());
+            UsernamePasswordToken token = new UsernamePasswordToken(ext.getLoginId(), pwd);
             Subject subject = SecurityUtils.getSubject();
             subject.login(token);
 
             // 写入登陆信息记录表
             sysIndexService.monitorshirosession(subject, "login");
 
-        } catch (DisabledAccountException e) {
-            return BaseResponse.badrequest(MessageSourceUtils.getSourceFromCache("login_fail_forbid", locale));
-        } catch (AuthenticationException e) {
+        } catch (Exception e) {
             return BaseResponse.badrequest(MessageSourceUtils.getSourceFromCache("login_fail_info", locale));
         }
 
@@ -141,7 +139,13 @@ public class SysLoginController extends BaseController {
         return new ModelAndView("redirect:/login.html");
     }
 
-
+    @ApiOperation(value = "sysGetRsaPubKey", notes = "获取Rsa公钥")
+    @RequestMapping("mqtt/getRsaPubKey")
+    @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "获取Rsa公钥")
+    public BaseResponse<Object> sysGetRsaPubKey(@ApiParam(value = "语言请求参数", required = false) Locale locale) {
+        String rsaPubKey = RsaUtils.getPublicKey();
+        return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", Locale.getDefault()), rsaPubKey);
+    }
 
     @ApiOperation(value = "sysUserPassword", notes = "密码修改")
     @RequestMapping("sys/user/password")

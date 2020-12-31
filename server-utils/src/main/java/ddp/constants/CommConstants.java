@@ -10,10 +10,6 @@ public class CommConstants {
   /*超级管理员ID*/
   public static final BigDecimal ADMIN_USER = new BigDecimal(1); //超级管理员ID
 
-  /*用户在线状态*/
-  public static final String USER_ONLINE_STATUS = "online";
-  public static final String USER_AWAY_STATUS = "away";
-
   /*redis session 设置*/
   public static final String SHIRO_NAME = "REALM_DDP_WEB_SERVER";
   public static final String REDIS_SESSION_PREFIX = "SHIRO_REDIS_SESSION:";

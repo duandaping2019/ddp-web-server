@@ -75,7 +75,6 @@
 <script src="/public/libs/app.js"></script>
 <script src="/public/plugins/layer/layer.js"></script>
 <script src="/public/js/rsa/jsencrypt.min.js"></script>
-<script src="/public/js/rsa/rsa-utils.js"></script>
 
 <script type="text/javascript">
     // 加载主对象信息
@@ -94,7 +93,19 @@
             }
         },
         created:function(){
-
+            // 登陆操作
+            $.ajax({
+                type: "POST",
+                url: "/mqtt/getRsaPubKey",
+                data: JSON.stringify({}),
+                dataType: "json", //响应数据类型
+                contentType: "application/json", //请求数据类型
+                success: function(result){
+                    if(result.code == 200){//登录成功
+                        vm.rsaPubKey = result.data;
+                    }
+                }
+            });
         },
         methods: {
             refreshCode: function(){ // 刷新验证码
@@ -105,6 +116,11 @@
                 if (!validData()) {
                     return;
                 }
+
+                //公钥加密
+                let encrypt = new JSEncrypt();
+                encrypt.setPublicKey(vm.rsaPubKey);
+                vm.user.loginPwd = encrypt.encrypt(vm.user.loginPwd);
 
                 // 登陆操作
                 $.ajax({

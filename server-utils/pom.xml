@@ -114,11 +114,6 @@
       <artifactId>org.apache.commons.codec</artifactId>
       <version>1.8</version>
     </dependency>
-    <dependency>
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcprov-jdk16</artifactId>
-      <version>1.46</version>
-    </dependency>
     <!-- Base64编码需要  end-->
 
   </dependencies>

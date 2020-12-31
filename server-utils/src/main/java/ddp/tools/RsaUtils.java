@@ -1,7 +1,6 @@
 package ddp.tools;
 
 import org.apache.commons.codec.binary.Base64;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
@@ -101,7 +100,7 @@ public class RsaUtils {
         Key privateK = keyFactory.generatePrivate(pkcs8KeySpec);
 
         //设置加密、填充方式
-        Cipher cipher = Cipher.getInstance(ALGORITHMS ,new BouncyCastleProvider());
+        Cipher cipher = Cipher.getInstance(ALGORITHMS);
         cipher.init(Cipher.DECRYPT_MODE, privateK);
 
         //分段进行解密操作
@@ -122,7 +121,7 @@ public class RsaUtils {
         Key publicK = keyFactory.generatePublic(x509KeySpec);
 
         //设置加密、填充方式
-        Cipher cipher = Cipher.getInstance(ALGORITHMS ,new BouncyCastleProvider());
+        Cipher cipher = Cipher.getInstance(ALGORITHMS);
         cipher.init(Cipher.ENCRYPT_MODE, publicK);
 
         //分段进行加密操作
@@ -169,5 +168,16 @@ public class RsaUtils {
         out.close();
         return toByteArray;
     }
+
+    public static void main(String[] args) throws Exception {
+        genKeyPair();
+        byte[] publicKeyArr = encryptByPublicKey("Admin@123".getBytes(), getPublicKey());
+        System.out.println(new String(publicKeyArr));
+
+        byte[] privateKeyArr = decryptByPrivateKey(publicKeyArr, getPrivateKey());
+        System.out.println(new String(privateKeyArr));
+
+    }
+
 }
 

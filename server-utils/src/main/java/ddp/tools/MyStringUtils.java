@@ -1,6 +1,7 @@
 package ddp.tools;
 
 import ddp.constants.CommConstants;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 
@@ -81,13 +82,21 @@ public class MyStringUtils {
    */
   public static char[] decodePwdInfo(String loginPwd) {
     try {
-      
+      byte[] privateKeyArr = RsaUtils.decryptByPrivateKey(loginPwd.getBytes(), RsaUtils.getPrivateKey());
+      System.out.println(new String(privateKeyArr));
 
     } catch (Exception e) {
       new RuntimeException(e);
     }
 
     return loginPwd.toCharArray();
+  }
+
+  /**
+   * RSA密码解析过程
+   */
+  public static char[] getRsaDecodePwd(String loginPwd) throws Exception {
+    return new String(RsaUtils.decryptByPrivateKey(Base64.decodeBase64(loginPwd), RsaUtils.getPrivateKey())).toCharArray();
   }
 
 }
