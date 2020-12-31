@@ -212,6 +212,7 @@ public class ShiroConfigure {
         // 具体配置
         filterChainDefinitionMap.put("/sys/login", "anon"); //系统登陆
         filterChainDefinitionMap.put("/sys/logout", "anon"); //系统注销
+        filterChainDefinitionMap.put("/sys/getRsaPubKey", "anon"); //获取Rsa公钥
         filterChainDefinitionMap.put("/captcha.jpg", "anon"); //验证信息
         filterChainDefinitionMap.put("/file/**", "anon"); //附件信息下载
         filterChainDefinitionMap.put("/mqtt/**", "anon"); // mtqq消息队列
