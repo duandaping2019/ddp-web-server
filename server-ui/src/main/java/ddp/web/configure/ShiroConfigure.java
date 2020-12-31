@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.servlet.Filter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -196,30 +197,29 @@ public class ShiroConfigure {
         shiroFilterFactoryBean.setFilters(filtersMap);
 
         /*设置限制链接*/
-        Map<String, String> filterChainDefinitionMap = new HashMap<>(16);
+        Map<String, String> filterResultMap = new LinkedHashMap<>(16); // LinkedHashMap 为关键点
 //        filterChainDefinitionMap.put("/user/kickout", "anon"); //强制踢出
 
         // 通用配置
-        filterChainDefinitionMap.put("/public/**", "anon"); //公共资源
-        filterChainDefinitionMap.put("/webjars/**", "anon"); //静态资源
-        filterChainDefinitionMap.put("/api/**", "anon"); //开放接口
+        filterResultMap.put("/public/**", "anon"); //公共资源
+        filterResultMap.put("/webjars/**", "anon"); //静态资源
+        filterResultMap.put("/api/**", "anon"); //开放接口
 
         //swagger配置
-        filterChainDefinitionMap.put("/swagger**", "anon");
-        filterChainDefinitionMap.put("/v2/api-docs", "anon");
-        filterChainDefinitionMap.put("/swagger-resources/configuration/ui", "anon");
+        filterResultMap.put("/swagger**", "anon");
+        filterResultMap.put("/v2/api-docs", "anon");
+        filterResultMap.put("/swagger-resources/configuration/ui", "anon");
 
         // 具体配置
-        filterChainDefinitionMap.put("/sys/login", "anon"); //系统登陆
-        filterChainDefinitionMap.put("/sys/logout", "anon"); //系统注销
-//        filterChainDefinitionMap.put("/sys/getRsaPubKey", "anon"); //获取Rsa公钥
-        filterChainDefinitionMap.put("/captcha.jpg", "anon"); //验证信息
-        filterChainDefinitionMap.put("/file/**", "anon"); //附件信息下载
-        filterChainDefinitionMap.put("/mqtt/**", "anon"); // mtqq消息队列
-        //filterChainDefinitionMap.put("/rsa/**", "anon"); //获取Rsa公钥
+        filterResultMap.put("/sys/login", "anon"); //系统登陆
+        filterResultMap.put("/sys/logout", "anon"); //系统注销
+        filterResultMap.put("/captcha.jpg", "anon"); //验证信息
+        filterResultMap.put("/file/**", "anon"); //附件信息下载
+        filterResultMap.put("/rsa/**", "anon"); //获取Rsa公钥
+        filterResultMap.put("/mqtt/**", "anon"); // mtqq消息队列
 
-        filterChainDefinitionMap.put("/**", "authc"); // authc【用户认证】
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        filterResultMap.put("/**", "authc"); // authc【用户认证】
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterResultMap);
 
         return shiroFilterFactoryBean;
     }

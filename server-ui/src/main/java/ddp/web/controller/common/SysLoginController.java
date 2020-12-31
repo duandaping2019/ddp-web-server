@@ -139,7 +139,7 @@ public class SysLoginController extends BaseController {
     }
 
     @ApiOperation(value = "sysGetRsaPubKey", notes = "获取Rsa公钥")
-    @RequestMapping("mqtt/getRsaPubKey")
+    @RequestMapping("rsa/getRsaPubKey")
     @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "获取Rsa公钥")
     public BaseResponse<Object> sysGetRsaPubKey(@ApiParam(value = "语言请求参数", required = false) Locale locale) {
         String rsaPubKey = RsaUtils.getPublicKey();
