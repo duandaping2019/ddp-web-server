@@ -141,6 +141,8 @@ public class SysLoginController extends BaseController {
         return new ModelAndView("redirect:/login.html");
     }
 
+
+
     @ApiOperation(value = "sysUserPassword", notes = "密码修改")
     @RequestMapping("sys/user/password")
     @OperLog(operModul = "系统管理", operType = CommConstants.UPDATE_DATA, operDesc = "密码修改")
