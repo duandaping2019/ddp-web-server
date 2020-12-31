@@ -74,73 +74,74 @@
 <script src="/public/libs/fastclick.min.js"></script>
 <script src="/public/libs/app.js"></script>
 <script src="/public/plugins/layer/layer.js"></script>
-<script src="/public/js/md5/md5.min.js"></script>
+<script src="/public/js/rsa/jsencrypt.min.js"></script>
+<script src="/public/js/rsa/rsa-utils.js"></script>
 
 <script type="text/javascript">
-var vm = new Vue({
-	el:'#rrapp',
-	data:{
-		error: false,
-		errorMsg: '',
-		src: 'captcha.jpg',
-        user:{}
-	},
-	beforeCreate: function(){
-		if(self != top){
-			top.location.href = self.location.href;
-		}
-	},
-	methods: {
-		refreshCode: function(){ // 刷新验证码
-			this.src = "captcha.jpg?t=" + $.now();
-		},
-		login: function (event) {
-		    // 登陆校验
-            if (!validData()) {
-                return;
+    // 加载主对象信息
+    let vm = new Vue({
+        el:'#rrapp',
+        data:{
+            error: false,
+            errorMsg: '',
+            src: 'captcha.jpg',
+            user:{}
+        },
+        beforeCreate: function(){
+            if(self != top){
+                top.location.href = self.location.href;
             }
+        },
+        methods: {
+            refreshCode: function(){ // 刷新验证码
+                this.src = "captcha.jpg?t=" + $.now();
+            },
+            login: function (event) {
+                // 登陆校验
+                if (!validData()) {
+                    return;
+                }
 
-            // 登陆操作
-			$.ajax({
-				type: "POST",
-			    url: "/sys/login?language=zh_CN",
-			    data: JSON.stringify(vm.user),
-			    dataType: "json", //响应数据类型
-                contentType: "application/json", //请求数据类型
-			    success: function(result){
-					if(result.code == 200){//登录成功
-						parent.location.href ='index.html';
-					}else{
-						vm.error = true;
-						vm.errorMsg = result.msg;
-						
-						vm.refreshCode();
-					}
-				}
-			});
-		}
-	}
-});
+                // 登陆操作
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/login?language=zh_CN",
+                    data: JSON.stringify(vm.user),
+                    dataType: "json", //响应数据类型
+                    contentType: "application/json", //请求数据类型
+                    success: function(result){
+                        if(result.code == 200){//登录成功
+                            parent.location.href ='index.html';
+                        }else{
+                            vm.error = true;
+                            vm.errorMsg = result.msg;
 
-function validData() {
-    if(!vm.user.loginId){
-        layer.alert("请输入用户名称！！！");
-        return false;
+                            vm.refreshCode();
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    function validData() {
+        if(!vm.user.loginId){
+            layer.alert("请输入用户名称！！！");
+            return false;
+        }
+
+        if(!vm.user.loginPwd){
+            layer.alert("请输入用户密码！！！");
+            return false;
+        }
+
+        if(!vm.user.captcha){
+            layer.alert("请输入验证码！！！");
+            return false;
+        }
+
+        return true;
     }
-
-    if(!vm.user.loginPwd){
-        layer.alert("请输入用户密码！！！");
-        return false;
-    }
-
-    if(!vm.user.captcha){
-        layer.alert("请输入验证码！！！");
-        return false;
-    }
-
-    return true;
-}
-
 
 </script>
 </body>

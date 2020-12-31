@@ -52,7 +52,7 @@ public class SysLoginController extends BaseController {
 
     @ApiOperation(value = "captcha", notes = "登录页验证码生成")
     @RequestMapping("captcha.jpg")
-    @OperLog(operModul = "系统管理", operType = CommConstants.ADD_DATA, operDesc = "验证码生成")
+    @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "验证码生成")
     public void captcha(HttpServletResponse response) throws IOException {
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
