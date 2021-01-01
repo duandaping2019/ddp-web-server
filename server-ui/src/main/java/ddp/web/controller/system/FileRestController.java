@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Api(tags = "文件管理类", value = "FileRestController")
 @RestController
-@RequestMapping("/file")
+@RequestMapping("/apis/file")
 public class FileRestController {
 
     @Autowired

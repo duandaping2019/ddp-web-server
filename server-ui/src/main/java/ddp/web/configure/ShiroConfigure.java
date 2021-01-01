@@ -1,9 +1,9 @@
 package ddp.web.configure;
 
 import ddp.constants.CommConstants;
+import ddp.service.listeners.CustomShiroSessionListener;
 import ddp.web.filters.KickoutSessionControlFilter;
 import ddp.web.filters.MyPassThruAuthenticationFilter;
-import ddp.service.listeners.CustomShiroSessionListener;
 import ddp.web.security.MyCredentialsMatcher;
 import ddp.web.security.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,13 +68,11 @@ public class ShiroConfigure {
 
     /**
      * sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID
-     * @return
      */
     @Bean
     public SimpleCookie sessionIdCookie() {
         SimpleCookie simpleCookie = new SimpleCookie();
-        //cookie的name,对应的默认是 JSESSIONID
-        simpleCookie.setName(CommConstants.SHIRO_SESSION_COOKIES);
+        simpleCookie.setName(CommConstants.SHIRO_SESSION_COOKIES); //cookie的name,对应的默认是 JSESSIONID
         simpleCookie.setMaxAge(CommConstants.SESSION_EXPIRETIME.intValue());//单位秒 -1 代表退出即删除
         simpleCookie.setPath("/");
         simpleCookie.setHttpOnly(true);//只支持http
@@ -112,24 +109,9 @@ public class ShiroConfigure {
     @Bean
     public RedisSessionDAO redisSessionDAO() {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        redisSessionDAO.setKeyPrefix(CommConstants.REDIS_SESSION_PREFIX);
         redisSessionDAO.setRedisManager(redisManager());
         return redisSessionDAO;
-    }
-
-    /**
-     * 限制同一账号登录同时登录人数控制
-     *
-     * @return
-     */
-    @Bean
-    public KickoutSessionControlFilter kickoutSessionControlFilter() {
-        KickoutSessionControlFilter kickoutSessionControlFilter = new KickoutSessionControlFilter();
-        kickoutSessionControlFilter.setCacheManager(cacheManager());
-        kickoutSessionControlFilter.setSessionManager(sessionManager());
-        kickoutSessionControlFilter.setKickoutAfter(false);
-        kickoutSessionControlFilter.setMaxSession(1);
-        kickoutSessionControlFilter.setKickoutUrl("/user/kickout");
-        return kickoutSessionControlFilter;
     }
 
     /**
@@ -191,35 +173,31 @@ public class ShiroConfigure {
         shiroFilterFactoryBean.setLoginUrl("/login.html"); // 登陆页面
 
         /*拦截器设置*/
-        Map<String, Filter> filtersMap = new HashMap<>(16);
-        filtersMap.put("authc", new MyPassThruAuthenticationFilter()); //【强制登陆访问限制】
+        Map<String, Filter> filtersMap = new LinkedHashMap<>(16);
         filtersMap.put("kickout", kickoutSessionControlFilter()); //限制同一帐号同时在线的个数
+        filtersMap.put("authc", new MyPassThruAuthenticationFilter()); //【强制登陆访问限制】
         shiroFilterFactoryBean.setFilters(filtersMap);
 
         /*设置限制链接*/
-        Map<String, String> filterResultMap = new LinkedHashMap<>(16); // LinkedHashMap 为关键点
-//        filterChainDefinitionMap.put("/user/kickout", "anon"); //强制踢出
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>(16); // LinkedHashMap 为关键点
 
-        // 通用配置
-        filterResultMap.put("/public/**", "anon"); //公共资源
-        filterResultMap.put("/webjars/**", "anon"); //静态资源
-        filterResultMap.put("/api/**", "anon"); //开放接口
+        //第三方资源匿名配置
+        filterChainDefinitionMap.put("/public/**", "anon"); //公共资源
+        filterChainDefinitionMap.put("/webjars/**", "anon"); //静态资源
+        filterChainDefinitionMap.put("/swagger**", "anon"); //swagger配置
+        filterChainDefinitionMap.put("/v2/api-docs", "anon"); //swagger文档配置
+        filterChainDefinitionMap.put("/swagger-resources/configuration/ui", "anon"); //swagger访问UI配置
 
-        //swagger配置
-        filterResultMap.put("/swagger**", "anon");
-        filterResultMap.put("/v2/api-docs", "anon");
-        filterResultMap.put("/swagger-resources/configuration/ui", "anon");
+        //系统内
+        filterChainDefinitionMap.put("/sys/login", "anon"); //系统登陆
+        filterChainDefinitionMap.put("/sys/logout", "anon"); //系统注销
+        filterChainDefinitionMap.put("/sys/kickout", "anon"); //踢出用户
+        filterChainDefinitionMap.put("/captcha.jpg", "anon"); //验证信息
+        filterChainDefinitionMap.put("/apis/**", "anon"); //开放接口
 
-        // 具体配置
-        filterResultMap.put("/sys/login", "anon"); //系统登陆
-        filterResultMap.put("/sys/logout", "anon"); //系统注销
-        filterResultMap.put("/captcha.jpg", "anon"); //验证信息
-        filterResultMap.put("/file/**", "anon"); //附件信息下载
-        filterResultMap.put("/rsa/**", "anon"); //获取Rsa公钥
-        filterResultMap.put("/mqtt/**", "anon"); // mtqq消息队列
-
-        filterResultMap.put("/**", "authc"); // authc【用户认证】
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterResultMap);
+        // 缺省配置
+        filterChainDefinitionMap.put("/**", "authc,kickout"); // authc【用户认证】
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return shiroFilterFactoryBean;
     }
@@ -253,5 +231,27 @@ public class ShiroConfigure {
         return authorizationAttributeSourceAdvisor;
     }
 
+
+
+    /**
+     * 限制同一账号登录同时登录人数控制
+     * **：注意顺序，必须放在shiroFilter下边要不报错
+     * No SecurityManager accessible to the calling code
+     */
+    @Bean
+    public KickoutSessionControlFilter kickoutSessionControlFilter() {
+        KickoutSessionControlFilter kickoutSessionControlFilter = new KickoutSessionControlFilter();
+        //使用cacheManager获取相应的cache来缓存用户登录的会话；用于保存用户—会话之间的关系的；
+        kickoutSessionControlFilter.setCacheManager(cacheManager());
+        //用于根据会话ID，获取会话进行踢出操作的；
+        kickoutSessionControlFilter.setSessionManager(sessionManager());
+        //剔出顺序，true代表后来者不允许进入
+        kickoutSessionControlFilter.setKickoutAfter(false);
+        //同一个用户最大的会话数，默认1；
+        kickoutSessionControlFilter.setMaxSession(1);
+        //被踢出后重定向到的地址
+        kickoutSessionControlFilter.setKickoutUrl("/sys/kickout");
+        return kickoutSessionControlFilter;
+    }
 
 }

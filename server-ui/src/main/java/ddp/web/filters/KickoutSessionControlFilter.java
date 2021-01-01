@@ -1,7 +1,7 @@
 package ddp.web.filters;
 
 import com.alibaba.fastjson.JSON;
-import ddp.entity.security.SysUserEntity;
+import ddp.constants.CommConstants;
 import ddp.service.tools.ShiroUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
@@ -14,12 +14,9 @@ import org.apache.shiro.web.util.WebUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -50,14 +47,16 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
 
     //设置Cache的key的前缀
     public void setCacheManager(CacheManager cacheManager) {
-        this.cache = cacheManager.getCache("shiro_redis_cache");
+        this.cache = cacheManager.getCache(CommConstants.REDIS_SESSION_PREFIX);
     }
 
+    /**表示是否允许访问；mappedValue就是[urls]配置中拦截器参数部分，如果允许访问返回true，否则false**/
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
         return false;
     }
 
+    /**表示当访问拒绝时是否已经处理了；如果返回true表示需要继续处理；如果返回false表示该拦截器实例已经处理了，将直接返回即可**/
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         Subject subject = getSubject(request, response);
@@ -66,22 +65,19 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
             return true;
         }
 
-        Session session = subject.getSession();
-        SysUserEntity user = ShiroUtils.getCurrUserInfo();
-        String username = user.getLoginId();
-        Serializable sessionId = session.getId();
+        String username = ShiroUtils.getCurrUserInfo().getLoginId(); // 登陆账号（唯一性）
+        Serializable sessionId = ShiroUtils.getSession().getId();
 
         //读取缓存   没有就存入
         Deque<Serializable> deque = cache.get(username);
 
-        //如果此用户没有session队列，也就是还没有登录过，缓存中没有
-        //就new一个空队列，不然deque对象为空，会报空指针
+        //如果此用户没有session队列，也就是还没有登录过，缓存中没有；就new一个空队列，不然deque对象为空，会报空指针
         if (deque == null) {
             deque = new LinkedList<>();
         }
 
         //如果队列里没有此sessionId，且用户没有被踢出；放入队列
-        if (!deque.contains(sessionId) && session.getAttribute("kickout") == null) {
+        if (!deque.contains(sessionId) && ShiroUtils.getSession().getAttribute("kickout") == null) {
             //将sessionId存入队列
             deque.push(sessionId);
             //将用户的sessionId队列缓存
@@ -91,17 +87,14 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
         //如果队列里的sessionId数超出最大会话数，开始踢人
         while (deque.size() > maxSession) {
             Serializable kickoutSessionId = null;
-            if (kickoutAfter) { //如果踢出后者
+            if (kickoutAfter) { //踢出后者标识
                 kickoutSessionId = deque.removeFirst();
-                //踢出后再更新下缓存队列
-                cache.put(username, deque);
             } else { //否则踢出前者
                 kickoutSessionId = deque.removeLast();
-                //踢出后再更新下缓存队列
-                cache.put(username, deque);
             }
 
-
+            //踢出后再更新下缓存队列
+            cache.put(username, deque);
 
             try {
                 //获取被踢出的sessionId的session对象
@@ -116,33 +109,21 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
         }
 
         //如果被踢出了，直接退出，重定向到踢出后的地址
-        if (session.getAttribute("kickout") != null) {
-            //会话被踢出了
+        if (ShiroUtils.getSession().getAttribute("kickout") != null) {
             try {
-                //退出登录
-                subject.logout();
-            } catch (Exception e) { //ignore
-            }
-            saveRequest(request);
+                subject.logout(); //会话被踢出了
+            } catch (Exception e) {}
 
-            Map<String, String> resultMap = new HashMap<>();
-            //判断是不是Ajax请求
-            if ("XMLHttpRequest".equalsIgnoreCase(((HttpServletRequest) request).getHeader("X-Requested-With"))) {
-                resultMap.put("user_status", "300");
-                resultMap.put("message", "您已经在其他地方登录，请重新登录！");
-                //输出json串
-                out(response, resultMap);
-            } else {
-                //重定向
-                WebUtils.issueRedirect(request, response, kickoutUrl);
-            }
+            saveRequest(request); // shiro 更新会话状态
+            WebUtils.issueRedirect(request, response, kickoutUrl);
+
             return false;
         }
+
         return true;
     }
 
-    private void out(ServletResponse hresponse, Map<String, String> resultMap)
-            throws IOException {
+    private void out(ServletResponse hresponse, Map<String, String> resultMap) {
         try {
             hresponse.setCharacterEncoding("UTF-8");
             PrintWriter out = hresponse.getWriter();

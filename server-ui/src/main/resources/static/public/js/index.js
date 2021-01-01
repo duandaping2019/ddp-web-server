@@ -1,5 +1,5 @@
 //生成菜单
-var menuItem = Vue.extend({
+let menuItem = Vue.extend({
 	name: 'menu-item',
 	props:{item:{}},
 	template:[
@@ -19,7 +19,7 @@ var menuItem = Vue.extend({
 
 //iframe自适应
 $(window).on('resize', function() {
-	var $content = $('.content');
+	let $content = $('.content');
 	$content.height($(this).height() - 120);
 	$content.find('iframe').each(function() {
 		$(this).height($content.height());
@@ -29,13 +29,16 @@ $(window).on('resize', function() {
 //注册菜单组件
 Vue.component('menuItem',menuItem);
 
-var vm = new Vue({
+let vm = new Vue({
 	el:'#rrapp',
 	data:{
 		user:{},
 		menuList:{},
 		main:"sys/main.html",
         navTitle:"控制台"
+	},
+	beforeCreate: function(){
+
 	},
 	methods: {
 		getMenuList: function (event) {

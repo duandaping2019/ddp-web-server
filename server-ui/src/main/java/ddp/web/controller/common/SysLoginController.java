@@ -108,6 +108,15 @@ public class SysLoginController extends BaseController {
 
     }
 
+    @ApiOperation(value = "sysKickout", notes = "用户剔除操作校验")
+    @RequestMapping("sys/kickout")
+    public ModelAndView sysKickout(@ApiParam(value = "语言请求参数", required = false) Locale locale) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/login.html");
+        modelAndView.addObject("kickoutInfo", MessageSourceUtils.getSourceFromCache("kickout", locale));
+        return modelAndView;
+    }
+
+
     @ApiOperation(value = "sysMenuUser", notes = "用户菜单权限加载")
     @RequestMapping("sys/menu/user")
     @OperLog(operModul = "系统首页", operType = CommConstants.GET_DATA, operDesc = "用户菜单权限加载")
@@ -138,20 +147,20 @@ public class SysLoginController extends BaseController {
         return new ModelAndView("redirect:/login.html");
     }
 
-    @ApiOperation(value = "sysGetRsaPubKey", notes = "获取Rsa公钥")
-    @RequestMapping("rsa/getRsaPubKey")
-    @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "获取Rsa公钥")
-    public BaseResponse<Object> sysGetRsaPubKey(@ApiParam(value = "语言请求参数", required = false) Locale locale) {
-        String rsaPubKey = RsaUtils.getPublicKey();
-        return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", Locale.getDefault()), rsaPubKey);
-    }
-
     @ApiOperation(value = "sysUserPassword", notes = "密码修改")
     @RequestMapping("sys/user/password")
     @OperLog(operModul = "系统管理", operType = CommConstants.UPDATE_DATA, operDesc = "密码修改")
     public BaseResponse<Object> sysUserPassword(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext) {
         String result = sysIndexService.updateSysUserPassword(ext);
         return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", Locale.getDefault()), result);
+    }
+
+    @ApiOperation(value = "sysGetRsaPubKey", notes = "获取Rsa公钥")
+    @RequestMapping("apis/rsa/getRsaPubKey")
+    @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "获取Rsa公钥")
+    public BaseResponse<Object> sysGetRsaPubKey(@ApiParam(value = "语言请求参数", required = false) Locale locale) {
+        String rsaPubKey = RsaUtils.getPublicKey();
+        return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", Locale.getDefault()), rsaPubKey);
     }
 
 }

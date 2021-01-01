@@ -77,6 +77,14 @@
 <script src="/public/js/rsa/jsencrypt.min.js"></script>
 
 <script type="text/javascript">
+    // 记载事项
+    $(function () {
+        let kickoutInfo = getQueryStringChinese("kickoutInfo");
+        if (kickoutInfo) {
+            layer.alert(kickoutInfo);
+        }
+    });
+
     // 加载主对象信息
     let vm = new Vue({
         el:'#rrapp',
@@ -96,7 +104,7 @@
             // 登陆操作
             $.ajax({
                 type: "POST",
-                url: "/rsa/getRsaPubKey",
+                url: "/apis/rsa/getRsaPubKey",
                 data: JSON.stringify({}),
                 dataType: "json", //响应数据类型
                 contentType: "application/json", //请求数据类型
@@ -161,6 +169,14 @@
         }
 
         return true;
+    }
+
+    //获取url中的参数
+    function getQueryStringChinese(name) {
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        let r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]);
+        return null;
     }
 
 </script>

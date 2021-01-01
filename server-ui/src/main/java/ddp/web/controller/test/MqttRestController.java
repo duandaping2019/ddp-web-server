@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Locale;
 
 @RestController
-@RequestMapping("/mqtt")
+@RequestMapping("/apis/mqtt")
 public class MqttRestController {
 
     @Autowired
