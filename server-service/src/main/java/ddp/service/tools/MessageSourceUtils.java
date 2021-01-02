@@ -2,7 +2,7 @@ package ddp.service.tools;
 
 import ddp.entity.security.SysLangEntity;
 import ddp.service.security.SysLangService;
-import ddp.tools.SpringBeanUtils;
+import ddp.utils.spring.SpringBeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

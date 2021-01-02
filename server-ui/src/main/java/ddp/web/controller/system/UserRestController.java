@@ -2,13 +2,13 @@ package ddp.web.controller.system;
 
 import com.github.pagehelper.PageInfo;
 import ddp.beans.BaseResponse;
-import ddp.constants.CommConstants;
+import ddp.beans.CommConstants;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysUserService;
 import ddp.service.tools.MessageSourceUtils;
 import ddp.service.tools.ShiroUtils;
-import ddp.tools.MyPageUtils;
+import ddp.utils.MyPageUtils;
 import ddp.web.aop.OperLog;
 import ddp.web.controller.BaseController;
 import io.swagger.annotations.Api;

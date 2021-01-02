@@ -1,6 +1,6 @@
-package ddp.tools;
+package ddp.utils;
 
-import ddp.constants.CommConstants;
+import ddp.beans.CommConstants;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;

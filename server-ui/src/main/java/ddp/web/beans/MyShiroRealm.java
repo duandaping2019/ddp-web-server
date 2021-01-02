@@ -1,6 +1,6 @@
-package ddp.web.security;
+package ddp.web.beans;
 
-import ddp.constants.CommConstants;
+import ddp.beans.CommConstants;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysIndexService;
 import ddp.service.security.SysUserService;

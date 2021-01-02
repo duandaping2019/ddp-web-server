@@ -1,12 +1,13 @@
 package ddp.service.security;
 
 import ddp.BaseServiceImpl;
-import ddp.constants.CommConstants;
+import ddp.beans.CommConstants;
+import ddp.dao.MySessionDAO;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
 import ddp.mapper.security.SysUserMapper;
 import ddp.service.tools.ShiroUtils;
-import ddp.tools.MyStringUtils;
+import ddp.utils.MyStringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ import java.util.Map;
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implements SysUserService {
   @Autowired
   private SysUserMapper userMapper;
+
+  @Autowired
+  private MySessionDAO mySessionDAO;
 
   @Override
   public SysUserExt getEntityInfo(SysUserExt ext) {
@@ -63,11 +67,17 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
     SysUserEntity entity = new SysUserEntity();
     BeanUtils.copyProperties(ext, entity);
     if (entity.getUserId() != null && !"".equals(entity.getUserId())) {
+      // 用户信息设置
       entity.setUpdateUserId(operator.getUserId().toString());
       entity.setUpdateUserName(operator.getUserName());
       entity.setUpdateTime(new Date());
 
+      // 用户信息更新
       userMapper.updateByPrimaryKeySelective(entity);
+
+      //强制用户下线重新登录获取最新信息
+      System.out.println(mySessionDAO);
+
     } else { // 新增操作
       entity.setCreateUserId(operator.getUserId().toString());
       entity.setCreateUserName(operator.getUserName());

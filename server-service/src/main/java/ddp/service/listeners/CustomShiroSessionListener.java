@@ -1,7 +1,7 @@
 package ddp.service.listeners;
 
 import ddp.service.security.SysIndexService;
-import ddp.tools.SpringBeanUtils;
+import ddp.utils.spring.SpringBeanUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;
 

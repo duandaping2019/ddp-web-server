@@ -1,6 +1,6 @@
 package ddp.web.filters;
 
-import ddp.tools.HttpInfoUtils;
+import ddp.utils.HttpInfoUtils;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;

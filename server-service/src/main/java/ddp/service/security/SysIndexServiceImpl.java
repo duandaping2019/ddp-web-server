@@ -1,6 +1,6 @@
 package ddp.service.security;
 
-import ddp.constants.CommConstants;
+import ddp.beans.CommConstants;
 import ddp.entity.security.SysUserEntity;
 import ddp.entity.security.SysUserOnlineEntity;
 import ddp.ext.security.SysMenuExt;
@@ -11,7 +11,7 @@ import ddp.mapper.security.SysUserMapper;
 import ddp.mapper.security.SysUserOnlineMapper;
 import ddp.service.tools.MessageSourceUtils;
 import ddp.service.tools.ShiroUtils;
-import ddp.tools.MyStringUtils;
+import ddp.utils.MyStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;

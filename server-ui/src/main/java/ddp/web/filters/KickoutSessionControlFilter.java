@@ -1,7 +1,7 @@
 package ddp.web.filters;
 
 import com.alibaba.fastjson.JSON;
-import ddp.constants.CommConstants;
+import ddp.beans.CommConstants;
 import ddp.service.tools.ShiroUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;

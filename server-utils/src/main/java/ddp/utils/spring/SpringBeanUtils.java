@@ -1,4 +1,4 @@
-package ddp.tools;
+package ddp.utils.spring;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;

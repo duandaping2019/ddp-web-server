@@ -1,4 +1,4 @@
-package ddp.tools;
+package ddp.utils;
 
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.NullCacheStorage;

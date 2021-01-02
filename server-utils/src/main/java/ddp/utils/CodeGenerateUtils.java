@@ -1,4 +1,4 @@
-package ddp.tools;
+package ddp.utils;
 
 import ddp.beans.ColumnClass;
 import freemarker.template.Template;

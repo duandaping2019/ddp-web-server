@@ -1,4 +1,4 @@
-package ddp.web.configure;
+package ddp.web.beans;
 
 import ddp.service.security.SysIndexService;
 import org.springframework.beans.factory.InitializingBean;

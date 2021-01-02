@@ -1,4 +1,4 @@
-package ddp.web.security;
+package ddp.web.beans;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

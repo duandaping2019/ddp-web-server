@@ -1,4 +1,4 @@
-package ddp.tools;
+package ddp.utils;
 
 import org.apache.commons.codec.binary.Base64;
 

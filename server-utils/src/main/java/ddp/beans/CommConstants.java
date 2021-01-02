@@ -1,4 +1,4 @@
-package ddp.constants;
+package ddp.beans;
 
 import java.math.BigDecimal;
 

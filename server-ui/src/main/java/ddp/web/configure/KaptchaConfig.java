@@ -1,4 +1,4 @@
-package ddp.configure;
+package ddp.web.configure;
 
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;

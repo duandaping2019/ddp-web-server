@@ -1,6 +1,6 @@
 package ddp;
 
-import ddp.tools.SpringBeanUtils;
+import ddp.utils.spring.SpringBeanUtils;
 import ddp.web.configure.MyLocaleResolver;
 import ddp.web.filters.HttpServletRequestReplacedFilter;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
@@ -26,7 +26,8 @@ import java.util.Properties;
 @ComponentScan(basePackages = {
     "ddp.web", //server-ui
     "ddp.service", //server-service
-    "ddp.beans", "ddp.configure", "ddp.demo", "ddp.tools" //server-utils
+    "ddp.dao", //server-base
+    "ddp.utils.spring" //server-utils
 })
 @MapperScan(basePackages = {"ddp.mapper"})
 public class ServerApplication {

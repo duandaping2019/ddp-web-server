@@ -1,10 +1,10 @@
 package ddp.service.tools;
 
 import ddp.bean.RRException;
-import ddp.constants.CommConstants;
+import ddp.beans.CommConstants;
 import ddp.ext.security.SysUserExt;
 import ddp.service.security.SysUserService;
-import ddp.tools.SpringBeanUtils;
+import ddp.utils.spring.SpringBeanUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 
