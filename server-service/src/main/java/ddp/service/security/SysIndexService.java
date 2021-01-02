@@ -28,4 +28,6 @@ public interface SysIndexService {
     /*Shiro Session 离线删除*/
     void deleteshirosession(String sessionId);
 
+    /*系统初始化在线用户信息*/
+    void truncateshirosession();
 }

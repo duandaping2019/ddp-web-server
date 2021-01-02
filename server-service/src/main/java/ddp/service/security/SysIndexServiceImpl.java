@@ -9,7 +9,6 @@ import ddp.ext.security.SysUserOnlineExt;
 import ddp.mapper.security.SysMenuMapper;
 import ddp.mapper.security.SysUserMapper;
 import ddp.mapper.security.SysUserOnlineMapper;
-import ddp.service.listeners.CustomShiroSessionListener;
 import ddp.service.tools.MessageSourceUtils;
 import ddp.service.tools.ShiroUtils;
 import ddp.tools.MyStringUtils;
@@ -148,13 +147,10 @@ public class SysIndexServiceImpl implements SysIndexService{
             entity.setStartTime(new Date()); //开始时间
             sysUserOnlineMapper.insert(entity);
 
-            // 增加在线统计人数
-            CustomShiroSessionListener listener = new CustomShiroSessionListener();
-            listener.addSessionCount();
-
         } else if (userOnlineExt != null) {
             userOnlineExt.setLastAccessTime(new Date());
             sysUserOnlineMapper.updateByPrimaryKeySelective(userOnlineExt);
+
         }
 
     }
@@ -166,5 +162,12 @@ public class SysIndexServiceImpl implements SysIndexService{
         condition.setSessionId(sessionId);
         sysUserOnlineMapper.deleteshirosession(condition);
     }
+
+    @Override
+    @Transactional
+    public void truncateshirosession() {
+        sysUserOnlineMapper.truncateshirosession();
+    }
+
 
 }

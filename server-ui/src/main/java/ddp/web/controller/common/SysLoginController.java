@@ -49,7 +49,6 @@ public class SysLoginController extends BaseController {
     @Autowired
     private SysIndexService sysIndexService;
 
-
     @ApiOperation(value = "captcha", notes = "登录页验证码生成")
     @RequestMapping("captcha.jpg")
     @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "验证码生成")
@@ -85,6 +84,7 @@ public class SysLoginController extends BaseController {
             if (!captcha.equalsIgnoreCase(ext.getCaptcha())) { // 忽略大写小的验证码比对
                 return BaseResponse.badrequest(MessageSourceUtils.getSourceFromCache("login_fail_info", locale));
             }
+
         }
 
         // 语言环境设置

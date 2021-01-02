@@ -86,7 +86,7 @@ public class OperLogAspect {
             }
 
             // 写入心跳日志
-            sysIndexService.monitorshirosession(SecurityUtils.getSubject(), "saveOperLog");
+            sysIndexService.monitorshirosession(SecurityUtils.getSubject(), null);
 
         } catch (Exception e) {
             e.printStackTrace();

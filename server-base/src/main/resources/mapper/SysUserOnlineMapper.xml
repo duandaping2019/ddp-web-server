@@ -25,6 +25,10 @@
         delete from sys_user_online where session_id = #{sessionId}
     </delete>
 
+    <delete id="truncateshirosession" databaseId="mysql">
+        TRUNCATE TABLE sys_user_online
+    </delete>
+
     <!--==============================================oracle语句======================================================-->
 
 </mapper>
