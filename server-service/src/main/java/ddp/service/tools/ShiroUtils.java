@@ -7,17 +7,17 @@ import ddp.service.security.SysUserService;
 import ddp.tools.SpringBeanUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 
 /**
- * Shiro工具类
+ * Shiro 当前用户操作工具类
+ *
  */
 public class ShiroUtils {
 
     private ShiroUtils(){}
 
     /**
-     * 获取用户会话对象
+     * 获取会话对象
      */
     public static Session getSession() {
         return SecurityUtils.getSubject().getSession();
@@ -42,37 +42,33 @@ public class ShiroUtils {
      * 判断是否登陆
      */
     public static boolean isLogin() {
-        // 判断用户是否已经登录
         return SecurityUtils.getSubject().isAuthenticated();
     }
 
     /**
-     * 用户注销信息
+     * 注销用户
      */
     public static void logout() {
         SecurityUtils.getSubject().logout();
     }
 
     /**
-     * 获取当前用户信息
+     * 获取用户实体信息
      */
     public static SysUserExt getCurrUserInfo() {
-        Subject subject = SecurityUtils.getSubject();
-        String loginId = (String) subject.getPrincipal();
         SysUserService userService = SpringBeanUtils.getBean(SysUserService.class);
-        SysUserExt ext = null;
+
+        String loginId = (String) (SecurityUtils.getSubject().getPrincipal());
         if (loginId != null) {
             SysUserExt condition = new SysUserExt();
             condition.setLoginId(loginId);
-            ext = userService.getEntityInfo(condition);
+            return userService.getEntityInfo(condition);
 
         } else {
             SysUserExt condition = new SysUserExt();
             condition.setUserId(CommConstants.ADMIN_USER);
-            ext = userService.getEntityInfo(condition);
+            return userService.getEntityInfo(condition);
         }
-
-        return ext;
     }
 
     /**
