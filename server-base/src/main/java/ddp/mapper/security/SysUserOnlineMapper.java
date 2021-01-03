@@ -5,6 +5,8 @@ import ddp.entity.security.SysUserOnlineEntity;
 import ddp.ext.security.SysUserOnlineExt;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
 * 描述：用户在线信息表模型
 * @author Ddp
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Repository;
 public interface SysUserOnlineMapper extends MyMapper<SysUserOnlineEntity> {
     /*获取在线用户信息实体*/
     SysUserOnlineExt getExtInfo(SysUserOnlineExt condition);
+
+    /*获取用户集合信息*/
+    List<SysUserOnlineExt> getExtListInfo(SysUserOnlineExt ext);
 
     /*删除在线用户信息实体*/
     void deleteshirosession(SysUserOnlineExt condition);

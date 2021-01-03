@@ -2,12 +2,17 @@ package ddp.service.security;
 
 import ddp.BaseServiceImpl;
 import ddp.beans.CommConstants;
-import ddp.dao.MySessionDAO;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
+import ddp.ext.security.SysUserOnlineExt;
 import ddp.mapper.security.SysUserMapper;
+import ddp.mapper.security.SysUserOnlineMapper;
+import ddp.service.filters.KickoutSessionControlFilter;
 import ddp.service.tools.ShiroUtils;
 import ddp.utils.MyStringUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.DefaultSessionKey;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +29,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
   private SysUserMapper userMapper;
 
   @Autowired
-  private MySessionDAO mySessionDAO;
+  private SysUserOnlineMapper sysUserOnlineMapper;
+
+  @Autowired
+  private SessionManager sessionManager;
 
   @Override
   public SysUserExt getEntityInfo(SysUserExt ext) {
@@ -75,8 +83,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
       // 用户信息更新
       userMapper.updateByPrimaryKeySelective(entity);
 
-      //强制用户下线重新登录获取最新信息
-      System.out.println(mySessionDAO);
+      // 刷新缓存信息
+      forceUserOffLine(entity);
 
     } else { // 新增操作
       entity.setCreateUserId(operator.getUserId().toString());
@@ -97,6 +105,28 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
     return entity;
   }
 
+  /*强制用户下线重新登录获取最新信息*/
+  public void forceUserOffLine(SysUserEntity entity) {
+    SysUserOnlineExt condition = new SysUserOnlineExt();
+    condition.setUserId(entity.getUserId());
+    List<SysUserOnlineExt> list = this.getOnlineExtListInfo(condition);
+
+    if (list != null && list.size() > 0 ) {
+      for(SysUserOnlineExt ext : list){
+        Session kickoutSession = sessionManager.getSession(new DefaultSessionKey(ext.getSessionId()));
+        if (kickoutSession != null) {
+          //设置会话的kickout属性表示踢出了
+          kickoutSession.setAttribute("kickout", true);
+
+          KickoutSessionControlFilter filter = new KickoutSessionControlFilter();
+          System.out.println("待实现内容、、、、、、、");
+
+        }
+
+      }
+    }
+  }
+
   @Override
   @Transactional
   public void delUserInfo(List<BigDecimal> idsList) {
@@ -104,6 +134,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
     userMapper.delUserInfo(idsList);
   }
 
+  /**
+   * 获取在线用户信息集合
+   */
+  @Override
+  public List<SysUserOnlineExt> getOnlineExtListInfo(SysUserOnlineExt ext) {
+    return sysUserOnlineMapper.getExtListInfo(ext);
+  }
 
 
 }

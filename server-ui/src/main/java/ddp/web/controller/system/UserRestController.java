@@ -63,6 +63,7 @@ public class UserRestController extends BaseController {
   public BaseResponse<Object> saveOrUpdate(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
                                   @ApiParam(value = "语言请求参数", required = false) Locale locale) {
 
+    // 更新用户信息
     SysUserEntity entity = userService.saveOrUpdate(ext);
     return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), entity);
 

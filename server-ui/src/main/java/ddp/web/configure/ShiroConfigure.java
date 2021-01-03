@@ -2,7 +2,7 @@ package ddp.web.configure;
 
 import ddp.beans.CommConstants;
 import ddp.service.listeners.CustomShiroSessionListener;
-import ddp.web.filters.KickoutSessionControlFilter;
+import ddp.service.filters.KickoutSessionControlFilter;
 import ddp.web.filters.MyPassThruAuthenticationFilter;
 import ddp.web.beans.MyCredentialsMatcher;
 import ddp.web.beans.MyShiroRealm;

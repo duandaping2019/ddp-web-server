@@ -16,7 +16,7 @@ public interface SysUserMapper extends MyMapper<SysUserEntity> {
     /*获取用户实体信息*/
     SysUserExt getExtInfo(SysUserExt ext);
 
-    /*获取用户分页信息*/
+    /*获取用户集合信息*/
     List<SysUserExt> getExtListInfo(SysUserExt ext);
 
     /*删除用户信息*/

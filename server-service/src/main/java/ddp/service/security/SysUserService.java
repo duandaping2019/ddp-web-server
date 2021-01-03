@@ -3,6 +3,7 @@ package ddp.service.security;
 import ddp.BaseService;
 import ddp.entity.security.SysUserEntity;
 import ddp.ext.security.SysUserExt;
+import ddp.ext.security.SysUserOnlineExt;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,7 +19,7 @@ public interface SysUserService extends BaseService<SysUserEntity> {
     /*获取用户实体信息【复杂】*/
     SysUserExt getExtInfo(SysUserExt ext);
 
-    /*获取用户分页信息*/
+    /*获取用户集合信息*/
     List<SysUserExt> getExtListInfo(SysUserExt ext);
 
     /*获取当前用户可配置角色列表*/
@@ -29,6 +30,9 @@ public interface SysUserService extends BaseService<SysUserEntity> {
 
     /*用户信息删除*/
     void delUserInfo(List<BigDecimal> idsList);
+
+    /*获取在线用户信息*/
+    List<SysUserOnlineExt> getOnlineExtListInfo(SysUserOnlineExt ext);
 
 }
 
