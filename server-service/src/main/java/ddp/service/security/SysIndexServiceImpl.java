@@ -13,6 +13,7 @@ import ddp.service.tools.MessageSourceUtils;
 import ddp.service.tools.ShiroUtils;
 import ddp.utils.MyStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,9 @@ public class SysIndexServiceImpl implements SysIndexService{
 
     @Autowired
     private SysUserOnlineMapper sysUserOnlineMapper;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     @Override
     public List<SysMenuExt> selectMenuList(SysUserEntity userEntity) {
@@ -167,6 +171,13 @@ public class SysIndexServiceImpl implements SysIndexService{
     @Transactional
     public void truncateshirosession() {
         sysUserOnlineMapper.truncateshirosession();
+    }
+
+    @Override
+    public void logoutSystem() {
+        String key = ShiroUtils.getCurrUserInfo().getLoginId();
+        cacheManager.getCache(CommConstants.REDIS_SESSION_PREFIX).remove(key);
+        ShiroUtils.logout();
     }
 
 

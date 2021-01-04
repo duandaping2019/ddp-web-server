@@ -7,9 +7,9 @@ import ddp.ext.security.SysUserExt;
 import ddp.ext.security.SysUserOnlineExt;
 import ddp.mapper.security.SysUserMapper;
 import ddp.mapper.security.SysUserOnlineMapper;
-import ddp.service.filters.KickoutSessionControlFilter;
 import ddp.service.tools.ShiroUtils;
 import ddp.utils.MyStringUtils;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.DefaultSessionKey;
 import org.apache.shiro.session.mgt.SessionManager;
@@ -33,6 +33,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
 
   @Autowired
   private SessionManager sessionManager;
+
+  @Autowired
+  private CacheManager cacheManager;
 
   @Override
   public SysUserExt getEntityInfo(SysUserExt ext) {
@@ -117,10 +120,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
         if (kickoutSession != null) {
           //设置会话的kickout属性表示踢出了
           kickoutSession.setAttribute("kickout", true);
-
-          KickoutSessionControlFilter filter = new KickoutSessionControlFilter();
-          System.out.println("待实现内容、、、、、、、");
-
+          cacheManager.getCache(CommConstants.REDIS_SESSION_PREFIX).remove(entity.getLoginId());
         }
 
       }

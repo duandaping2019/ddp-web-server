@@ -148,6 +148,7 @@ public class ShiroConfigure {
      * cacheManager 缓存 redis实现
      * 使用的是shiro-redis开源插件
      */
+    @Bean
     public RedisCacheManager cacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());

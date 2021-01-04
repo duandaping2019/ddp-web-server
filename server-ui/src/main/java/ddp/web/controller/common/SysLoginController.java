@@ -141,7 +141,7 @@ public class SysLoginController extends BaseController {
     @OperLog(operModul = "系统管理", operType = CommConstants.GET_DATA, operDesc = "系统注销")
     public ModelAndView sysLogout(@ApiParam(value = "语言请求参数", required = false) Locale locale) {
         if (ShiroUtils.isLogin()) {
-            ShiroUtils.logout();
+            sysIndexService.logoutSystem();
         }
 
         return new ModelAndView("redirect:/login.html");

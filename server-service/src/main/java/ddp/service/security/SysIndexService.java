@@ -30,4 +30,8 @@ public interface SysIndexService {
 
     /*系统初始化在线用户信息*/
     void truncateshirosession();
+
+    /*系统退出*/
+    void logoutSystem();
+
 }
