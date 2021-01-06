@@ -34,6 +34,85 @@ Shiro 身份验证
         b) SecurityManager将任务派发给Authenticator进行身份认证
         c) Authenticator从Realm获取验证信息，可以配置多Realm（各自顺序和策略）
 
+授权机制
+    1、判定是否拥有权限【这种方式的一般规则是“资源标识符：操作”】
+        //判断拥有权限：user:create
+        Assert.assertTrue(subject().isPermitted("user:create"));
+        //判断拥有权限：user:update and user:delete
+        Assert.assertTrue(subject().isPermittedAll("user:update", "user:delete"));
+    2、字符串通配符权限
+        “:”表示资源/操作/实例的分割；“,”表示操作的分割；“*”表示任意资源/操作/实例
+        role51="system:user:create,update,delete,view"
+        role52=system:user:*
+        subject().checkPermissions("system:user:*");
+
+    3、所有资源单个权限
+        role61=*:view
+        subject().checkPermissions("user:view");
+
+    4、WildcardPermission 如下两种方式是等价的【单个实例所有权限】
+        subject().checkPermission("menu:view:1");
+        subject().checkPermission(new WildcardPermission("menu:view:1"));
+
+授权流程
+    1、首先调用 Subject.isPermitted*/hasRole*接口，其会委托给 SecurityManager，而 SecurityManager 接着会委托给 Authorizer
+    2、Authorizer 是真正的授权者，如果我们调用如 isPermitted(“user:view”)，其首先会通过 PermissionResolver 把字符串转换成相应的 Permission 实例
+    3、在进行授权之前，其会调用相应的 Realm 获取 Subject 相应的角色/权限用于匹配传入的角色/权限
+    4、Authorizer 会判断 Realm 的角色/权限是否和传入的匹配，如果有多个 Realm，会委托给 ModularRealmAuthorizer 进行循环判断，
+       如果匹配如 isPermitted*/hasRole* 会返回 true，否则返回 false 表示授权失败
+
+ModularRealmAuthorizer 进行多 Realm 匹配流程：
+    1、首先检查相应的 Realm 是否实现了实现了 Authorizer
+    2、如果实现了 Authorizer，那么接着调用其相应的 isPermitted*/hasRole* 接口进行匹配
+    3、如果有一个 Realm 匹配那么将返回 true，否则返回 false
+
+如果 Realm 进行授权的话，应该继承 AuthorizingRealm，其流程是
+    1、如果调用 hasRole*，则直接获取 AuthorizationInfo.getRoles() 与传入的角色比较即可；
+       如果调用 isPermitted(“user:view”)，首先通过 PermissionResolver 将权限字符串转换成相应的 Permission 实例，默认使用 WildcardPermissionResolver，即转换为通配符的 WildcardPermission；
+    2、通过 AuthorizationInfo.getObjectPermissions() 得到 Permission 实例集合；
+       通过 AuthorizationInfo.getStringPermissions() 得到字符串集合并通过 PermissionResolver 解析为 Permission 实例；
+       然后获取用户的角色，并通过 RolePermissionResolver 解析角色对应的权限集合（默认没有实现，可以自己提供）
+    3、接着调用 Permission.implies(Permission p) 逐个与传入的权限比较，如果有匹配的则返回 true，否则 false
+
+Authorizer、PermissionResolver及RolePermissionResolver
+    1、Authorizer 的职责是进行授权（访问控制），是 Shiro API 中授权核心的入口点
+    2、PermissionResolver 用于解析权限字符串到 Permission 实例
+    3、RolePermissionResolver 用于根据角色解析相应的权限集合
+
+AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)：表示获取身份验证信息；
+AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals)：表示根据用户身份获取授权信息
+
+
+编码 / 解码
+    base64 编码/解码操作：
+    String str = "hello";
+    String base64Encoded = Base64.encodeToString(str.getBytes());
+    String str2 = Base64.decodeToString(base64Encoded);
+
+    16进制字符串编码/解码操作：
+    String str = "hello";
+    String base64Encoded = Hex.encodeToString(str.getBytes());
+    String str2 = new String(Hex.decode(base64Encoded.getBytes()));
+
+
+对于 Subject 我们一般这么使用：
+    1、身份验证（login）
+    2、授权（hasRole/isPermitted 或 checkRole/checkPermission）
+    3、将相应的数据存储到会话（Session）
+    4、切换身份（RunAs）/ 多线程身份传播
+    5、退出
+
+RunAs
+    void runAs(PrincipalCollection principals) throws NullPointerException, IllegalStateException;
+    boolean isRunAs();
+    PrincipalCollection getPreviousPrincipals();
+    PrincipalCollection releaseRunAs();
+RunAs 即实现 “允许 A 假设为 B 身份进行访问”，通过调用 subject.runAs(b) 进行访问；
+接着调用 subject.getPrincipals 将获取到 B 的身份；此时调用 isRunAs 将返回 true；
+而 a 的身份需要通过 subject. getPreviousPrincipals 获取；如果不需要 RunAs 了调用 subject. releaseRunAs 即可。
+
+
+
 
 
 
