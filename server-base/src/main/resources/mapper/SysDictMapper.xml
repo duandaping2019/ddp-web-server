@@ -3,11 +3,11 @@
 <mapper namespace="ddp.mapper.security.SysDictMapper" >
     <resultMap id="BaseResultMap" type="ddp.ext.security.SysDictExt">
         <id column="dict_id" property="dictId" jdbcType="DECIMAL" />
-        <id column="dict_type_big" property="dictTypeBig" jdbcType="VARCHAR" />
-        <id column="dict_type_small" property="dictTypeSmall" jdbcType="VARCHAR" />
-        <id column="dict_code" property="dictCode" jdbcType="VARCHAR" />
-        <id column="dict_name_en" property="dictNameEn" jdbcType="VARCHAR" />
-        <id column="dict_name_zh" property="dictNameZh" jdbcType="VARCHAR" />
+        <result column="dict_type_big" property="dictTypeBig" jdbcType="VARCHAR" />
+        <result column="dict_type_small" property="dictTypeSmall" jdbcType="VARCHAR" />
+        <result column="dict_code" property="dictCode" jdbcType="VARCHAR" />
+        <result column="dict_name_en" property="dictNameEn" jdbcType="VARCHAR" />
+        <result column="dict_name_zh" property="dictNameZh" jdbcType="VARCHAR" />
     </resultMap>
 
     <!--==============================================mysql语句======================================================-->

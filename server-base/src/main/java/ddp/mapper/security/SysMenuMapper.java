@@ -27,4 +27,7 @@ public interface SysMenuMapper extends MyMapper<SysMenuEntity> {
     /*通过父级Id获取子菜单*/
     List<SysMenuExt> queryListParentId(BigDecimal parentId);
 
+    /*获取菜单集合列表数据*/
+    List<SysMenuExt> getExtListInfo(SysMenuExt ext);
+
 }

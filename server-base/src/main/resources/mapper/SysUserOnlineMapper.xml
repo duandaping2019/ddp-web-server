@@ -3,11 +3,11 @@
 <mapper namespace="ddp.mapper.security.SysUserOnlineMapper" >
     <resultMap id="BaseResultMap" type="ddp.ext.security.SysUserOnlineExt">
         <id column="uo_id" property="uoId" jdbcType="VARCHAR" />
-        <id column="session_id" property="sessionId" jdbcType="VARCHAR" />
-        <id column="user_id" property="userId" jdbcType="BIGINT" />
-        <id column="host" property="host" jdbcType="VARCHAR" />
-        <id column="start_time" property="startTime" jdbcType="TIMESTAMP" />
-        <id column="last_access_time" property="lastAccessTime" jdbcType="TIMESTAMP" />
+        <result column="session_id" property="sessionId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="host" property="host" jdbcType="VARCHAR" />
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+        <result column="last_access_time" property="lastAccessTime" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <!--==============================================mysql语句======================================================-->
@@ -21,7 +21,7 @@
         </where>
     </select>
 
-    <select id="getExtListInfo" resultMap="BaseResultMap">
+    <select id="getExtListInfo" resultMap="BaseResultMap" databaseId="mysql">
         select * from sys_user_online suo
         <where>
             1 = 1
@@ -29,6 +29,14 @@
                 and suo.user_id = #{userId}
             </if>
         </where>
+        <choose>
+            <when test="orderColumn != null and orderColumn.trim() != ''">
+                order by ${orderColumn} ${orderRule}
+            </when>
+            <otherwise>
+                order by suo.start_time desc
+            </otherwise>
+        </choose>
     </select>
 
     <delete id="deleteshirosession" databaseId="mysql">

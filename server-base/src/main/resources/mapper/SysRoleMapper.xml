@@ -3,8 +3,8 @@
 <mapper namespace="ddp.mapper.security.SysRoleMapper" >
     <resultMap id="BaseResultMap" type="ddp.ext.security.SysRoleExt">
         <id column="role_id" property="roleId" jdbcType="DECIMAL" />
-        <id column="role_code" property="roleCode" jdbcType="VARCHAR" />
-        <id column="role_name" property="roleName" jdbcType="VARCHAR" />
+        <result column="role_code" property="roleCode" jdbcType="VARCHAR" />
+        <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     </resultMap>
 
     <!--==============================================mysql语句======================================================-->

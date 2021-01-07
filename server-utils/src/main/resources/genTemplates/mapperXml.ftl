@@ -12,11 +12,11 @@
                 </#if>
             <#else>
                 <#if (model.columnType = 'varchar' || model.columnType = 'text')>
-        <id column="${model.columnName}" property="${model.changeColumnName?uncap_first}" jdbcType="VARCHAR" />
+        <result column="${model.columnName}" property="${model.changeColumnName?uncap_first}" jdbcType="VARCHAR" />
                 <#elseif (model.columnType = 'timestamp' || model.columnType = 'datetime')>
-        <id column="${model.columnName}" property="${model.changeColumnName?uncap_first}" jdbcType="TIMESTAMP" />
+        <result column="${model.columnName}" property="${model.changeColumnName?uncap_first}" jdbcType="TIMESTAMP" />
                 <#else>
-        <id column="${model.columnName}" property="${model.changeColumnName?uncap_first}" jdbcType="BIGINT" />
+        <result column="${model.columnName}" property="${model.changeColumnName?uncap_first}" jdbcType="BIGINT" />
                 </#if>
             </#if>
         </#list>

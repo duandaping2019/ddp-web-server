@@ -3,15 +3,16 @@
 <mapper namespace="ddp.mapper.security.SysMenuMapper" >
     <resultMap id="BaseResultMap" type="ddp.ext.security.SysMenuExt">
         <id column="menu_id" property="menuId" jdbcType="DECIMAL" />
-        <id column="parent_id" property="parentId" jdbcType="DECIMAL" />
-        <id column="menu_type" property="menuType" jdbcType="DECIMAL" />
-        <id column="menu_code" property="menuCode" jdbcType="VARCHAR" />
-        <id column="menu_name" property="menuName" jdbcType="VARCHAR" />
-        <id column="menu_name_en" property="menuNameEn" jdbcType="VARCHAR" />
-        <id column="menu_permission" property="menuPermission" jdbcType="VARCHAR" />
-        <id column="menu_index" property="menuIndex" jdbcType="DECIMAL" />
-        <id column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
-        <id column="menu_icon" property="menuIcon" jdbcType="VARCHAR" />
+        <result column="parent_id" property="parentId" jdbcType="DECIMAL" />
+        <result column="menu_type" property="menuType" jdbcType="DECIMAL" />
+        <result column="menu_code" property="menuCode" jdbcType="VARCHAR" />
+        <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+        <result column="menu_name_en" property="menuNameEn" jdbcType="VARCHAR" />
+        <result column="menu_permission" property="menuPermission" jdbcType="VARCHAR" />
+        <result column="menu_index" property="menuIndex" jdbcType="DECIMAL" />
+        <result column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
+        <result column="menu_icon" property="menuIcon" jdbcType="VARCHAR" />
+        <result column="parent_name" property="parentName" jdbcType="VARCHAR" />
     </resultMap>
 
     <!--==============================================mysql语句======================================================-->
@@ -61,6 +62,24 @@
         from sys_menu sm
         where parent_id = #{parentId}
         order by menu_index
+    </select>
+
+    <select id="getExtListInfo" resultMap="BaseResultMap" databaseId="mysql">
+        select sm.*,
+            sm2.menu_name as parent_name
+        from sys_menu sm
+        left join sys_menu sm2 on sm2.menu_id =  sm.parent_id
+        <where>
+            1 = 1
+        </where>
+        <choose>
+            <when test="orderColumn != null and orderColumn.trim() != ''">
+                order by ${orderColumn} ${orderRule}
+            </when>
+            <otherwise>
+                order by sm.parent_id asc
+            </otherwise>
+        </choose>
     </select>
 
     <!--==============================================oracle语句======================================================-->

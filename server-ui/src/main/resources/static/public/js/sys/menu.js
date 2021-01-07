@@ -1,17 +1,17 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: '../sys/menu/list',
-        datatype: "json",
+		url: '/menu/list', //获取数据的地址
+		mtype: 'POST', //ajax提交方式，POST或者GET。默认GET
+		ajaxGridOptions: {
+			contentType: "application/json",
+		},//post请求需要加
+		serializeGridData: function(postData) {
+			return JSON.stringify(postData);
+		},//post请求需要加
+		datatype: "json", //从服务器端返回的数据类型，默认为xml。可选类型有：xml，local，json等
         colModel: [			
-			{ label: '菜单ID', name: 'menuId', index: "menu_id", width: 40, key: true },
-			{ label: '菜单名称', name: 'name', width: 60 },
-			{ label: '上级菜单', name: 'parentName', sortable: false, width: 60 },
-			{ label: '菜单图标', name: 'icon', sortable: false, width: 50, formatter: function(value, options, row){
-				return value == null ? '' : '<i class="'+value+' fa-lg"></i>';
-			}},
-			{ label: '菜单URL', name: 'url', width: 100 },
-			{ label: '授权标识', name: 'perms', width: 100 },
-			{ label: '类型', name: 'type', width: 50, formatter: function(value, options, row){
+			{ label: '主键', name: 'menuId', hidden:true, key: true},
+			{ label: '菜单类型', name: 'menuType', formatter: function (value, options, row) {
 				if(value === 0){
 					return '<span class="label label-primary">目录</span>';
 				}
@@ -22,32 +22,47 @@ $(function () {
 					return '<span class="label label-warning">按钮</span>';
 				}
 			}},
-			{ label: '排序号', name: 'orderNum', index: "order_num", width: 50}
+
+
+
+
+			{ label: '菜单编码', name: 'menuCode', index: 'menu_code'},
+			{ label: '菜单名称', name: 'menuName', sortable: false},
+			{ label: '父级菜单', name: 'parentName', sortable: false},
+			{ label: '菜单排序', name: 'menuIndex', sortable: false}
+
+			// { label: '上级菜单', name: 'parentName', sortable: false, width: 60 },
+			// { label: '菜单图标', name: 'icon', sortable: false, width: 50, formatter: function(value, options, row){
+			// 	return value == null ? '' : '<i class="'+value+' fa-lg"></i>';
+			// }},
+			// { label: '菜单URL', name: 'url', width: 100 },
+			// { label: '授权标识', name: 'perms', width: 100 },
         ],
-		viewrecords: true,
-        height: 385,
-        rowNum: 10,
-		rowList : [10,30,50],
-        rownumbers: true, 
-        rownumWidth: 25, 
-        autowidth:true,
-        multiselect: true,
-        pager: "#jqGridPager",
-        jsonReader : {
-            root: "data.list",
-            page: "data.pageNum",
-            total: "data.pages",
-            records: "data.total"
-        },
-        prmNames : {
-            page:"pageNum",
-            rows:"pageSize",
-            order: "orderRule"
-        },
-        gridComplete:function(){
-        	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
-        }
+		caption: '菜单列表', //表格名称
+		viewrecords: true, //定义是否要显示总记录数
+		height: 385, //表格高度，可以是数字，像素值或者百分比
+		rowNum: 10, //在grid上显示记录条数，这个参数要被传递到后台
+		rowList : [10,30,50], //一个下拉选择框，用来改变显示记录数，当选择时会覆盖rowNum参数传递到后台
+		rownumbers: true, //显示行号
+		rownumWidth: 25, //行号宽度
+		autowidth:true, //自动宽度
+		multiselect: true, //是否多选
+		pager: "#jqGridPager", //定义翻页用的导航栏，必须是有效的html元素
+		jsonReader : {
+			root: "data.list", //包含实际数据的数组
+			page: "data.pageNum", //当前页
+			total: "data.pages", //总的页数
+			records: "data.total" //总的记录数（查出来的总条数）
+		},
+		prmNames : { // 参数定义
+			page:"pageNum",
+			rows:"pageSize",
+			order: "orderRule"
+		},
+		gridComplete:function(){
+			//隐藏grid底部滚动条
+			$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+		}
     });
 });
 

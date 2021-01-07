@@ -12,6 +12,7 @@ import java.util.List;
 public class SysMenuExt extends SysMenuEntity {
 
     private List<SysMenuExt> list;
+    private String parentName;//父级菜单名称
 
     public List<SysMenuExt> getList() {
         return list;
@@ -19,5 +20,13 @@ public class SysMenuExt extends SysMenuEntity {
 
     public void setList(List<SysMenuExt> list) {
         this.list = list;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 }

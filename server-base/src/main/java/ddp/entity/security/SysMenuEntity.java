@@ -34,7 +34,7 @@ public class SysMenuEntity extends BaseEntity {
     private BigDecimal parentId;
 
     /**
-    *菜单类型【0项目表示  1菜单  2按钮】
+    *菜单类型【0目录  1菜单  2按钮】
     */
     @Column(name = "menu_type", length = 1)
     private Integer menuType;
@@ -111,14 +111,14 @@ public class SysMenuEntity extends BaseEntity {
     }
 
     /**
-    * 设置菜单类型【0项目表示  1菜单  2按钮】
+    * 设置菜单类型【0目录  1菜单  2按钮】
     */
     public Integer getMenuType() {
         return this.menuType;
     }
 
     /**
-    * 获取菜单类型【0项目表示  1菜单  2按钮】
+    * 获取菜单类型【0目录  1菜单  2按钮】
     */
     public void setMenuType(Integer menuType) {
         this.menuType = menuType;
