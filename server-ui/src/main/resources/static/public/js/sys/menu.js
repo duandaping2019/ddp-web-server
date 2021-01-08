@@ -11,6 +11,14 @@ $(function () {
 		datatype: "json", //从服务器端返回的数据类型，默认为xml。可选类型有：xml，local，json等
         colModel: [			
 			{ label: '主键', name: 'menuId', hidden:true, key: true},
+			{ label: '菜单编码', name: 'menuCode', index: 'menu_code'},
+			{ label: '菜单名称', name: 'menuName', sortable: false},
+			{ label: '父级菜单', name: 'parentName', sortable: false},
+			{ label: '菜单图标', name: 'menuIcon', sortable: false, formatter: function(value, options, row){
+				return value == null ? '' : '<i class="'+value+' fa-lg"></i>';
+			}},
+			{ label: '菜单路径', name: 'menuUrl', sortable: false },
+			{ label: '授权标识', name: 'menuPermission', sortable: false },
 			{ label: '菜单类型', name: 'menuType', formatter: function (value, options, row) {
 				if(value === 0){
 					return '<span class="label label-primary">目录</span>';
@@ -22,21 +30,7 @@ $(function () {
 					return '<span class="label label-warning">按钮</span>';
 				}
 			}},
-
-
-
-
-			{ label: '菜单编码', name: 'menuCode', index: 'menu_code'},
-			{ label: '菜单名称', name: 'menuName', sortable: false},
-			{ label: '父级菜单', name: 'parentName', sortable: false},
 			{ label: '菜单排序', name: 'menuIndex', sortable: false}
-
-			// { label: '上级菜单', name: 'parentName', sortable: false, width: 60 },
-			// { label: '菜单图标', name: 'icon', sortable: false, width: 50, formatter: function(value, options, row){
-			// 	return value == null ? '' : '<i class="'+value+' fa-lg"></i>';
-			// }},
-			// { label: '菜单URL', name: 'url', width: 100 },
-			// { label: '授权标识', name: 'perms', width: 100 },
         ],
 		caption: '菜单列表', //表格名称
 		viewrecords: true, //定义是否要显示总记录数
@@ -66,7 +60,9 @@ $(function () {
     });
 });
 
-var setting = {
+let ztree = null;
+
+let setting = {
 	data: {
 		simpleData: {
 			enable: true,
@@ -75,13 +71,14 @@ var setting = {
 			rootPId: -1
 		},
 		key: {
+			name : "menuName",
+			title:"menuName",
 			url:"nourl"
 		}
 	}
 };
-var ztree;
 
-var vm = new Vue({
+let vm = new Vue({
 	el:'#rrapp',
 	data:{
 		showList: true,
@@ -89,29 +86,29 @@ var vm = new Vue({
 		menu:{
 			parentName:null,
 			parentId:0,
-			type:1,
-			orderNum:0
+			menuType:1,
+			menuIndex:0
 		}
 	},
 	methods: {
 		getMenu: function(menuId){
 			//加载菜单树
-			$.get("../sys/menu/select", function(r){
-				ztree = $.fn.zTree.init($("#menuTree"), setting, r.menuList);
-				var node = ztree.getNodeByParam("menuId", vm.menu.parentId);
+			$.get("/menu/select", function(r){
+				ztree = $.fn.zTree.init($("#menuTree"), setting, r.data.list);
+				let node = ztree.getNodeByParam("menuId", vm.menu.parentId);
 				ztree.selectNode(node);
 				
-				vm.menu.parentName = node.name;
+				vm.menu.parentName = node.menuName;
 			})
 		},
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
-			vm.menu = {parentName:null,parentId:0,type:1,orderNum:0};
+			vm.menu = {parentName:null,parentId:0,menuType:1,menuIndex:0};
 			vm.getMenu();
 		},
 		update: function (event) {
-			var menuId = getSelectedRow();
+			let menuId = getSelectedRow();
 			if(menuId == null){
 				return ;
 			}
@@ -125,7 +122,7 @@ var vm = new Vue({
             });
 		},
 		del: function (event) {
-			var menuIds = getSelectedRows();
+			let menuIds = getSelectedRows();
 			if(menuIds == null){
 				return ;
 			}
@@ -148,7 +145,7 @@ var vm = new Vue({
 			});
 		},
 		saveOrUpdate: function (event) {
-			var url = vm.menu.menuId == null ? "../sys/menu/save" : "../sys/menu/update";
+			let url = vm.menu.menuId == null ? "../sys/menu/save" : "../sys/menu/update";
 			$.ajax({
 				type: "POST",
 			    url: url,
@@ -176,10 +173,10 @@ var vm = new Vue({
 				content: jQuery("#menuLayer"),
 				btn: ['确定', '取消'],
 				btn1: function (index) {
-					var node = ztree.getSelectedNodes();
+					let node = ztree.getSelectedNodes();
 					//选择上级菜单
 					vm.menu.parentId = node[0].menuId;
-					vm.menu.parentName = node[0].name;
+					vm.menu.parentName = node[0].menuName;
 					
 					layer.close(index);
 	            }
@@ -187,7 +184,7 @@ var vm = new Vue({
 		},
 		reload: function (event) {
 			vm.showList = true;
-			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			let page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page
             }).trigger("reloadGrid");

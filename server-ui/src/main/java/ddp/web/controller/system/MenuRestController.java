@@ -38,4 +38,12 @@ public class MenuRestController {
         return BaseResponse.success(new PageInfo(menuService.getExtListInfo(ext)));
     }
 
+    @ApiOperation(value = "sysMenuSelect", notes = "获取菜单树信息")
+    @RequestMapping("select")
+    @OperLog(operModul = "菜单管理", operType = CommConstants.GET_DATA, operDesc = "获取菜单树信息")
+    @RequiresPermissions("sys:menu:select")
+    public BaseResponse<Object> sysMenuSelect(@ApiParam(value = "语言请求参数", required = false) Locale locale){
+        return BaseResponse.success(new PageInfo(menuService.getMenuTreeData()));
+    }
+
 }

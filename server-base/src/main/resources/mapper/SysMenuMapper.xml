@@ -82,6 +82,15 @@
         </choose>
     </select>
 
+    <select id="getMenuTreeData" resultMap="BaseResultMap" databaseId="mysql">
+        select
+            sm.menu_id,
+            concat(sm.menu_code, '|' ,sm.menu_name) as menu_name,
+            sm.parent_id
+        from sys_menu sm
+        where sm.menu_type != 2
+    </select>
+
     <!--==============================================oracle语句======================================================-->
 
 </mapper>

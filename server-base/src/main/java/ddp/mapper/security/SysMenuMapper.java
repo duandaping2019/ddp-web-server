@@ -30,4 +30,7 @@ public interface SysMenuMapper extends MyMapper<SysMenuEntity> {
     /*获取菜单集合列表数据*/
     List<SysMenuExt> getExtListInfo(SysMenuExt ext);
 
+    /*获取非按钮的菜单树集合信息*/
+    List<SysMenuExt> getMenuTreeData();
+
 }
