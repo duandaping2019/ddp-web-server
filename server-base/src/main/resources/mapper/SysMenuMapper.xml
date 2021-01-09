@@ -54,6 +54,7 @@
         where 1 = 1
             and ur.user_id = #{userId}
         group by rm.menu_id
+        order by rm.menu_id
     </select>
 
     <select id="queryListParentId" resultMap="BaseResultMap" databaseId="mysql">
@@ -93,13 +94,16 @@
         left join sys_menu sm2 on sm2.menu_id =  sm.parent_id
         <where>
             1 = 1
+            <if test="menuCode != null and menuCode != ''">
+                and sm.menu_code like CONCAT('%', #{menuCode}, '%')
+            </if>
         </where>
         <choose>
             <when test="orderColumn != null and orderColumn.trim() != ''">
                 order by ${orderColumn} ${orderRule}
             </when>
             <otherwise>
-                order by sm.parent_id asc
+                order by menu_type,menu_id
             </otherwise>
         </choose>
     </select>
@@ -114,6 +118,7 @@
             <if test="menuId != null">
                 and sm.menu_id != #{menuId}
             </if>
+        order by sm.menu_id
     </select>
 
     <delete id="delMenuInfo" databaseId="mysql">

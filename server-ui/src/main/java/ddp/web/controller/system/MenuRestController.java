@@ -51,14 +51,13 @@ public class MenuRestController {
         return BaseResponse.success(new PageInfo(menuService.getMenuTreeData(ext)));
     }
 
-    @ApiOperation(value = "saveOrUpdate", notes = "存储菜单信息")
+    @ApiOperation(value = "sysMenuSave", notes = "存储菜单信息")
     @RequestMapping("/save_or_update")
     @OperLog(operModul = "系统管理", operType = CommConstants.ADD_DATA, operDesc = "存储菜单信息")
     @RequiresPermissions("sys:menu:save")
-    public BaseResponse<Object> saveOrUpdate(@ApiParam(value = "菜单请求参数", required = false) @RequestBody SysMenuExt ext,
+    public BaseResponse<Object> sysMenuSave(@ApiParam(value = "菜单请求参数", required = false) @RequestBody SysMenuExt ext,
                                              @ApiParam(value = "语言请求参数", required = false) Locale locale) {
 
-        // 更新菜单信息
         SysMenuEntity entity = menuService.saveOrUpdate(ext);
         return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), entity);
 

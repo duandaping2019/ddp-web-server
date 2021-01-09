@@ -56,11 +56,11 @@ public class UserRestController extends BaseController {
     return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale), roleList);
   }
 
-  @ApiOperation(value = "saveOrUpdate", notes = "存储用户信息")
+  @ApiOperation(value = "sysUserSave", notes = "存储用户信息")
   @RequestMapping("/save_or_update")
   @OperLog(operModul = "系统管理", operType = CommConstants.ADD_DATA, operDesc = "存储用户信息")
   @RequiresPermissions("sys:user:save")
-  public BaseResponse<Object> saveOrUpdate(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
+  public BaseResponse<Object> sysUserSave(@ApiParam(value = "用户请求参数", required = false) @RequestBody SysUserExt ext,
                                   @ApiParam(value = "语言请求参数", required = false) Locale locale) {
 
     // 更新用户信息

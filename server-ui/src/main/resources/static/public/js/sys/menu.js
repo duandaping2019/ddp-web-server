@@ -12,7 +12,7 @@ $(function () {
 			return JSON.stringify(postData);
 		},//post请求需要加
 		datatype: "json", //从服务器端返回的数据类型，默认为xml。可选类型有：xml，local，json等
-        colModel: [			
+        colModel: [
 			{ label: '主键', name: 'menuId', hidden:true, key: true},
 			{ label: '菜单编码', name: 'menuCode', index: 'menu_code'},
 			{ label: '菜单名称', name: 'menuName', sortable: false},
@@ -109,6 +109,9 @@ let setting = {
 let vm = new Vue({
 	el:'#rrapp',
 	data:{
+		q:{//查询条件对象
+			menuCode: null
+		},
 		showList: true,
 		title: null,
 		menu:{
@@ -119,6 +122,40 @@ let vm = new Vue({
 		}
 	},
 	methods: {
+		query: function () {
+			vm.reload();
+		},
+		treeShow: function () {
+			$.ajax({
+				type: "POST",
+				url: "/menu/select",
+				data: JSON.stringify({
+					"menuId": null //获取主键
+				}),
+				dataType: "json", //响应数据类型
+				contentType: "application/json", //请求数据类型
+				success: function(result){
+					if(result.code === 200){//存储成功
+						ztree = $.fn.zTree.init($("#menuTree"), setting, result.data.list);
+						let node = ztree.getNodeByParam("menuId", vm.menu.parentId);
+						ztree.selectNode(node);
+
+						layer.open({
+							type: 1,
+							offset: '50px',
+							skin: 'layui-layer-molv',
+							title: "菜单树",
+							area: ['300px', '500px'],
+							shade: 0,
+							shadeClose: false,
+							content: jQuery("#menuLayer"),
+							btn: false
+						});
+					}
+				}
+			});
+
+		},
 		getMenu: function(menuId){
 			//加载菜单树
 			$.ajax({
@@ -249,7 +286,8 @@ let vm = new Vue({
 		reload: function (event) {
 			vm.showList = true;
 			let page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{ 
+			$("#jqGrid").jqGrid('setGridParam',{
+				postData:{'menuCode': vm.q.menuCode},
                 page:page
             }).trigger("reloadGrid");
 		},

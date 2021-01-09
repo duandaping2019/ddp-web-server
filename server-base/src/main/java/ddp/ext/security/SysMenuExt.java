@@ -13,6 +13,7 @@ public class SysMenuExt extends SysMenuEntity {
 
     private List<SysMenuExt> list;
     private String parentName;//父级菜单名称
+    private Boolean leaf;//叶子节点
     private Boolean open;//菜单是否展开
 
     public List<SysMenuExt> getList() {
@@ -29,6 +30,14 @@ public class SysMenuExt extends SysMenuEntity {
 
     public void setParentName(String parentName) {
         this.parentName = parentName;
+    }
+
+    public Boolean getLeaf() {
+        return leaf;
+    }
+
+    public void setLeaf(Boolean leaf) {
+        this.leaf = leaf;
     }
 
     public Boolean getOpen() {
