@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.Date;
 
 
 /**
@@ -26,6 +27,27 @@ public class SysMenuEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "menu_id", length = 32)
     private BigDecimal menuId;
+
+    @Column(name = "create_user_id", length = 32)
+    private String createUserId; //创建人Id
+
+    @Column(name = "create_user_name", length = 128)
+    private String createUserName; //创建人Name
+
+    @Column(name = "create_time", length = 19)
+    private Date createTime; //创建时间
+
+    @Column(name = "update_user_id", length = 32)
+    private String updateUserId; //更新人ID
+
+    @Column(name = "update_user_name", length = 128)
+    private String updateUserName; //更新人Name
+
+    @Column(name = "update_time", length = 32)
+    private Date updateTime; //更新时间
+
+    @Column(name = "del_flag", length = 1)
+    private Short delFlag; // 删除标记
 
     /**
     *父级主键
@@ -82,145 +104,140 @@ public class SysMenuEntity extends BaseEntity {
     private String menuIcon;
 
 
-    /**
-    * 设置主键ID
-    */
     public BigDecimal getMenuId() {
-        return this.menuId;
+        return menuId;
     }
 
-    /**
-    * 获取主键ID
-    */
     public void setMenuId(BigDecimal menuId) {
         this.menuId = menuId;
     }
 
-    /**
-    * 设置父级主键
-    */
-    public BigDecimal getParentId() {
-        return this.parentId;
+    public String getCreateUserId() {
+        return createUserId;
     }
 
-    /**
-    * 获取父级主键
-    */
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getUpdateUserId() {
+        return updateUserId;
+    }
+
+    public void setUpdateUserId(String updateUserId) {
+        this.updateUserId = updateUserId;
+    }
+
+    public String getUpdateUserName() {
+        return updateUserName;
+    }
+
+    public void setUpdateUserName(String updateUserName) {
+        this.updateUserName = updateUserName;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Short getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Short delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public BigDecimal getParentId() {
+        return parentId;
+    }
+
     public void setParentId(BigDecimal parentId) {
         this.parentId = parentId;
     }
 
-    /**
-    * 设置菜单类型【0目录  1菜单  2按钮】
-    */
     public Integer getMenuType() {
-        return this.menuType;
+        return menuType;
     }
 
-    /**
-    * 获取菜单类型【0目录  1菜单  2按钮】
-    */
     public void setMenuType(Integer menuType) {
         this.menuType = menuType;
     }
 
-    /**
-    * 设置菜单编码
-    */
     public String getMenuCode() {
-        return this.menuCode;
+        return menuCode;
     }
 
-    /**
-    * 获取菜单编码
-    */
     public void setMenuCode(String menuCode) {
         this.menuCode = menuCode;
     }
 
-    /**
-    * 设置菜单名称ZH
-    */
     public String getMenuName() {
-        return this.menuName;
+        return menuName;
     }
 
-    /**
-    * 获取菜单名称ZH
-    */
     public void setMenuName(String menuName) {
         this.menuName = menuName;
     }
 
-    /**
-    * 设置菜单名称EN
-    */
     public String getMenuNameEn() {
-        return this.menuNameEn;
+        return menuNameEn;
     }
 
-    /**
-    * 获取菜单名称EN
-    */
     public void setMenuNameEn(String menuNameEn) {
         this.menuNameEn = menuNameEn;
     }
 
-    /**
-    * 设置带单权限标识符
-    */
     public String getMenuPermission() {
-        return this.menuPermission;
+        return menuPermission;
     }
 
-    /**
-    * 获取带单权限标识符
-    */
     public void setMenuPermission(String menuPermission) {
         this.menuPermission = menuPermission;
     }
 
-    /**
-    * 设置菜单排序
-    */
     public BigDecimal getMenuIndex() {
-        return this.menuIndex;
+        return menuIndex;
     }
 
-    /**
-    * 获取菜单排序
-    */
     public void setMenuIndex(BigDecimal menuIndex) {
         this.menuIndex = menuIndex;
     }
 
-    /**
-    * 设置菜单路径
-    */
     public String getMenuUrl() {
-        return this.menuUrl;
+        return menuUrl;
     }
 
-    /**
-    * 获取菜单路径
-    */
     public void setMenuUrl(String menuUrl) {
         this.menuUrl = menuUrl;
     }
 
-    /**
-    * 设置菜单图标
-    */
     public String getMenuIcon() {
-        return this.menuIcon;
+        return menuIcon;
     }
 
-    /**
-    * 获取菜单图标
-    */
     public void setMenuIcon(String menuIcon) {
         this.menuIcon = menuIcon;
     }
-
 
 }

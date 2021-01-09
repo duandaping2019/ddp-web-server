@@ -11,7 +11,10 @@
 	<link rel="stylesheet" href="/public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
 	<link rel="stylesheet" href="/public/plugins/ztree/css/metroStyle/metroStyle.css">
 	<link rel="stylesheet" href="/public/css/main.css">
+
 	<script src="/public/libs/jquery.min.js"></script>
+	<script src="/public/js/jquery.validate.min.js"></script>
+	<script src="/public/js/jquery.validate.extend.js"></script>
 	<script src="/public/plugins/layer/layer.js"></script>
 	<script src="/public/libs/bootstrap.min.js"></script>
 	<script src="/public/libs/vue.min.js"></script>
@@ -34,9 +37,9 @@
 	
 	<div v-show="!showList" class="panel panel-default">
 		<div class="panel-heading">{{title}}</div>
-		<form class="form-horizontal">
+		<form id="menuForm" class="form-horizontal">
 			<div class="form-group">
-				<div class="col-sm-2 control-label">类型</div> 
+				<div class="col-sm-2 control-label"><strong style="color: red">*</strong>类型</div>
 				<label class="radio-inline">
 				  <input type="radio" name="menuType" value="0" v-model="menu.menuType"/> 目录
 				</label>
@@ -48,15 +51,27 @@
 				</label>
 			</div>
 			<div class="form-group">
-			   	<div class="col-sm-2 control-label">菜单名称</div>
+				<div class="col-sm-2 control-label"><strong style="color: red">*</strong>菜单编码</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="menuCode" v-model="menu.menuCode" placeholder="菜单编码或按钮编码"/>
+				</div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label"><strong style="color: red">*</strong>菜单名称</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="menu.menuName" placeholder="菜单名称或按钮名称"/>
+			      <input type="text" class="form-control" name="menuName" v-model="menu.menuName" placeholder="菜单名称或按钮名称"/>
 			    </div>
 			</div>
 			<div class="form-group">
-				<div class="col-sm-2 control-label">上级菜单</div>
+				<div class="col-sm-2 control-label"><strong style="color: red">*</strong>菜单英文名称</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="menuNameEn" v-model="menu.menuNameEn" placeholder="菜单名称或按钮名称"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"><strong style="color: red">*</strong>上级菜单</div>
 			   	<div class="col-sm-10">
-			       <input type="text" class="form-control" style="cursor:pointer;" v-model="menu.parentName" @click="menuTree" readonly="readonly" placeholder="一级菜单"/>
+			       <input type="text" class="form-control" style="cursor:pointer;" name="parentName" v-model="menu.parentName" @click="menuTree" readonly="readonly" placeholder="一级菜单"/>
 			    </div>
 			</div>
 			<div v-if="menu.menuType == 1" class="form-group">
@@ -71,10 +86,10 @@
 			      <input type="text" class="form-control" v-model="menu.menuPermission" placeholder="多个用逗号分隔，如：user:list,user:create"/>
 			    </div>
 			</div>
-			<div v-if="menu.menuType != 2" class="form-group">
-			   	<div class="col-sm-2 control-label">排序号</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label"><strong style="color: red">*</strong>排序号</div>
 			   	<div class="col-sm-10">
-			      <input type="number" class="form-control" v-model="menu.menuIndex" placeholder="排序号"/>
+			      <input type="number" class="form-control" name="menuIndex" v-model="menu.menuIndex" placeholder="排序号"/>
 			    </div>
 			</div>
 			<div v-if="menu.menuType != 2" class="form-group">
@@ -86,8 +101,8 @@
 			</div>
 			<div class="form-group">
 				<div class="col-sm-2 control-label"></div> 
-				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
-				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="关闭"/>
+				<input type="button" id="saveOrUpdateBtn" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				<input type="button" class="btn btn-warning" @click="reload" value="关闭"/>
 			</div>
 		</form>
 	</div>

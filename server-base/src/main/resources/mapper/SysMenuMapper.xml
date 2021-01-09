@@ -3,6 +3,15 @@
 <mapper namespace="ddp.mapper.security.SysMenuMapper" >
     <resultMap id="BaseResultMap" type="ddp.ext.security.SysMenuExt">
         <id column="menu_id" property="menuId" jdbcType="DECIMAL" />
+
+        <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+        <result column="create_user_name" property="createUserName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user_id" property="updateUserId" jdbcType="VARCHAR"/>
+        <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="del_flag" property="delFlag" jdbcType="SMALLINT"/>
+
         <result column="parent_id" property="parentId" jdbcType="DECIMAL" />
         <result column="menu_type" property="menuType" jdbcType="DECIMAL" />
         <result column="menu_code" property="menuCode" jdbcType="VARCHAR" />
@@ -64,6 +73,19 @@
         order by menu_index
     </select>
 
+    <select id="getExtInfo" resultMap="BaseResultMap" databaseId="mysql">
+        select sm.*,
+            sm2.menu_name as parent_name
+        from sys_menu sm
+        left join sys_menu sm2 on sm2.menu_id =  sm.parent_id
+        <where>
+            1 = 1
+            <if test="menuId != null">
+                and sm.menu_id = #{menuId}
+            </if>
+        </where>
+    </select>
+
     <select id="getExtListInfo" resultMap="BaseResultMap" databaseId="mysql">
         select sm.*,
             sm2.menu_name as parent_name
@@ -89,7 +111,17 @@
             sm.parent_id
         from sys_menu sm
         where sm.menu_type != 2
+            <if test="menuId != null">
+                and sm.menu_id != #{menuId}
+            </if>
     </select>
+
+    <delete id="delMenuInfo" databaseId="">
+        delete from sys_menu where menu_id in
+        <foreach collection="idsList" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
 
     <!--==============================================oracle语句======================================================-->
 

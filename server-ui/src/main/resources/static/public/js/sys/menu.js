@@ -1,3 +1,6 @@
+let myValidate = null;
+let ztree = null;
+
 $(function () {
     $("#jqGrid").jqGrid({
 		url: '/menu/list', //获取数据的地址
@@ -13,6 +16,7 @@ $(function () {
 			{ label: '主键', name: 'menuId', hidden:true, key: true},
 			{ label: '菜单编码', name: 'menuCode', index: 'menu_code'},
 			{ label: '菜单名称', name: 'menuName', sortable: false},
+			{ label: '菜单名称(EN)', name: 'menuNameEn', sortable: false},
 			{ label: '父级菜单', name: 'parentName', sortable: false},
 			{ label: '菜单图标', name: 'menuIcon', sortable: false, formatter: function(value, options, row){
 				return value == null ? '' : '<i class="'+value+' fa-lg"></i>';
@@ -58,9 +62,33 @@ $(function () {
 			$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
 		}
     });
-});
 
-let ztree = null;
+	// 表单校验
+	myValidate = $('#menuForm').validate({
+		rules: {
+			menuType:{
+				required: true
+			},
+			menuCode:{
+				required: true
+			},
+			menuName:{
+				required: true
+			},
+			menuNameEn:{
+				required: true
+			},
+			parentName:{
+				required: true
+			},
+			menuIndex:{
+				required: true,
+				digits: true
+			}
+		}
+	});
+
+});
 
 let setting = {
 	data: {
@@ -93,13 +121,24 @@ let vm = new Vue({
 	methods: {
 		getMenu: function(menuId){
 			//加载菜单树
-			$.get("/menu/select", function(r){
-				ztree = $.fn.zTree.init($("#menuTree"), setting, r.data.list);
-				let node = ztree.getNodeByParam("menuId", vm.menu.parentId);
-				ztree.selectNode(node);
-				
-				vm.menu.parentName = node.menuName;
-			})
+			$.ajax({
+				type: "POST",
+				url: "/menu/select",
+				data: JSON.stringify({
+					"menuId": menuId //获取主键
+				}),
+				dataType: "json", //响应数据类型
+				contentType: "application/json", //请求数据类型
+				success: function(result){
+					if(result.code === 200){//存储成功
+						ztree = $.fn.zTree.init($("#menuTree"), setting, result.data.list);
+						let node = ztree.getNodeByParam("menuId", vm.menu.parentId);
+						ztree.selectNode(node);
+
+						vm.menu.parentName = node.menuName;
+					}
+				}
+			});
 		},
 		add: function(){
 			vm.showList = false;
@@ -109,57 +148,82 @@ let vm = new Vue({
 		},
 		update: function (event) {
 			let menuId = getSelectedRow();
-			if(menuId == null){
-				return ;
+			if (!menuId) {
+				return;
 			}
-			
-			$.get("../sys/menu/info/"+menuId, function(r){
-				vm.showList = false;
-                vm.title = "修改";
-                vm.menu = r.menu;
-                
-                vm.getMenu();
-            });
+
+			$.ajax({
+				type: "POST",
+				url: "/menu/get_menu_info",
+				data: JSON.stringify({
+					"menuId": menuId //获取主键
+				}),
+				dataType: "json", //响应数据类型
+				contentType: "application/json", //请求数据类型
+				success: function(result){
+					if(result.code === 200){//存储成功
+						vm.showList = false; //展示页面
+						vm.title = "修改"; //显示标题
+						vm.menu = result.data; //记载数据
+						vm.getMenu(vm.menu.menuId); // 设置弹出框数据
+
+						// 重置表单校验器
+						myValidate.resetForm(); // 重置表单校验器
+					}
+				}
+			});
 		},
 		del: function (event) {
 			let menuIds = getSelectedRows();
-			if(menuIds == null){
-				return ;
+			if (!menuIds) {
+				return;
 			}
-			
+
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
-				    url: "../sys/menu/delete",
-				    data: JSON.stringify(menuIds),
-				    success: function(r){
-				    	if(r.code === 0){
-							alert('操作成功', function(index){
+					url: "/menu/del_menu_info",
+					data: JSON.stringify(menuIds),
+					dataType: "json", //响应数据类型
+					contentType: "application/json", //请求数据类型
+					success: function(result){
+						if(result.code === 200){//存储成功
+							alert(result.msg, function(){
 								vm.reload();
 							});
-						}else{
-							alert(r.msg);
 						}
 					}
 				});
 			});
 		},
 		saveOrUpdate: function (event) {
-			let url = vm.menu.menuId == null ? "../sys/menu/save" : "../sys/menu/update";
-			$.ajax({
-				type: "POST",
-			    url: url,
-			    data: JSON.stringify(vm.menu),
-			    success: function(r){
-			    	if(r.code === 0){
-						alert('操作成功', function(index){
-							vm.reload();
-						});
-					}else{
-						alert(r.msg);
-					}
+			if ($("#menuForm").valid()) {//表单校验
+				//特别校验内容
+				if (!vm.validSpecialPart()){
+					return;
 				}
-			});
+
+				$("#saveOrUpdateBtn").attr("disabled", true); // 置灰按钮
+				$.ajax({
+					type: "POST",
+					url: "/menu/save_or_update",
+					data: JSON.stringify(vm.menu),
+					dataType: "json", //响应数据类型
+					contentType: "application/json", //请求数据类型
+					success: function(result){
+						if(result.code === 200){//存储成功
+							alert("操作成功！", function () {
+								$("#saveOrUpdateBtn").attr("disabled", false); // 还原按钮
+								vm.reload();
+							});
+						}else{
+							alert("操作失败！", function () {
+								$("#saveOrUpdateBtn").attr("disabled", false); // 还原按钮
+							});
+						}
+					}
+				});
+			}
 		},
 		menuTree: function(){
 			layer.open({
@@ -188,6 +252,22 @@ let vm = new Vue({
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page
             }).trigger("reloadGrid");
+		},
+		validSpecialPart: function () {
+			let menuType = parseInt(vm.menu.menuType);
+			if ( menuType === 1){
+				if (!vm.menu.menuUrl){
+					alert("请输入菜单路径！");
+					return false;
+				}
+			} else if (menuType === 2) {
+				if (!vm.menu.menuPermission){
+					alert("请输入授权标识！");
+					return false;
+				}
+			}
+
+			return true;
 		}
 	}
 });
