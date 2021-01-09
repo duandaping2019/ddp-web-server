@@ -82,7 +82,7 @@ public class UserRestController extends BaseController {
   }
 
 
-  @ApiOperation(value = "delUserInfo", notes = "获取用户信息")
+  @ApiOperation(value = "delUserInfo", notes = "删除用户信息")
   @RequestMapping("/del_user_info")
   @OperLog(operModul = "系统管理", operType = CommConstants.DEL_DATA, operDesc = "删除用户信息")
   @RequiresPermissions("sys:user:delete")

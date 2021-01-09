@@ -116,7 +116,7 @@
             </if>
     </select>
 
-    <delete id="delMenuInfo" databaseId="">
+    <delete id="delMenuInfo" databaseId="mysql">
         delete from sys_menu where menu_id in
         <foreach collection="idsList" item="id" open="(" close=")" separator=",">
             #{id}

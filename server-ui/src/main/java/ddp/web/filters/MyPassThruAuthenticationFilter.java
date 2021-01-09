@@ -2,8 +2,6 @@ package ddp.web.filters;
 
 import org.apache.shiro.web.filter.authc.PassThruAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletRequest;
@@ -15,17 +13,12 @@ import javax.servlet.http.HttpServletResponse;
  *  权限限制过滤器
  */
 public class MyPassThruAuthenticationFilter extends PassThruAuthenticationFilter {
-    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     //获取请求方法，若为OPTIONS请求直接返回True放行
     @Override
     public boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
-
-        log.info("进入MyPassThruAuthenticationFilter");
-
         HttpServletRequest req = (HttpServletRequest) request;
         if (req.getMethod().equals(RequestMethod.OPTIONS.name())) {
-            log.info("OPTIONS方法直接返回True");
             return true;
         }
         return super.onPreHandle(request, response, mappedValue);

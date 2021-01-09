@@ -3,6 +3,7 @@ package ddp.mapper.security;
 import ddp.MyMapper;
 import ddp.entity.security.SysMenuEntity;
 import ddp.ext.security.SysMenuExt;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -27,10 +28,16 @@ public interface SysMenuMapper extends MyMapper<SysMenuEntity> {
     /*通过父级Id获取子菜单*/
     List<SysMenuExt> queryListParentId(BigDecimal parentId);
 
+    /*获取菜单拓展实体*/
+    SysMenuExt getExtInfo(SysMenuExt ext);
+
     /*获取菜单集合列表数据*/
     List<SysMenuExt> getExtListInfo(SysMenuExt ext);
 
     /*获取非按钮的菜单树集合信息*/
-    List<SysMenuExt> getMenuTreeData();
+    List<SysMenuExt> getMenuTreeData(SysMenuExt ext);
+
+    /*删除菜单信息*/
+    void delMenuInfo(@Param("idsList") List<BigDecimal> idsList);
 
 }
