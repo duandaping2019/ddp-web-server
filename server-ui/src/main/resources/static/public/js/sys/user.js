@@ -37,6 +37,8 @@ $(function () {
 		caption: '用户列表', //表格名称
 		viewrecords: true, //定义是否要显示总记录数
         height: 385, //表格高度，可以是数字，像素值或者百分比
+		altRows: true,//单双行样式不同
+		altclass: 'differ',
         rowNum: 10, //在grid上显示记录条数，这个参数要被传递到后台
 		rowList : [10,30,50], //一个下拉选择框，用来改变显示记录数，当选择时会覆盖rowNum参数传递到后台
         rownumbers: true, //显示行号

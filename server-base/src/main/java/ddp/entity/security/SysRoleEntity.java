@@ -62,7 +62,7 @@ public class SysRoleEntity extends BaseEntity {
     private String roleName;
 
     /**
-     *角色名称
+     *角色说明
      */
     @Column(name = "role_desc", length = 256)
     private String roleDesc;

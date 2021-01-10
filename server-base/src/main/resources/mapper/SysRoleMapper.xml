@@ -18,7 +18,23 @@
     </resultMap>
 
     <!--==============================================mysql语句======================================================-->
-
+    <select id="getExtListInfo" resultMap="BaseResultMap" databaseId="mysql">
+        select * from sys_role sr
+        <where>
+            1 = 1
+            <if test="roleName != null and roleName != ''">
+                and sr.role_name like CONCAT('%', #{roleName}, '%')
+            </if>
+        </where>
+        <choose>
+            <when test="orderColumn != null and orderColumn.trim() != ''">
+                order by ${orderColumn} ${orderRule}
+            </when>
+            <otherwise>
+                order by sr.role_id
+            </otherwise>
+        </choose>
+    </select>
 
     <!--==============================================oracle语句======================================================-->
 

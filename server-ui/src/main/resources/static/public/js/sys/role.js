@@ -1,41 +1,71 @@
+let ztree = null;
+let myValidate = null;
+
 $(function () {
     $("#jqGrid").jqGrid({
-        url: '../sys/role/list',
-        datatype: "json",
-        colModel: [			
-			{ label: '角色ID', name: 'roleId', index: "role_id", width: 45, key: true },
-			{ label: '角色名称', name: 'roleName', index: "role_name", width: 75 },
-			{ label: '备注', name: 'remark', width: 100 },
-			{ label: '创建时间', name: 'createTime', index: "create_time", width: 80}
-        ],
-		viewrecords: true,
-        height: 385,
-        rowNum: 10,
-		rowList : [10,30,50],
-        rownumbers: true, 
-        rownumWidth: 25, 
-        autowidth:true,
-        multiselect: true,
-        pager: "#jqGridPager",
-        jsonReader : {
-            root: "data.list",
-            page: "data.pageNum",
-            total: "data.pages",
-            records: "data.total"
-        },
-        prmNames : {
-            page:"pageNum",
-            rows:"pageSize",
-            order: "orderRule"
-        },
-        gridComplete:function(){
-        	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
-        }
+		url: '/role/list', //获取数据的地址
+		mtype: 'POST', //ajax提交方式，POST或者GET。默认GET
+		ajaxGridOptions: {
+			contentType: "application/json",
+		},//post请求需要加
+		serializeGridData: function(postData) {
+			return JSON.stringify(postData);
+		},//post请求需要加
+		datatype: "json", //从服务器端返回的数据类型，默认为xml。可选类型有：xml，local，json等
+		colModel: [
+			{ label: '主键ID', name: 'roleId', hidden:true, key: true},
+			{ label: '角色编码', name: 'roleCode', index: 'role_code'},
+			{ label: '角色名称', name: 'roleName', sortable: false},
+			{ label: '角色说明', name: 'roleDesc', sortable: false}
+		],
+		caption: '角色列表', //表格名称
+		viewrecords: true, //定义是否要显示总记录数
+		height: 385, //表格高度，可以是数字，像素值或者百分比
+		altRows: true,//单双行样式不同
+		altclass: 'differ',
+		rowNum: 10, //在grid上显示记录条数，这个参数要被传递到后台
+		rowList : [10,30,50], //一个下拉选择框，用来改变显示记录数，当选择时会覆盖rowNum参数传递到后台
+		rownumbers: true, //显示行号
+		rownumWidth: 25, //行号宽度
+		autowidth:true, //自动宽度
+		multiselect: true, //是否多选
+		pager: "#jqGridPager", //定义翻页用的导航栏，必须是有效的html元素
+		jsonReader : {
+			root: "data.list", //包含实际数据的数组
+			page: "data.pageNum", //当前页
+			total: "data.pages", //总的页数
+			records: "data.total" //总的记录数（查出来的总条数）
+		},
+		prmNames : { // 参数定义
+			page:"pageNum",
+			rows:"pageSize",
+			order: "orderRule"
+		},
+		gridComplete:function(){
+			//隐藏grid底部滚动条
+			$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+		}
     });
+
+	// 表单校验
+	myValidate = $('#userForm').validate({
+		rules: {
+			roleCode:{
+				required: true
+			},
+			roleName:{
+				required: true
+			}
+		}
+	});
+
 });
 
-var setting = {
+let setting = {
+	check:{
+		enable:true,
+		nocheckInherit:true
+	},
 	data: {
 		simpleData: {
 			enable: true,
@@ -46,15 +76,10 @@ var setting = {
 		key: {
 			url:"nourl"
 		}
-	},
-	check:{
-		enable:true,
-		nocheckInherit:true
 	}
 };
-var ztree;
-	
-var vm = new Vue({
+
+let vm = new Vue({
 	el:'#rrapp',
 	data:{
 		q:{
@@ -75,7 +100,7 @@ var vm = new Vue({
 			vm.getMenuTree(null);
 		},
 		update: function () {
-			var roleId = getSelectedRow();
+			let roleId = getSelectedRow();
 			if(roleId == null){
 				return ;
 			}
@@ -85,7 +110,7 @@ var vm = new Vue({
             vm.getMenuTree(roleId);
 		},
 		del: function (event) {
-			var roleIds = getSelectedRows();
+			let roleIds = getSelectedRows();
 			if(roleIds == null){
 				return ;
 			}
@@ -112,23 +137,23 @@ var vm = new Vue({
             	vm.role = r.role;
                 
                 //勾选角色所拥有的菜单
-    			var menuIds = vm.role.menuIdList;
-    			for(var i=0; i<menuIds.length; i++) {
-    				var node = ztree.getNodeByParam("menuId", menuIds[i]);
+    			let menuIds = vm.role.menuIdList;
+    			for(let i=0; i<menuIds.length; i++) {
+    				let node = ztree.getNodeByParam("menuId", menuIds[i]);
     				ztree.checkNode(node, true, false);
     			}
     		});
 		},
 		saveOrUpdate: function (event) {
 			//获取选择的菜单
-			var nodes = ztree.getCheckedNodes(true);
-			var menuIdList = new Array();
-			for(var i=0; i<nodes.length; i++) {
+			let nodes = ztree.getCheckedNodes(true);
+			let menuIdList = new Array();
+			for(let i=0; i<nodes.length; i++) {
 				menuIdList.push(nodes[i].menuId);
 			}
 			vm.role.menuIdList = menuIdList;
 			
-			var url = vm.role.roleId == null ? "../sys/role/save" : "../sys/role/update";
+			let url = vm.role.roleId == null ? "../sys/role/save" : "../sys/role/update";
 			$.ajax({
 				type: "POST",
 			    url: url,
@@ -146,7 +171,7 @@ var vm = new Vue({
 		},
 		getMenuTree: function(roleId) {
 			//加载菜单树
-			$.get("../sys/menu/perms", function(r){
+			$.get("/menu/perms", function(r){
 				ztree = $.fn.zTree.init($("#menuTree"), setting, r.menuList);
 				//展开所有节点
 				ztree.expandAll(true);
@@ -158,7 +183,7 @@ var vm = new Vue({
 	    },
 	    reload: function (event) {
 	    	vm.showList = true;
-			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			let page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 postData:{'roleName': vm.q.roleName},
                 page:page

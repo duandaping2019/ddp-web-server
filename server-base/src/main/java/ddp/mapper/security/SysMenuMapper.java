@@ -16,17 +16,11 @@ import java.util.List;
 */
 @Repository
 public interface SysMenuMapper extends MyMapper<SysMenuEntity> {
-    /*获取所有权限*/
-    List<String> selectAllPerms();
+    /*获取拥有目录菜单权限*/
+    List<SysMenuExt> selectMenuList(@Param("userId") BigDecimal userId);
 
-    /*获取指定用户权限*/
-    List<String> selectPointPerms(BigDecimal userId);
-
-    /*获取用户菜单*/
-    List<BigDecimal> queryAllMenuId(BigDecimal userId);
-
-    /*通过父级Id获取子菜单*/
-    List<SysMenuExt> queryListParentId(BigDecimal parentId);
+    /*获取用户权限*/
+    List<String> selectPerms(@Param("userId") BigDecimal userId);
 
     /*获取菜单拓展实体*/
     SysMenuExt getExtInfo(SysMenuExt ext);
@@ -39,5 +33,11 @@ public interface SysMenuMapper extends MyMapper<SysMenuEntity> {
 
     /*删除菜单信息*/
     void delMenuInfo(@Param("idsList") List<BigDecimal> idsList);
+
+    /*授权菜单权限控制*/
+    List<SysMenuExt> selectMenuPermissionList(@Param("userId") BigDecimal userId);
+
+
+
 
 }

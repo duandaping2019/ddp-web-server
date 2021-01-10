@@ -84,4 +84,9 @@ public class SysMenuServiceImpl implements SysMenuService{
         menuMapper.delMenuInfo(idsList);
     }
 
+    @Override
+    public List<SysMenuExt> selectMenuPermissionList(SysUserExt currUserInfo) {
+        return menuMapper.selectMenuPermissionList(currUserInfo.getUserId());
+    }
+
 }

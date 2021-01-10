@@ -2,6 +2,7 @@ package ddp.service.security;
 
 import ddp.entity.security.SysMenuEntity;
 import ddp.ext.security.SysMenuExt;
+import ddp.ext.security.SysUserExt;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,5 +26,8 @@ public interface SysMenuService {
 
     /*菜单信息删除*/
     void delMenuInfo(List<BigDecimal> idsList);
+
+    /*获取菜单权限信息*/
+    List<SysMenuExt> selectMenuPermissionList(SysUserExt currUserInfo);
 
 }

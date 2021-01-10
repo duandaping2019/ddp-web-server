@@ -7,6 +7,7 @@ import ddp.entity.security.SysMenuEntity;
 import ddp.ext.security.SysMenuExt;
 import ddp.service.security.SysMenuService;
 import ddp.service.tools.MessageSourceUtils;
+import ddp.service.tools.ShiroUtils;
 import ddp.utils.MyPageUtils;
 import ddp.web.aop.OperLog;
 import io.swagger.annotations.Api;
@@ -20,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @Api(tags = "菜单管理类", value = "MenuRestController")
 @RestController
@@ -85,5 +88,16 @@ public class MenuRestController {
         menuService.delMenuInfo(idsList);
         return BaseResponse.success(MessageSourceUtils.getSourceFromCache("opt_succ", locale));
     }
+
+    @ApiOperation(value = "sysMenuMenuPermission", notes = "获取菜单权限信息")
+    @RequestMapping("/perms")
+    @OperLog(operModul = "系统管理", operType = CommConstants.DEL_DATA, operDesc = "获取菜单权限信息")
+    @RequiresPermissions("sys:menu:menu_permission")
+    public Map<String, Object> sysMenuMenuPermission() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("menuList", menuService.selectMenuPermissionList(ShiroUtils.getCurrUserInfo())); //菜单
+        return data;
+    }
+
 
 }

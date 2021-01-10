@@ -25,53 +25,48 @@
     </resultMap>
 
     <!--==============================================mysql语句======================================================-->
-    <select id="selectAllPerms" resultType="java.lang.String" databaseId="mysql">
-        select
-            sm.menu_permission as "permissions"
-        from sys_menu sm
-        where sm.menu_permission is not null
-            and length(sm.menu_permission) > 0
-        group by sm.menu_permission
+    <select id="selectMenuList" resultMap="BaseResultMap" databaseId="mysql">
+        <choose>
+            <when test="userId != 1">
+                select * from sys_menu sm
+                join sys_role_menu srm on srm.menu_id = sm.menu_id
+                join sys_user_role sur on sur.role_id = srm.role_id
+                where 1 = 1
+                    and sm.menu_type != 2
+                    and sur.user_id = #{userId}
+                order by sm.menu_id
+            </when>
+            <otherwise>
+                select * from sys_menu sm
+                where 1 = 1
+                and sm.menu_type != 2
+                order by sm.menu_id
+            </otherwise>
+        </choose>
     </select>
 
-    <select id="selectPointPerms" resultType="java.lang.String" databaseId="mysql">
-        select
-            sm.menu_permission as "permissions"
-        from sys_menu sm
-        join sys_role_menu srm on srm.menu_id = sm.menu_id
-        join sys_user_role sur on sur.role_id = srm.role_id
-        where sm.menu_permission is not null
-            and length(sm.menu_permission) > 0
-            and sur.user_id = #{userId}
-        group by sm.menu_permission
-    </select>
-
-    <select id="queryAllMenuId" resultType="java.math.BigDecimal" databaseId="mysql">
-        select
-            rm.menu_id
-        from sys_role_menu rm
-        join sys_user_role ur on ur.role_id = rm.role_id
-        where 1 = 1
-            and ur.user_id = #{userId}
-        group by rm.menu_id
-        order by rm.menu_id
-    </select>
-
-    <select id="queryListParentId" resultMap="BaseResultMap" databaseId="mysql">
-        select
-            sm.menu_id,
-            sm.parent_id,
-            sm.menu_type,
-            sm.menu_code,
-            sm.menu_name,
-            sm.menu_name_en,
-            sm.menu_permission,
-            sm.menu_index,
-            sm.menu_url,
-            sm.menu_icon
-        from sys_menu sm
-        where parent_id = #{parentId}
-        order by menu_index
+    <select id="selectPerms" resultType="java.lang.String" databaseId="mysql">
+        <choose>
+            <when test="userId != 1">
+                select
+                    sm.menu_permission as "permissions"
+                from sys_menu sm
+                join sys_role_menu srm on srm.menu_id = sm.menu_id
+                join sys_user_role sur on sur.role_id = srm.role_id
+                where sm.menu_permission is not null
+                    and length(sm.menu_permission) > 0
+                    and sur.user_id = #{userId}
+                group by sm.menu_permission
+            </when>
+            <otherwise>
+                select
+                    sm.menu_permission as "permissions"
+                from sys_menu sm
+                where sm.menu_permission is not null
+                    and length(sm.menu_permission) > 0
+                group by sm.menu_permission
+            </otherwise>
+        </choose>
     </select>
 
     <select id="getExtInfo" resultMap="BaseResultMap" databaseId="mysql">
@@ -103,7 +98,7 @@
                 order by ${orderColumn} ${orderRule}
             </when>
             <otherwise>
-                order by menu_type,menu_id
+                order by sm.menu_type, sm.menu_id
             </otherwise>
         </choose>
     </select>
@@ -127,6 +122,23 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectMenuPermissionList" resultMap="BaseResultMap" databaseId="mysql">
+        <choose>
+            <when test="userId != 1">
+                select * from sys_menu where 1 = 2
+            </when>
+            <otherwise>
+                select
+                    sm.menu_id,
+                    concat(sm.menu_code, '|' ,sm.menu_name) as menu_name,
+                    sm.parent_id
+                from sys_menu sm
+                where 1 = 1
+                order by sm.menu_id
+            </otherwise>
+        </choose>
+    </select>
 
     <!--==============================================oracle语句======================================================-->
 
