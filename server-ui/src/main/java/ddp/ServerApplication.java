@@ -26,7 +26,6 @@ import java.util.Properties;
 @ComponentScan(basePackages = {
     "ddp.web", //server-ui
     "ddp.service", //server-service
-    "ddp.dao", //server-base
     "ddp.utils.spring" //server-utils
 })
 @MapperScan(basePackages = {"ddp.mapper"})
